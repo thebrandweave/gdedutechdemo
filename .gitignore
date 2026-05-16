@@ -1,0 +1,18 @@
+node_modules/
+dist/
+build/
+.env
+
+# Videos & uploads
+uploads/course_uploads/course_videos/
+*.mp4
+*.MOV
+*.mov
+*.webm
+
+# Archives
+*.zip
+*.rar
+
+# Executables
+*.exe

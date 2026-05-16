@@ -1,0 +1,464 @@
+/* Main Section Container */
+.hero-section {
+    position: relative;
+    padding: 120px 0 0; /* Extra top padding, 0 bottom to let image touch edge */
+    overflow: hidden;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    z-index: 99;
+    background: transparent;
+}
+
+/* Background Pattern (Subtle grid/dots) */
+.banner-pattern {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 75%;
+    background-image: url('./assets/images/home6-banne-pattern.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.07;
+    z-index: 1;
+}
+
+#herosection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+background: linear-gradient(135deg, #d15b50 0%, #2092bc 100%) !important;   
+     }
+
+#herosection canvas {
+    /* This creates the 'Half-Time' look by fading the lines out */
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%);
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%);
+    
+    /* Soften the lines so they aren't "Full" */
+    opacity: 0.4; 
+    mix-blend-mode: screen;
+    filter: brightness(0.8);
+}
+      
+/* Vibrant Top-Left Glow */
+.hero-bg-glow {
+    position: absolute;
+    top: -15%;
+    left: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(60, 169, 201, 0.25) 0%, transparent 70%);
+    filter: blur(120px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-stroke-text {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 14vw;
+    font-weight: 900;
+
+    color: transparent;
+
+    -webkit-text-stroke: 3px rgb(115 71 71 / 12%);
+
+    z-index: 1;
+    pointer-events: none;
+
+    line-height: 0.8;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    display: block;
+}
+
+.hero-main-layout {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items:start;
+    justify-content: space-between;
+    gap: 0px;
+}
+
+/* Left Side: Typography */
+.hero-left { flex: 1; text-align: left; }
+.hero-title {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 40px;
+}
+.hero-title span { color: #3ca9c9; }
+
+.hero-actions { display: flex; align-items: center; gap: 25px; margin-bottom: 20px; }
+.btn-get-started {
+    background: #0079a8;
+    
+    border: 1px solid #3ca9c9;
+    padding: 12px 18px;
+    border-radius: 50px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.btn-get-started:hover { background: transparent; color: #fff; border-color: #fff; }
+
+.btn-watch-video { display: flex; align-items: center; gap: 15px; color: #fff; text-decoration: none; font-weight: 600; }
+.play-icon {
+    width: 55px; height: 55px;
+    background: #0d1a1d;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Center Image: The Man */
+.hero-center { flex: 1; display: flex; justify-content: center; align-self: flex-end; }
+.main-person {
+    max-width: 130%;
+    height: auto;
+    filter: drop-shadow(0 20px 80px rgba(0,0,0,0.6));
+    margin-bottom: -152px; /* Aligns image to the very bottom edge */
+    margin-left: 51px;
+}
+
+/* Right Side Wrapper */
+.hero-right {
+    flex: 1;
+    padding-left: 60px;
+    position: relative;
+}
+
+/* The New Badge: Floating Glass Style */
+.experience-badge-v2 {
+    display: flex;
+    align-items: center;
+    /* gap: 15px; */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 25px 12px 12px;
+    border-radius: 60px 15px 15px 60px;
+    margin-bottom: 35px;
+    position: relative;
+    width: fit-content;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transition: 0.4s ease;
+}
+
+.experience-badge-v2:hover {
+    transform: translateX(10px);
+    border-color: #3ca9c9;
+}
+
+/* The Avatar Circle */
+.exp-circle-v2 {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    /* border: 2px solid #3ca9c9; */
+    padding: 3px;
+    /* background: #0d1a1d; */
+    overflow: hidden;
+}
+
+.exp-circle-v2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Content inside the badge */
+.exp-content-v2 h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin: 0;
+    font-weight: 800;
+}
+
+.exp-content-v2 p {
+    font-size: 12px;
+    color: #206c83;
+    margin: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- THE BOOMERANG DECOR --- */
+.boomerang-path {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 40px;
+    height: 40px;
+    border-top: 4px solid #c74a54;
+    border-right: 4px solid #3ca9c9;
+    border-radius: 0 10px 0 0;
+    opacity: 0.5;
+}
+
+/* Description Box Styling */
+.description-box {
+    border-left: 2px solid rgba(60, 169, 201, 0.4);
+    padding-left: 25px;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0;
+    text-align: start;
+}
+
+/* The Main Badge Container */
+.certificate-badge {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); */
+}
+
+/* The Star/Seal Shape */
+.badge-seal {
+    width: 100px;
+    height: 100px;
+    background: transparent;
+    /* Creates a 12-point star seal shape */
+    /* clip-path: polygon(50% 0%, 61% 10%, 75% 6%, 79% 20%, 94% 25%, 90% 39%, 100% 50%, 90% 61%, 94% 75%, 79% 80%, 75% 94%, 61% 90%, 50% 100%, 39% 90%, 25% 94%, 21% 80%, 6% 75%, 10% 61%, 0% 50%, 10% 39%, 6% 25%, 21% 20%, 25% 6%, 39% 10%); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* border: 2px solid rgba(255, 255, 255, 0.3); */
+}
+
+/* Icon inside the seal */
+.badge-seal i {
+    color: #fff;
+    font-size: 44px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* The Ribbon hanging behind the seal */
+.badge-ribbon {
+    position: absolute;
+    width: 35px;
+    height: 50px;
+    /* background: #c0392b; Traditional Red Ribbon */
+    top: 30px;
+    z-index: 1;
+    /* Creates the notched ribbon look */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Hover Animation */
+.experience-badge-v2:hover .certificate-badge {
+    transform: rotate(10deg) scale(1.1);
+    transition: 0.3s ease;
+}
+
+/* Responsive adjustment */
+@media (max-width: 991px) {
+    .hero-right {
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .description-box {
+        border-left: none;
+        border-top: 1px solid rgba(60, 169, 201, 0.4);
+        padding-left: 0;
+        padding-top: 20px;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .hero-title { font-size: 3.5rem; }
+    .main-person { max-width: 100%; }
+}
+@media (max-width: 991px) {
+    .hero-main-layout { flex-direction: column; text-align: center; }
+    .hero-left, .hero-right { text-align: center; padding: 0; }
+    .hero-actions, .experience-badge { justify-content: center; }
+    .hero-title { font-size: 3rem; }
+    .bg-stroke-text { display: none; } /* Clean up mobile view */
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: row; /* This forces them to be horizontal */
+  gap: 20px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  width: 180px; /* Fixed width helps keep them uniform */
+  text-align: center;
+}
+
+.stat-card h2 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.stat-card p {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Responsive adjustment for mobile */
+@media (max-width: 600px) {
+  .stats-container {
+    flex-direction: column; /* Stacks them back up on small screens */
+    gap: 0px;
+  }
+}
+
+
+
+
+/* ============================= */
+/* 📱 Mobile View (600px and below) */
+/* ============================= */
+@media (max-width: 600px) {
+  .hero-main-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-left { order: 1; }
+  .hero-center { order: 2; }
+  .hero-right { order: 3; }
+
+  .hero-left,
+  .hero-center,
+  .hero-right {
+    width: 100%;
+  }
+
+
+    .hero-title {
+        font-size: 2rem;
+        margin-bottom: 6px;
+    }
+
+    .btn-get-started {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .main-person {
+       display: none;
+    }
+
+    .experience-badge-v2 {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .exp-content-v2 h3 {
+        font-size: 1.2rem;
+    }
+
+    .exp-content-v2 p {
+        font-size: 10px;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        margin: 6px;
+        margin-bottom: 12px;
+        gap: 2px;
+        text-align: center;
+    }
+
+    .bg-stroke-text {
+        display: none;
+    }
+
+    .stats-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px) {
+  .nebula-shroud {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .frost-obelisk {
+    width: 100%;
+    padding: 15px;
+  }
+}
+/* ============================= */
+/* 💻 Large Screens Fix */
+/* ============================= */
+@media (min-width: 1200px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .main-person {
+        margin-bottom: -125px;
+    }
+}
+
+@media (max-width: 600px) {
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 20px;
+    margin-top: 20px; */
+  }
+
+  .experience-badge-v2 {
+    width: 70%;
+    max-width: 228px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-section {
+    padding-top: 120px;
+  }
+}

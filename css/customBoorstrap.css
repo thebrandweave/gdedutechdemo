@@ -1,0 +1,30 @@
+:root {
+    --primary-color: #cb4d55;
+    --secondary-color: #d6624e;
+    --accent-color: #0d7298;
+    --gradient-start: #0d7298;
+    --gradient-end: #1d91bb;
+  }
+
+
+  .text-primary {
+    color: var(--accent-color) !important;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(45deg, var(--accent-color), var(--gradient-start), var(--gradient-end)) !important;
+    border-color: var(--accent-color) !important;
+  }
+  .btn-outline-primary {
+    color: var(--accent-color) !important ;
+    border-color: var(--accent-color) !important;
+  }
+  .btn-outline-primary:hover {
+    background: linear-gradient(45deg, var(--accent-color), var(--gradient-start), var(--gradient-end)) !important;
+    color: white !important;
+  }
+  
+  .breadcrumb-item a {
+    text-decoration: none;
+    color: var(--accent-color);
+  }
