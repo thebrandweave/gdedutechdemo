@@ -526,6 +526,91 @@ $admin_name = $_SESSION['username'] ?? 'Admin';
                         </div>
                     </div>
 
+                    <!-- Recent Student Admissions -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0 color-primary"><i class="bi bi-person-plus text-primary me-2"></i>Recent Student Admissions</h5>
+                                    <a href="./Admissions/" class="btn btn-sm btn-primary">Manage Admissions</a>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Student ID</th>
+                                                <th class="text-center">QR Code</th>
+                                                <th>Name</th>
+                                                <th>College</th>
+                                                <th>Course</th>
+                                                <th>Duration</th>
+                                                <th>Key Skills</th>
+                                                <th>Admitted On</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            require_once '../Configurations/config.php';
+                                            $adm_query = "SELECT * FROM student_admissions ORDER BY id DESC LIMIT 5";
+                                            $adm_result = mysqli_query($conn, $adm_query);
+                                            
+                                            if ($adm_result && mysqli_num_rows($adm_result) > 0):
+                                                while ($adm = mysqli_fetch_assoc($adm_result)):
+                                                    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? '') == 443) ? "https://" : "http://";
+                                                    $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
+                                                    $path = (strpos($domain, 'gdedutech.com') !== false) ? "/verify_certificate.php" : "/gdedutechdemo/verify_certificate.php";
+                                                    $verify_url = $protocol . $domain . $path . "?student_id=" . $adm['student_id'];
+                                                    $qr_api_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($verify_url);
+                                            ?>
+                                                    <tr>
+                                                        <td class="fw-bold"><a href="../verify_certificate.php?student_id=<?php echo urlencode($adm['student_id']); ?>" target="_blank" class="text-primary text-decoration-none"><?php echo htmlspecialchars($adm['student_id']); ?></a></td>
+                                                        <td class="text-center">
+                                                            <div class="d-flex flex-column align-items-center gap-1">
+                                                                <a href="<?php echo $verify_url; ?>" target="_blank" title="Verify (Opens in new tab)">
+                                                                    <img src="<?php echo $qr_api_url; ?>" alt="QR Code" style="width: 40px; height: 40px; border: 1px solid #dee2e6; border-radius: 4px; padding: 2px;">
+                                                                </a>
+                                                                <a href="Admissions/download_qr.php?student_id=<?php echo urlencode($adm['student_id']); ?>" class="btn btn-sm btn-light py-0 px-1 border" style="font-size: 0.6rem;" title="Download QR Code">
+                                                                    <i class="bi bi-download"></i> Download
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td><?php echo htmlspecialchars($adm['student_name']); ?></td>
+                                                        <td><?php echo htmlspecialchars($adm['college']); ?></td>
+                                                        <td><span class="badge bg-info-subtle text-info border border-info-subtle"><?php echo htmlspecialchars($adm['course_applied']); ?></span></td>
+                                                        <td class="text-nowrap" style="font-size: 0.85rem;">
+                                                            <?php echo date('d M Y', strtotime($adm['start_date'])); ?> 
+                                                            <br><span class="text-muted">to</span><br> 
+                                                            <?php echo date('d M Y', strtotime($adm['end_date'])); ?>
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" title="<?php echo htmlspecialchars($adm['key_skills']); ?>">
+                                                                <?php echo htmlspecialchars($adm['key_skills']); ?>
+                                                            </span>
+                                                        </td>
+                                                        <td style="font-size: 0.85rem;"><?php echo date('d M Y, h:i A', strtotime($adm['created_at'])); ?></td>
+                                                    </tr>
+                                            <?php 
+                                                endwhile;
+                                            else:
+                                            ?>
+                                                <tr>
+                                                    <td colspan="8" class="text-center py-4 text-muted">No student admissions found.</td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Recent Users & Course Status -->
                     <div class="row">
                         <!-- Recent Users -->

@@ -137,6 +137,9 @@ $offset = ($page - 1) * $limit;
 
 // Fetch total records
 $total_query = mysqli_query($conn, "SELECT COUNT(*) as count FROM student_admissions");
+if (!$total_query) {
+    die("Database Error (fetching count): " . mysqli_error($conn));
+}
 $total_row = mysqli_fetch_assoc($total_query);
 $total_records = $total_row['count'];
 $total_pages = ceil($total_records / $limit);
@@ -144,6 +147,9 @@ $total_pages = ceil($total_records / $limit);
 // Fetch records with pagination
 $query = "SELECT * FROM student_admissions ORDER BY id DESC LIMIT $limit OFFSET $offset";
 $result = mysqli_query($conn, $query);
+if (!$result) {
+    die("Database Error (fetching admissions): " . mysqli_error($conn));
+}
 
 // Fetch all courses for the dropdown select menu
 try {
@@ -155,6 +161,7 @@ try {
 ?>
 
 <!DOCTYPE html>
+<!-- GDEDU ADMISSIONS VERSION 2 -->
 <html lang="en">
 
 <head>
@@ -164,6 +171,15 @@ try {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #dee2e6 !important;
+        }
+        thead.table-light th {
+            background-color: #f1f5f9 !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -297,8 +313,8 @@ try {
                     <div class="card shadow-sm">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead class="bg-primary text-white">
+                                <table class="table table-bordered table-hover mb-0">
+                                    <thead class="table-light">
                                         <tr>
                                             <th class="py-3 px-4 fw-bold">Student ID</th>
                                             <th class="py-3 px-4 fw-bold text-center">QR Code</th>
