@@ -294,7 +294,7 @@ require_once './Configurations/config.php';
                         <img
                             src="./Images/Others/certificate.jpg"
                             class="certificate-image"
-                            alt="Certificaaaate"
+                            alt="Certificate"
                         >
 
                       
