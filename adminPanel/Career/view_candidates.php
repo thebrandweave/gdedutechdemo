@@ -84,6 +84,11 @@ if (isset($_POST['delete_application'])) {
                                 <i class="bi bi-grid me-2"></i> Categories
                             </a>
                         </li>
+<li class="w-100">
+                            <a href="../Admissions/" class="nav-link">
+                                <i class="bi bi-person-plus me-2"></i> Student Admission
+                            </a>
+                        </li>
                         <li class="w-100">
                             <a href="../Courses/" class="nav-link">
                                 <i class="bi bi-book me-2"></i> Courses

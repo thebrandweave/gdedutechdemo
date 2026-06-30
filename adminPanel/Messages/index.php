@@ -53,6 +53,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                                 <i class="bi bi-grid me-2"></i> Categories
                             </a>
                         </li>
+<li class="w-100">
+                            <a href="../Admissions/" class="nav-link">
+                                <i class="bi bi-person-plus me-2"></i> Student Admission
+                            </a>
+                        </li>
                         <li class="w-100">
                             <a href="../Courses/" class="nav-link">
                                 <i class="bi bi-book me-2"></i> Courses

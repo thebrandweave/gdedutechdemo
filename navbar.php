@@ -243,8 +243,29 @@
     </ul>
 
 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'courses.php' ? 'active' : ''; ?>" href="courses.php">Courses</a>
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link-a <?php echo (basename($_SERVER['PHP_SELF']) == 'courses.php' || basename($_SERVER['PHP_SELF']) == 'verify_certificate.php') ? 'active' : ''; ?>"
+                        href="#"
+                        id="coursesDropdown"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        Courses
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="courses.php">
+                                All Courses
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="verify_certificate.php">
+                                Verify Certificate
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'events.php' ? 'active' : ''; ?>" href="events.php">Events</a>

@@ -103,6 +103,12 @@ $feedbacks = $conn->query($query);
                             Categories
                         </a>
                     </li>
+<li class="w-100">
+                        <a href="../Admissions/" class="nav-link">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Student Admission
+                        </a>
+                    </li>
 
                     <li class="w-100">
                         <a href="../Applications/" class="nav-link">
