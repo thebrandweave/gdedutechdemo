@@ -3,18 +3,13 @@ $host = $_SERVER['HTTP_HOST'];
 
 if (strpos($host, 'gdedutech.com') !== false) {
     $conn = new mysqli("localhost", "u232955123_gdedutech", "Brandweave@24", "u232955123_gdedutech");
-
 } else {
     $conn = new mysqli("localhost", "root", "", "gdedutech");
 }
 
-// if ($conn->connect_error) {
-//     die("Connection failed: " . $conn->connect_error);
-// }
+// Re-enable this so failures are visible instead of a blank page
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-// define('UPLOADS_DIR', __DIR__ . '/uploads/');
-$adminMail="gdedutech24@gmail.com";
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-
-?>
+$adminMail = "gdedutech24@gmail.com";

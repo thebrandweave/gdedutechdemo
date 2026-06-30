@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -158,7 +159,9 @@ try {
     // Fails silently, allowing the rest of the HTML table to load
     $courses_query = false; 
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <!-- GDEDU ADMISSIONS VERSION 2 -->
@@ -185,36 +188,38 @@ try {
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+          <!-- Sidebar -->
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-                    <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none">
-                        <span class="fs-5 fw-bolder" style="display: flex;align-items:center;color:black;"><img height="35px" src="../images/edutechLogo.png" alt="">&nbsp; GD Edu Tech</span>
+                    <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-decoration-none">
+                        <span class="fs-5 fw-bolder d-flex align-items-center">
+                            <img height="35px" src="../images/edutechLogo.png">
+                            &nbsp; GD Edu Tech
+                        </span>
                     </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
+
+                    <ul class="nav nav-pills flex-column w-100">
+
                         <li class="w-100">
                             <a href="../" class="nav-link">
                                 <i class="bi bi-speedometer2 me-2"></i> Dashboard
                             </a>
                         </li>
+
                         <li class="w-100">
                             <a href="../Categories/" class="nav-link">
                                 <i class="bi bi-grid me-2"></i> Categories
                             </a>
                         </li>
                         <li class="w-100">
-                            <a href="./" class="nav-link active">
+                            <a href="../Admissions/" class="nav-link active">
                                 <i class="bi bi-person-plus me-2"></i> Student Admission
                             </a>
                         </li>
-                        <li class="w-100">
-                            <a href="../Courses/" class="nav-link">
-                                <i class="bi bi-book me-2"></i> Courses
-                            </a>
-                        </li>
+
                         <li class="w-100">
                             <a href="../Applications/" class="nav-link">
-                                <i class="bi bi-journal-text me-2"></i> Scholarship Applications
+                                <i class="bi bi-journal-text me-2"></i> Applications
                             </a>
                         </li>
                         <li class="w-100">
@@ -223,8 +228,8 @@ try {
                             </a>
                         </li>
                         <li class="w-100">
-                            <a href="../social_links.php" class="nav-link">
-                                <i class="bi bi-link-45deg me-2"></i> Social Links
+                            <a href="../Courses/" class="nav-link">
+                                <i class="bi bi-book me-2"></i> Courses
                             </a>
                         </li>
                         <li class="w-100 dropdown">
@@ -232,23 +237,17 @@ try {
                                 <i class="bi bi-lightbulb me-2"></i> Quick Links
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="quizDropdown">
-                                <li><a class="dropdown-item" href="../Career/">Career portal</a></li>
-                                <li><a class="dropdown-item" href="../Shop/shop.php">Shop</a></li>
-                                <li><a class="dropdown-item" href="../Resources/index.php">Resources</a></li>
+                                <li><a class="dropdown-item" href="../index.php">Career portal</a></li>
+                                <li><a class="dropdown-item" href="./Shop/shop.php">Shop</a></li>
                             </ul>
                         </li>
                         <li class="w-100">
-                            <a href="../Schedule/index.php" class="nav-link">
+                            <a href="../Schedule/" class="nav-link">
                                 <i class="bi bi-calendar-event me-2"></i> Schedule
                             </a>
                         </li>
                         <li class="w-100">
-                            <a href="../feedback/feedback.php" class="nav-link">
-                                <i class="bi bi-chat-square-heart"></i> Feedback
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Messages/index.php" class="nav-link">
+                            <a href="../Messages/" class="nav-link">
                                 <i class="bi bi-chat-dots me-2"></i> Messages
                             </a>
                         </li>
@@ -277,12 +276,13 @@ try {
                                 <i class="bi bi-box-arrow-right me-2"></i> Logout
                             </a>
                         </li>
+
                     </ul>
                 </div>
             </div>
 
             <!-- Main Content -->
-            <div class="col py-3">
+            <div class="col py-3" style="min-width: 0;">
                 <div class="container-fluid">
                     <!-- Header -->
                     <div class="row mb-4">
@@ -313,30 +313,30 @@ try {
                     <div class="card shadow-sm">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover mb-0">
-                                    <thead class="table-light">
+                                <table class="table table-bordered table-hover mb-0" style="font-size: 0.85rem;">
+                                    <thead class="table-light text-nowrap">
                                         <tr>
-                                            <th class="py-3 px-4 fw-bold">Student ID</th>
-                                            <th class="py-3 px-4 fw-bold text-center">QR Code</th>
-                                            <th class="py-3 px-4 fw-bold">Name</th>
-                                            <th class="py-3 px-4 fw-bold">College</th>
-                                            <th class="py-3 px-4 fw-bold">Phone Number</th>
-                                            <th class="py-3 px-4 fw-bold">Email</th>
-                                            <th class="py-3 px-4 fw-bold">Course Applied</th>
-                                            <th class="py-3 px-4 fw-bold">Internship</th>
-                                            <th class="py-3 px-4 fw-bold">Start Date</th>
-                                            <th class="py-3 px-4 fw-bold">End Date</th>
-                                            <th class="py-3 px-4 fw-bold">Key Skills</th>
-                                            <th class="py-3 px-4 fw-bold">Date Admitted</th>
-                                            <th class="py-3 px-4 fw-bold text-center">Actions</th>
+                                            <th class="py-2 px-2 fw-bold">Student ID</th>
+                                            <th class="py-2 px-2 fw-bold text-center">QR Code</th>
+                                            <th class="py-2 px-2 fw-bold">Name</th>
+                                            <th class="py-2 px-2 fw-bold">College</th>
+                                            <th class="py-2 px-2 fw-bold">Phone Number</th>
+                                            <th class="py-2 px-2 fw-bold">Email</th>
+                                            <th class="py-2 px-2 fw-bold">Course Applied</th>
+                                            <th class="py-2 px-2 fw-bold">Internship</th>
+                                            <th class="py-2 px-2 fw-bold">Start Date</th>
+                                            <th class="py-2 px-2 fw-bold">End Date</th>
+                                            <th class="py-2 px-2 fw-bold">Key Skills</th>
+                                            <th class="py-2 px-2 fw-bold">Date Admitted</th>
+                                            <th class="py-2 px-2 fw-bold text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php if (mysqli_num_rows($result) > 0): ?>
                                             <?php while ($admission = mysqli_fetch_assoc($result)): ?>
                                                 <tr class="align-middle">
-                                                    <td class="px-4 fw-bold text-primary"><?php echo htmlspecialchars($admission['student_id']); ?></td>
-                                                    <td class="px-4 text-center">
+                                                    <td class="px-2 fw-bold text-primary"><?php echo htmlspecialchars($admission['student_id']); ?></td>
+                                                    <td class="px-2 text-center">
                                                         <?php 
                                                         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? '') == 443) ? "https://" : "http://";
                                                         $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
@@ -346,23 +346,31 @@ try {
                                                         ?>
                                                         <div class="d-flex flex-column align-items-center gap-1">
                                                             <a href="<?php echo $verify_url; ?>" target="_blank" title="Verify Certificate (Opens in new tab)">
-                                                                <img src="<?php echo $qr_api_url; ?>" alt="QR Code" style="width: 45px; height: 45px; border: 1px solid #dee2e6; border-radius: 4px; padding: 2px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">
+                                                                <img src="<?php echo $qr_api_url; ?>" alt="QR Code" style="width: 35px; height: 35px; border: 1px solid #dee2e6; border-radius: 4px; padding: 2px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">
                                                             </a>
-                                                            <a href="download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-light py-0 px-1 border" style="font-size: 0.65rem;" title="Download QR Code">
+                                                            <a href="download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-light py-0 px-1 border" style="font-size: 0.6rem;" title="Download QR Code">
                                                                 <i class="bi bi-download"></i> Download
                                                             </a>
                                                         </div>
                                                     </td>
-                                                    <td class="px-4"><?php echo htmlspecialchars($admission['student_name']); ?></td>
-                                                    <td class="px-4"><?php echo htmlspecialchars($admission['college']); ?></td>
-                                                    <td class="px-4"><?php echo htmlspecialchars($admission['phone_number']); ?></td>
-                                                    <td class="px-4"><?php echo htmlspecialchars($admission['email_id']); ?></td>
-                                                    <td class="px-4"><?php echo htmlspecialchars($admission['course_applied']); ?></td>
-                                                    <td class="px-4"><span class="badge bg-secondary"><?php echo htmlspecialchars($admission['internship']); ?></span></td>
-                                                    <td class="px-4 text-nowrap"><?php echo $admission['start_date'] ? date('d M Y', strtotime($admission['start_date'])) : '-'; ?></td>
-                                                    <td class="px-4 text-nowrap"><?php echo $admission['end_date'] ? date('d M Y', strtotime($admission['end_date'])) : '-'; ?></td>
-                                                    <td class="px-4"><span class="text-truncate d-inline-block" style="max-width: 120px;" title="<?php echo htmlspecialchars($admission['key_skills']); ?>"><?php echo htmlspecialchars($admission['key_skills'] ?? '-'); ?></span></td>
-                                                    <td class="px-4"><?php echo date('d M Y, h:i A', strtotime($admission['created_at'])); ?></td>
+                                                    <td class="px-2"><?php echo htmlspecialchars($admission['student_name']); ?></td>
+                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['college']); ?>">
+                                                        <div class="text-truncate" style="max-width: 120px;"><?php echo htmlspecialchars($admission['college']); ?></div>
+                                                    </td>
+                                                    <td class="px-2 text-nowrap"><?php echo htmlspecialchars($admission['phone_number']); ?></td>
+                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['email_id']); ?>">
+                                                        <div class="text-truncate" style="max-width: 100px;"><?php echo htmlspecialchars($admission['email_id']); ?></div>
+                                                    </td>
+                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['course_applied']); ?>">
+                                                        <div class="text-truncate" style="max-width: 110px;"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
+                                                    </td>
+                                                    <td class="px-2"><span class="badge bg-secondary" style="font-size: 0.75rem;"><?php echo htmlspecialchars($admission['internship']); ?></span></td>
+                                                    <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo $admission['start_date'] ? date('d M Y', strtotime($admission['start_date'])) : '-'; ?></td>
+                                                    <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo $admission['end_date'] ? date('d M Y', strtotime($admission['end_date'])) : '-'; ?></td>
+                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['key_skills']); ?>">
+                                                        <div class="text-truncate" style="max-width: 100px;"><?php echo htmlspecialchars($admission['key_skills'] ?? '-'); ?></div>
+                                                    </td>
+                                                    <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo date('d M Y', strtotime($admission['created_at'])); ?></td>
                                                     <td class="px-4 text-center text-nowrap">
                                                         <a href="javascript:void(0)" class="text-primary action-icon me-2 edit-btn" 
                                                            data-id="<?php echo $admission['id']; ?>"
