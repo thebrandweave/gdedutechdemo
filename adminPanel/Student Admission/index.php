@@ -146,7 +146,12 @@ $query = "SELECT * FROM student_admissions ORDER BY id DESC LIMIT $limit OFFSET 
 $result = mysqli_query($conn, $query);
 
 // Fetch all courses for the dropdown select menu
-$courses_query = mysqli_query($conn, "SELECT course_id, title FROM Courses ORDER BY title ASC");
+try {
+    $courses_query = mysqli_query($conn, "SELECT course_id, title FROM Courses ORDER BY title ASC");
+} catch (mysqli_sql_exception $e) {
+    // Fails silently, allowing the rest of the HTML table to load
+    $courses_query = false; 
+}
 ?>
 
 <!DOCTYPE html>
