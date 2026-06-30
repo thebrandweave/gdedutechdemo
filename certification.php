@@ -292,9 +292,9 @@ require_once './Configurations/config.php';
                     <div class="certificate-image-wrapper">
 
                         <img
-                            src="./Images/Others/certificate1.jpg"
+                            src="./Images/Others/certificate.jpg"
                             class="certificate-image"
-                            alt="Certificate"
+                            alt="Certificaaaate"
                         >
 
                       
