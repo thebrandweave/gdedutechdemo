@@ -563,7 +563,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                      onclick="openCourseModal(
             'Full Stack Development',
             './Images/Others/web.jpg',
-            'Complete 16-week program covering HTML, CSS, JavaScript, React, Node.js, MongoDB, REST APIs, Postman, Git , Github and real-world projects.'
+            'Complete 16-week program covering HTML, CSS, JavaScript, ReactJs or NextJs, Node.js, MongoDB, REST APIs, Postman, Git , Github and real-world projects.',
+              ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
@@ -588,7 +589,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                     onclick="openCourseModal(
                         'Architectural Design course',
                         './Images/Others/architecture.jpg',
-                        'Master the fundamentals and advanced concepts of architectural design through this comprehensive program. Learn to create functional, aesthetic, and sustainable designs using industry-standard tools like AutoCAD, Revit, SketchUp, V-Ray, and Lumion. This course covers space planning, 3D modeling, rendering, and interior design, with a strong focus on real-world projects and practical experience.'
+                        'Master the fundamentals and advanced concepts of architectural design through this comprehensive program. Learn to create functional, aesthetic, and sustainable designs using industry-standard tools like AutoCAD, Revit, SketchUp, V-Ray, and Lumion. This course covers space planning, 3D modeling, rendering, and interior design, with a strong focus on real-world projects and practical experience.',
+                          ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
@@ -613,7 +615,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                     onclick="openCourseModal(
                         'Interior Design course',
                         './Images/Others/int.jpg',
-                        'Step into the world of creative interiors and learn how to design stylish, functional spaces from concept to completion. This course teaches you space planning, color combinations, lighting design, furniture layout, and modern interior trends.'
+                        'Step into the world of creative interiors and learn how to design stylish, functional spaces from concept to completion. This course teaches you space planning, color combinations, lighting design, furniture layout, and modern interior trends.',
+                          ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
@@ -637,7 +640,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                     onclick="openCourseModal(
                         'Digital Marketing',
                         './Images/Others/market.jpg',
-                        'Master SEO, SMM, PPC, Google Ads, content marketing, analytics, WordPress, and Photoshop.'
+                        'Master SEO, SMM, PPC, Google Ads, content marketing, analytics, WordPress, and Photoshop.',
+                          ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
@@ -661,7 +665,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                     onclick="openCourseModal(
                         'Graphic Design & Video Editing',
                         './Images/Others/designer.jpg',
-                        'Learn Canva, Photoshop, Illustrator, Premiere Pro, After Effects, and DaVinci Resolve.'
+                        'Learn Canva, Photoshop, Illustrator, Premiere Pro, After Effects, and DaVinci Resolve.',
+                          ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
@@ -678,7 +683,30 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                     </div>
                 </div>
             </div>
+            <!-- Course 6-->
+            <div class="col-lg-4 col-md-6">
+                <div class="premium-card h-100 course-card"
+                    onclick="openCourseModal(
+                        ' Photography & Camera Handling',
+                        './Images/Others/designer.jpeg',
+                    'Learn professional photography, camera handling, lighting techniques, framing, and photo composition.',
+                      ['Offline', '16 Weeks', 'Certification']
+                    )"
+                    style="cursor:pointer;">
 
+                    <div class="position-relative">
+                        <img src="./Images/Others/designer.jpeg" class="card-img-top" style="height:200px; object-fit:cover;">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
+                                Photography & Camera Handling
+                        </span>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">     Photography & Camera Handling</h5>
+                        <p class="text-muted">Click to explore course details</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -698,11 +726,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
         <p id="courseDescription" class="text-muted" style="text-align:start"></p>
 
-        <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
-            <span class="badge bg-success">Offline</span>
-            <span class="badge bg-warning text-dark">16 Weeks</span>
-            <span class="badge bg-info text-dark">Certification</span>
-        </div>
+        <div id="courseBadges" class="d-flex gap-2 flex-wrap mt-3"></div>
 
         <a href="contact.php" class="btn btn-primary mt-4">
              Enroll Now
@@ -715,12 +739,38 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
 <!-- JS -->
 <script>
-function openCourseModal(title, image, description) {
-    document.getElementById('courseTitle').innerText = title;
-    document.getElementById('courseImage').src = image;
-    document.getElementById('courseDescription').innerText = description;
+function openCourseModal(title, image, description, badges) {
 
-    var modal = new bootstrap.Modal(document.getElementById('courseModal'));
+    document.getElementById("courseTitle").innerText = title;
+    document.getElementById("courseImage").src = image;
+    document.getElementById("courseDescription").innerText = description;
+
+    let badgesHTML = "";
+
+    badges.forEach(badge => {
+
+        let badgeClass = "bg-secondary";
+
+        if (badge === "Offline") {
+            badgeClass = "bg-success";
+        } 
+        else if (badge === "16 Weeks") {
+            badgeClass = "bg-warning text-dark";
+        } 
+        else if (badge === "Certification") {
+            badgeClass = "bg-info text-dark";
+        }
+
+        badgesHTML += `
+            <span class="badge ${badgeClass} me-2">
+                ${badge}
+            </span>
+        `;
+    });
+
+    document.getElementById("courseBadges").innerHTML = badgesHTML;
+
+    const modal = new bootstrap.Modal(document.getElementById('courseModal'));
     modal.show();
 }
 </script>

@@ -52,7 +52,12 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
     <!-- Particles.js -->
     <!--<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>-->
 
-  
+        <link rel="icon" type="image/png" href="./Images/Logos/GD_Only_logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./Images/Logos/GD_Only_logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./Images/Logos/GD_Only_logo.png">
+    <link rel="shortcut icon" href="./Images/Logos/GD_Only_logo.png">
+    <link rel="apple-touch-icon" href="./Images/Logos/GD_Only_logo.png">
+    <meta name="msapplication-TileImage" content="./Images/Logos/GD_Only_logo.png">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/hero/style.css">
@@ -513,7 +518,40 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 .course-card, .modal {
     transition: all 0.3s ease-in-out;
 }
+.certification-badges{
+    display:flex;
 
+    gap:12px;
+    margin-top:20px;
+}
+.certification-badges{
+    display:flex;
+    gap:18px;
+    margin-top:20px;
+    align-items:center;
+}
+
+.cert-badge-item{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    /* background:rgba(255,255,255,0.08); */
+    /* backdrop-filter:blur(12px); */
+    /* border:1px solid rgba(255,255,255,0.15); */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.3s ease;
+    overflow:hidden;
+}
+
+
+
+.cert-badge-image{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+}
     </style>
 </head>
 
@@ -591,6 +629,26 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
         <p class="hero-description">
             Join thousands of students in our world-class online programs and develop the skills needed for in-demand careers.
         </p>
+      <div class="certification-badges">
+
+    <div class="cert-badge-item">
+        <img
+            src="./Images/Others/badge.png"
+            alt="ISO Certified"
+            class="cert-badge-image"
+        >
+    </div>
+
+    <div class="cert-badge-item">
+        <img
+            src="./Images/Others/badge1.png"
+            alt="Industry Approved"
+            class="cert-badge-image"
+        >
+    </div>
+
+</div>
+
     </div>
 </div>
             </div>
@@ -875,6 +933,40 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                 </a>
 
             </div>
+                     <!-- Course 6 -->
+            <div class="col-lg-4 col-md-6">
+
+                <a href="courses.php" class="text-decoration-none text-dark">
+
+                    <div class="premium-card h-100 course-card">
+
+                        <div class="position-relative">
+                            <img
+                                src="./Images/Others/designer.jpeg"
+                                class="card-img-top"
+                                style="height:200px; object-fit:cover;"
+                            >
+
+                            <span class="badge position-absolute top-0 end-0 m-3">
+                                Photography & Camera Handling
+                            </span>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-3">
+                                   Photography & Camera Handling
+                            </h5>
+
+                            <p class="text-muted">
+                               View Details
+                            </p>
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
 
         </div>
 
@@ -945,32 +1037,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
         </div>
     </section>
 
-    <!-- Testimonial Section -->
-    <section class="testimonial-section" id="testimonials">
-        <div>
-
-  
-
-            <!-- Call to Action -->
-            <div class="testimonial-cta" data-aos="fade-up" data-aos-delay="400" style="text-align: center;display: flex;justify-content: center;align-items: center;margin-top: 40px;">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 mb-4 mb-lg-0">
-                        <div class="cta-content">
-                            <h3 class="text-white mb-2 ">Ready to Start Your Learning Journey?</h3>
-                            <p class="text-white-50 mb-0">Join thousands of successful students who have transformed their careers with us.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 text-lg-end">
-                        <a href="./studentPanel/signup.php" class="btn btn-light btn-lg rounded-pill">
-                            Get Started Now
-                            <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
+   
 
 
     <!-- Gallery Section -->
@@ -1005,6 +1072,32 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+     <!-- Testimonial Section -->
+    <section class="testimonial-section" id="testimonials">
+        <div>
+
+  
+
+            <!-- Call to Action -->
+            <div class="testimonial-cta" data-aos="fade-up" data-aos-delay="400" style="text-align: center;display: flex;justify-content: center;align-items: center;margin-top: 40px;">
+                <div class="row align-items-center">
+                    <div class="col-lg-8 mb-4 mb-lg-0">
+                        <div class="cta-content">
+                            <h3 class="text-white mb-2 ">Ready to Start Your Learning Journey?</h3>
+                            <p class="text-white-50 mb-0">Join thousands of successful students who have transformed their careers with us.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="./studentPanel/signup.php" class="btn btn-light btn-lg rounded-pill">
+                            Get Started Now
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 <!-- Modern Student Feedback Section -->
@@ -1136,6 +1229,9 @@ $feedbacks = $conn->query($feedback_query);
                 <?php endwhile; ?>
 
             </div>
+            <!-- <div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
+<div class="swiper-pagination"></div> -->
 
         </div>
 
@@ -1385,11 +1481,13 @@ var feedbackSwiper = new Swiper(".modernFeedbackSwiper", {
 
     slidesPerView: 1,
     spaceBetween: 25,
-    loop: true,
 
-    autoplay: {
-        delay: 3500,
-        disableOnInteraction: false,
+    loop: true,
+    autoHeight: true,
+
+    navigation: {
+        nextEl: ".modernFeedbackSwiper .swiper-button-next",
+        prevEl: ".modernFeedbackSwiper .swiper-button-prev",
     },
 
     pagination: {
@@ -1399,15 +1497,27 @@ var feedbackSwiper = new Swiper(".modernFeedbackSwiper", {
 
     breakpoints: {
 
-        768: {
-            slidesPerView: 2,
+        480: {
+            slidesPerView: 1,
+            spaceBetween: 10,
         },
 
-        1200: {
-            slidesPerView: 3,
-        }
+        576: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+        },
 
-    }
+        992: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+        },
+
+    },
+
+    autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+    },
 
 });
     </script>

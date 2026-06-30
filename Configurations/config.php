@@ -5,7 +5,7 @@ if (strpos($host, 'gdedutech.com') !== false) {
     $conn = new mysqli("localhost", "u232955123_gdedutech", "Brandweave@24", "u232955123_gdedutech");
 
 } else {
-    $conn = new mysqli("localhost", "root", "", "gd_edu_tech");
+    $conn = new mysqli("localhost", "root", "", "gd");
 }
 
 // if ($conn->connect_error) {

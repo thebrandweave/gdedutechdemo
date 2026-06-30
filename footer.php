@@ -29,6 +29,25 @@ $current_year = date('Y');
                         </a>
                     </h2>
                 </div>
+                  <div class="certification-badges">
+
+    <div class="cert-badge-item">
+        <img
+            src="./Images/Others/badge.png"
+            alt="ISO Certified"
+            class="cert-badge-image"
+        >
+    </div>
+
+    <div class="cert-badge-item">
+        <img
+            src="./Images/Others/badge1.png"
+            alt="Industry Approved"
+            class="cert-badge-image"
+        >
+    </div>
+
+</div>
                     </div>
             <div class="footer-links-section" data-aos="fade" data-aos-duration="1200" data-aos-delay="100">
                 <h3 class="footer-heading">Quick Links</h3>
@@ -138,6 +157,42 @@ $current_year = date('Y');
         margin: 0 auto;
         padding: 0 20px;
     }
+
+    
+.certification-badges{
+    display:flex;
+
+    gap:12px;
+    margin-top:20px;
+}
+.certification-badges{
+    display:flex;
+    gap:18px;
+    margin-top:20px;
+    align-items:center;
+}
+
+.cert-badge-item{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    /* background:rgba(255,255,255,0.08); */
+    /* backdrop-filter:blur(12px); */
+    /* border:1px solid rgba(255,255,255,0.15); */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.3s ease;
+    overflow:hidden;
+}
+
+
+
+.cert-badge-image{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+}
 
     .footer-top {
         display: flex;

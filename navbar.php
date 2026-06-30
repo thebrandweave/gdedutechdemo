@@ -73,6 +73,37 @@
     color: var(--primary) !important;
 }
 
+
+
+.nav-link-a {
+    color: var(--text-dark) !important;
+    display:flex;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 10px 12px !important;
+    transition: color 0.3s ease;
+    position: relative; /* Required for underline positioning */
+}
+
+
+
+.nav-link-a:hover::after, 
+.nav-link-a.active::after {
+    width: 60%; /* Line grows from center outward */
+}
+
+.nav-link-a.active, .nav-link:hover {
+    color: var(--primary) !important;
+}
+
+
+
+
+
+
+
+
+
 /* --- Interactive Action Buttons --- */
 .navbar-actions {
     display: flex;
@@ -138,6 +169,31 @@
     .navbar-actions { flex-direction: column; margin-top: 15px; }
     .btn-login, .btn-signup { width: 100%; text-align: center; justify-content: center; }
 }
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+     transition: 0.3s;
+}
+
+.dropdown-menu {
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 10px 0;
+}
+
+.dropdown-item {
+    padding: 10px 18px;
+    transition: 0.3s;
+    font-weight:600;
+    font-size:0.92rem;
+}
+
+.dropdown-item:hover {
+    background: #f3f4f6;
+    color: #0078a8;
+}
+
 </style>
 
 <nav class="navbar navbar-expand-lg" id="dynamicNavbar">
@@ -155,9 +211,38 @@
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="index.php">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'about.php' ? 'active' : ''; ?>" href="about.php">About</a>
-                </li>
+            <li class="nav-item dropdown">
+
+    <a
+        class="nav-link-a  <?php echo (basename($_SERVER['PHP_SELF']) == 'about.php' || basename($_SERVER['PHP_SELF']) == 'our-story.php' || basename($_SERVER['PHP_SELF']) == 'certification.php') ? 'active' : ''; ?>"
+        href="#"
+        id="aboutDropdown"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+    >
+        About
+    </a>
+
+    <ul class="dropdown-menu">
+
+    
+
+        <li>
+            <a class="dropdown-item" href="about.php">
+                Our Story
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="certification.php">
+                Certification
+            </a>
+        </li>
+
+    </ul>
+
+</li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'courses.php' ? 'active' : ''; ?>" href="courses.php">Courses</a>
                 </li>
