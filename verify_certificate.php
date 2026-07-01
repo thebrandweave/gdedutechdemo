@@ -283,7 +283,7 @@ if (isset($_GET['student_id'])) {
             margin-bottom: 15px;
         }
         .profile-avatar-initials {
-            width: 75px;
+            width: 100px;
             height: 75px;
             border-radius: 50%;
             background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
@@ -412,237 +412,112 @@ if (isset($_GET['student_id'])) {
                 <?php endif; ?>
 
                 <!-- Verification Result Section -->
-                <?php if ($admission): ?>
-                    <div class="verification-container animate__animated animate__fadeIn" data-aos="fade-up">
-                        <div class="row">
-                            <!-- Left: Student Info Card -->
-                            <div class="col-lg-4 mb-4 print-action-section">
-                                <div class="student-profile-card">
-                                    <div class="verified-header">
-                                        <i class="bi bi-patch-check-fill verified-badge-icon"></i>
-                                        <span>RECORD VERIFIED</span>
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <!-- Avatar/Initials -->
-                                        <div class="profile-avatar-container">
-                                            <div class="profile-avatar-initials">
-                                                <?php
-                                                $words = explode(" ", $admission['student_name']);
-                                                $initials = "";
-                                                foreach ($words as $w) {
-                                                    $initials .= strtoupper(substr($w, 0, 1));
-                                                }
-                                                echo htmlspecialchars(substr($initials, 0, 2));
-                                                ?>
-                                            </div>
-                                        </div>
-                                        
-                                        <h4 class="student-profile-name text-center"><?php echo htmlspecialchars($admission['student_name']); ?></h4>
-                                        <div class="text-center mb-4">
-                                            <span class="badge badge-student-id bg-light text-secondary border px-3 py-2">
-                                                ID: <span class="fw-bold text-primary" id="copy-student-id"><?php echo htmlspecialchars($admission['student_id']); ?></span>
-                                                <button class="btn btn-link p-0 ms-1 border-0 align-baseline" onclick="copyStudentId()" title="Copy Student ID">
-                                                    <i class="bi bi-clipboard text-muted" id="copy-icon"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-
-                                        <!-- Info Details -->
-                                        <div class="info-list">
-                                            <div class="info-item">
-                                                <div class="info-label"><i class="bi bi-building text-primary me-2"></i>College / Institution</div>
-                                                <div class="info-value fw-semibold text-dark"><?php echo htmlspecialchars($admission['college']); ?></div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label"><i class="bi bi-journal-bookmark text-primary me-2"></i>Course Enrolled</div>
-                                                <div class="info-value fw-bold text-primary"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label"><i class="bi bi-envelope text-primary me-2"></i>Email Address</div>
-                                                <div class="info-value"><a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>"><?php echo htmlspecialchars($admission['email_id']); ?></a></div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label"><i class="bi bi-telephone text-primary me-2"></i>Phone Number</div>
-                                                <div class="info-value"><?php echo htmlspecialchars($admission['phone_number']); ?></div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label"><i class="bi bi-calendar3 text-primary me-2"></i>Training Duration</div>
-                                                <div class="info-value text-dark fw-semibold">
-                                                    <?php echo date('d M Y', strtotime($admission['start_date'])); ?> 
-                                                    to 
-                                                    <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
-                                                </div>
-                                            </div>
-                                            <?php if (!empty($admission['internship'])): ?>
-                                                <div class="info-item">
-                                                    <div class="info-label"><i class="bi bi-briefcase text-primary me-2"></i>Internship</div>
-                                                    <div class="info-value"><span class="badge bg-success-subtle text-success border border-success-subtle"><?php echo htmlspecialchars($admission['internship']); ?></span></div>
-                                                </div>
-                                            <?php endif; ?>
-                                            <div class="info-item">
-                                                <div class="info-label"><i class="bi bi-tags text-primary me-2"></i>Key Software / Skills</div>
-                                                <div class="info-value">
-                                                    <?php 
-                                                    $skills = explode(",", $admission['key_skills']);
-                                                    foreach ($skills as $skill) {
-                                                        $skill = trim($skill);
-                                                        if (!empty($skill)) {
-                                                            echo '<span class="skill-badge">' . htmlspecialchars($skill) . '</span>';
-                                                        }
-                                                    }
-                                                    ?>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-4 pt-3 border-top d-flex gap-2 justify-content-center">
-                                            <a href="adminPanel/Admissions/download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                                <i class="bi bi-download me-1"></i>Download QR
-                                            </a>
-                                            <button onclick="window.print();" class="btn btn-primary btn-sm rounded-pill px-3">
-                                                <i class="bi bi-printer me-1"></i>Print Page
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right: Certificate Card -->
-                            <div class="col-lg-8 mb-4">
-                                <div class="print-action-section text-end mb-3 d-flex justify-content-between align-items-center">
-                                    <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Use the print option to save as PDF or print.</span>
-                                    <button onclick="window.print();" class="print-btn"><i class="bi bi-printer me-2"></i>Print Certificate</button>
-                                </div>
-
-                                <div class="cert-card">
-                                    <!-- Background Swoosh Accents -->
-                                    <!-- Top Right Swoosh SVG -->
-                                    <svg class="corner-wave wave-top-right" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M 0 0 C 150 0 250 50 300 200 L 300 0 Z" fill="#0d7298" />
-                                        <path d="M 50 0 C 170 0 260 40 300 150 L 300 130 C 255 35 155 0 0 0 Z" fill="#ff6b35" />
-                                    </svg>
-                                    <!-- Bottom Left Swoosh SVG -->
-                                    <svg class="corner-wave wave-bottom-left" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M 0 0 C 150 200 250 200 300 200 L 0 200 Z" fill="#0d7298" />
-                                        <path d="M 0 50 C 130 200 220 200 300 200 L 280 200 C 200 200 110 160 0 0 Z" fill="#ff6b35" />
-                                    </svg>
-
-                                    <div class="cert-border-outer">
-                                        <!-- Top Logo Bar -->
-                                        <div class="row align-items-center mb-4 cert-header-row">
-                                            <div class="col-3 text-start">
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/MSME_Logo_India.svg" style="height: 65px;" alt="MSME Logo">
-                                            </div>
-                                            <div class="col-9 text-center">
-                                                <div class="d-flex flex-column align-items-center justify-content-center">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <img src="./Images/Logos/GD_Only_logo.png" style="height: 42px;" alt="GD Only Logo">
-                                                        <span class="fs-2 fw-extrabold text-dark" style="letter-spacing: 1px; font-weight: 800;">GD EDU TECH</span>
-                                                    </div>
-                                                    <span class="text-uppercase font-monospace text-primary mt-1" style="font-size: 0.72rem; letter-spacing: 3px; font-weight: 600;">Connecting Passion with Progress</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Subtitle Banner -->
-                                        <div class="text-center mb-4 px-3 py-2" style="border-top: 1.5px solid #0d7298; border-bottom: 1.5px solid #0d7298; background: rgba(248, 250, 252, 0.8);">
-                                            <div class="fw-bold text-dark" style="font-size: 0.88rem; letter-spacing: 1px;">A TECHNICAL TRAINING UNIT OF PRO GEE DEE VENTURES</div>
-                                            <div class="text-muted mt-1" style="font-size: 0.65rem; letter-spacing: 0.5px; line-height: 1.4;">
-                                                REGISTERED WITH MINISTRY OF MSME, GOVT. OF INDIA | UDYAM REG NO: UDYAM-KR-11-0102678<br>
-                                                ISO 9001:2015 CERTIFIED ORGANIZATION
-                                            </div>
-                                        </div>
-
-                                        <!-- Registration ID -->
-                                        <div class="text-start mb-4 ps-2">
-                                            <span class="fw-bold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Reg no:</span>
-                                            <span class="fw-bold text-dark fs-5 ms-1"><?php echo htmlspecialchars($admission['student_id']); ?></span>
-                                        </div>
-
-                                        <!-- Gothic Certificate of Completion Title -->
-                                        <div class="text-center mb-4">
-                                            <h1 class="cert-gothic-title">Certificate of Completion</h1>
-                                        </div>
-
-                                        <div class="text-center text-uppercase text-muted fw-bold mb-4" style="font-size: 0.85rem; letter-spacing: 3px;">
-                                            THIS CERTIFICATE IS PROUDLY PRESENTED TO
-                                        </div>
-
-                                        <!-- Student Name script font -->
-                                        <div class="text-center">
-                                            <div class="cert-student-name"><?php echo htmlspecialchars($admission['student_name']); ?></div>
-                                        </div>
-                                        <div class="row justify-content-center mb-5">
-                                            <div class="col-8 border-bottom border-warning border-3" style="height: 1px;"></div>
-                                        </div>
-
-                                        <!-- Description content statement -->
-                                        <div class="cert-body-statement text-center px-4 mb-5">
-                                            has successfully completed the professional certificate course in
-                                            <div class="fw-bold text-dark fs-4 my-2" style="font-family: 'Montserrat', sans-serif;"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
-                                            conducted from <span class="fw-bold text-dark"><?php echo !empty($admission['start_date']) ? date('d-m-Y', strtotime($admission['start_date'])) : '[START DATE]'; ?></span> to <span class="fw-bold text-dark"><?php echo !empty($admission['end_date']) ? date('d-m-Y', strtotime($admission['end_date'])) : '[END DATE]'; ?></span>.
-                                            <div class="mt-3">
-                                                He/She has demonstrated proficiency in <span class="fw-bold text-primary"><?php echo !empty($admission['key_skills']) ? htmlspecialchars($admission['key_skills']) : 'KEY SOFTWARE/SKILLS'; ?></span>.
-                                            </div>
-                                        </div>
-
-                                        <!-- Seals & Signatures Footer -->
-                                        <div class="cert-footer-row row align-items-end mt-5 pt-4">
-                                            <!-- QR Code (Left) -->
-                                            <div class="col-3 text-start">
-                                                <?php 
-                                                $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? '') == 443) ? "https://" : "http://";
-                                                $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
-                                                $path = (strpos($domain, 'gdedutech.com') !== false) ? "/verify_certificate.php" : "/gdedutechdemo/verify_certificate.php";
-                                                $verify_url = $protocol . $domain . $path . "?student_id=" . $admission['student_id'];
-                                                $qr_api_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($verify_url);
-                                                ?>
-                                                <div class="d-flex flex-column align-items-start gap-1">
-                                                    <img src="<?php echo $qr_api_url; ?>" alt="Verification QR Code" style="width: 105px; height: 105px; border: 1px solid #dee2e6; border-radius: 4px; padding: 2px;">
-                                                    <a href="adminPanel/Admissions/download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-outline-secondary py-0 px-2 mt-1 print-action-section" style="font-size: 0.65rem;">
-                                                        <i class="bi bi-download me-1"></i>Download QR
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <!-- Accreditation Badges (Center) -->
-                                            <div class="col-6 text-center">
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <!-- IAF Logo SVG -->
-                                                    <svg viewBox="0 0 100 100" style="height: 48px; width: 48px;">
-                                                        <circle cx="50" cy="50" r="45" fill="#0d7298" />
-                                                        <circle cx="50" cy="50" r="40" fill="none" stroke="#fff" stroke-width="2" />
-                                                        <text x="50" y="55" font-family="'Montserrat', sans-serif" font-weight="800" font-size="22" fill="#fff" text-anchor="middle">IAF</text>
-                                                        <text x="50" y="78" font-family="'Montserrat', sans-serif" font-weight="500" font-size="7" fill="#fff" text-anchor="middle">ACCREDITATION</text>
-                                                    </svg>
-                                                    <!-- EIAC Logo SVG -->
-                                                    <svg viewBox="0 0 100 50" style="height: 48px; width: 96px;">
-                                                        <ellipse cx="50" cy="25" rx="45" ry="20" fill="none" stroke="#ff6b35" stroke-width="3" />
-                                                        <text x="50" y="32" font-family="'Montserrat', sans-serif" font-weight="800" font-size="24" fill="#0d7298" text-anchor="middle">eiac</text>
-                                                    </svg>
-                                                    <!-- ISO 9001 Seal SVG -->
-                                                    <svg viewBox="0 0 100 100" style="height: 48px; width: 48px;">
-                                                        <circle cx="50" cy="50" r="45" fill="none" stroke="#0d7298" stroke-width="3" />
-                                                        <circle cx="50" cy="50" r="38" fill="none" stroke="#ff6b35" stroke-width="1.5" />
-                                                        <text x="50" y="35" font-family="'Montserrat', sans-serif" font-weight="700" font-size="8" fill="#0d7298" text-anchor="middle">CERTIFIED</text>
-                                                        <text x="50" y="55" font-family="'Montserrat', sans-serif" font-weight="800" font-size="14" fill="#ff6b35" text-anchor="middle">ISO 9001</text>
-                                                        <text x="50" y="72" font-family="'Montserrat', sans-serif" font-weight="700" font-size="8" fill="#0d7298" text-anchor="middle">CERTIFIED</text>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <!-- Signature Block (Right) -->
-                                            <div class="col-3 text-center">
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div style="width: 100%; border-bottom: 2px solid #ff6b35; margin-bottom: 8px;"></div>
-                                                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">Managing Director</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+               <?php if ($admission): ?>
+    <div class="verification-container animate__animated animate__fadeIn" data-aos="fade-up">
+        <div class="row">
+            <!-- Left: Student Info Card -->
+            <div class="col-12 mb-4 print-action-section">
+                <div class="student-profile-card">
+                    <div class="verified-header py-3 fs-5">
+                        <i class="bi bi-patch-check-fill verified-badge-icon me-2"></i>
+                        <span class="fw-bold tracking-wider">RECORD VERIFIED</span>
                     </div>
-                <?php endif; ?>
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row align-items-center">
+                            
+                            <!-- Left Column: Avatar, Name, ID, Actions -->
+                            <div class="col-md-5 text-center border-end-md pb-4 pb-md-0">
+                                <!-- Avatar/Initials -->
+                                <div class="profile-avatar-container mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2rem;">
+                                    <div class="profile-avatar-initials d-flex align-items-center justify-content-center h-100 fw-bold">
+                                        <?php
+                                        $words = explode(" ", $admission['student_name']);
+                                        $initials = "";
+                                        foreach ($words as $w) {
+                                            $initials .= strtoupper(substr($w, 0, 1));
+                                        }
+                                        echo htmlspecialchars(substr($initials, 0, 2));
+                                        ?>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="student-profile-name fw-bold mb-3"><?php echo htmlspecialchars($admission['student_name']); ?></h3>
+                                
+                                <div class="mb-4">
+                                    <span class="badge badge-student-id bg-light text-secondary border px-4 py-2 fs-6">
+                                        ID: <span class="fw-bold text-primary" id="copy-student-id"><?php echo htmlspecialchars($admission['student_id']); ?></span>
+                                        <button class="btn btn-link p-0 ms-2 border-0 align-baseline fs-5" onclick="copyStudentId()" title="Copy Student ID">
+                                            <i class="bi bi-clipboard text-muted" id="copy-icon"></i>
+                                        </button>
+                                    </span>
+                                </div>
+
+                                <div class="d-flex gap-3 justify-content-center mt-3">
+                                    <a href="adminPanel/Admissions/download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-outline-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
+                                        <i class="bi bi-download me-2"></i>Download QR
+                                    </a>
+                                    <!-- <button onclick="window.print();" class="btn btn-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
+                                        <i class="bi bi-printer me-2"></i>Print Page
+                                    </button> -->
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Info Details arranged 2 in a line (Bigger Font) -->
+                            <div class="col-md-7 ps-md-5">
+                                <div class="row g-4 info-list">
+                                    <div class="col-sm-6 info-item">
+                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-building text-primary me-2"></i>College / Institution</div>
+                                        <div class="info-value text-dark fs-5 fw-bold"><?php echo htmlspecialchars($admission['college']); ?></div>
+                                    </div>
+                                    <div class="col-sm-6 info-item">
+                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-journal-bookmark text-primary me-2"></i>Course Enrolled</div>
+                                        <div class="info-value text-primary fs-5 fw-bold"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
+                                    </div>
+                                    <div class="col-sm-6 info-item">
+                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-envelope text-primary me-2"></i>Email Address</div>
+                                        <div class="info-value text-break fs-5 fw-semibold"><a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>" class="text-decoration-none"><?php echo htmlspecialchars($admission['email_id']); ?></a></div>
+                                    </div>
+                                    <div class="col-sm-6 info-item">
+                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-telephone text-primary me-2"></i>Phone Number</div>
+                                        <div class="info-value text-dark fs-5 fw-semibold"><?php echo htmlspecialchars($admission['phone_number']); ?></div>
+                                    </div>
+                                    <div class="col-sm-6 info-item">
+                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-calendar3 text-primary me-2"></i>Training Duration</div>
+                                        <div class="info-value text-dark fs-6 fw-semibold">
+                                            <?php echo date('d M Y', strtotime($admission['start_date'])); ?> to <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
+                                        </div>
+                                    </div>
+                                    <?php if (!empty($admission['internship'])): ?>
+                                        <div class="col-sm-6 info-item">
+                                            <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-briefcase text-primary me-2"></i>Internship</div>
+                                            <div class="info-value"><span class="badge bg-success-subtle text-success border border-success-subtle fs-6 px-3 py-2 fw-semibold"><?php echo htmlspecialchars($admission['internship']); ?></span></div>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="col-12 info-item mt-4">
+                                        <div class="info-label text-secondary fw-semibold mb-2 fs-6"><i class="bi bi-tags text-primary me-2"></i>Key Software / Skills</div>
+                                        <div class="info-value d-flex flex-wrap gap-2">
+                                            <?php 
+                                            $skills = explode(",", $admission['key_skills']);
+                                            foreach ($skills as $skill) {
+                                                $skill = trim($skill);
+                                                if (!empty($skill)) {
+                                                    echo '<span class="badge bg-light text-dark border px-3 py-2 fs-6 fw-normal">' . htmlspecialchars($skill) . '</span>';
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- /row -->
+                    </div> <!-- /card-body -->
+                </div> <!-- /student-profile-card -->
+            </div> <!-- /col-12 -->
+            
+        </div>
+    </div>
+<?php endif; ?>
             </div>
         </div>
     </div>
