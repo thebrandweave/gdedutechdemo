@@ -62,11 +62,9 @@ $meetings_result = mysqli_query($conn, $meetings_query);
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+  <div class="container-fluid">
+        <div class="row flex-nowrap"> <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar"> 
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100">
                     <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 fw-bolder" style="display: flex;align-items:center;color:black;">
                             <img height="35px" src="../../Images/Logos/edutechLogo.png" alt="">&nbsp; GD Edu Tech
@@ -103,6 +101,11 @@ $meetings_result = mysqli_query($conn, $meetings_query);
                                 <i class="bi bi-calendar2-event me-2"></i> Events
                             </a>
                         </li>
+                             <li class="w-100">
+                            <a href="../social_links.php" class="nav-link">
+                                <i class="bi bi-link-45deg me-2"></i> Social Links
+                            </a>
+                        </li>
                         <li class="w-100 dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-lightbulb me-2"></i> Quick Links
@@ -115,6 +118,11 @@ $meetings_result = mysqli_query($conn, $meetings_query);
                         <li class="w-100">
                             <a href="../Schedule/" class="nav-link active">
                                 <i class="bi bi-calendar-event me-2"></i> Schedule
+                            </a>
+                        </li>
+                         <li class="w-100">
+                            <a href="../feedback/feedback.php" class="nav-link">
+                                <i class="bi bi-chat-square-heart"></i> Feedback
                             </a>
                         </li>
                         <li class="w-100">

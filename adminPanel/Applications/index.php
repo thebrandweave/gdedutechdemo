@@ -46,17 +46,21 @@ $admin_name = $_SESSION['username'] ?? 'Admin';
         color:black;
         font-weight: bold;
     }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
 </style>
 </head>
 
 <body>
 
 <div class="container-fluid">
-<div class="row">
-
-<!-- ✅ Sidebar (same as your categories page) -->
-<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
-    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+        <div class="row flex-nowrap"> <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar"> 
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100">
         <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-decoration-none">
             <span class="fs-5 fw-bolder d-flex align-items-center">
                 <img height="35px" src="../images/edutechLogo.png">
@@ -82,10 +86,14 @@ $admin_name = $_SESSION['username'] ?? 'Admin';
                     <i class="bi bi-person-plus me-2"></i> Student Admission
                 </a>
             </li>
-
+  <li class="w-100">
+                <a href="../Courses/" class="nav-link">
+                    <i class="bi bi-book me-2"></i> Courses
+                </a>
+            </li>
             <li class="w-100">
                 <a href="../Applications/" class="nav-link active">
-                    <i class="bi bi-journal-text me-2"></i> Applications
+                    <i class="bi bi-journal-text me-2"></i> Scholarship Applications
                 </a>
             </li>
              <li class="w-100">
@@ -93,11 +101,11 @@ $admin_name = $_SESSION['username'] ?? 'Admin';
                     <i class="bi bi-calendar2-event me-2"></i> Events
                 </a>
             </li>
-            <li class="w-100">
-                <a href="../Courses/" class="nav-link">
-                    <i class="bi bi-book me-2"></i> Courses
-                </a>
-            </li>
+               <li class="w-100">
+                            <a href="../social_links.php" class="nav-link">
+                                <i class="bi bi-link-45deg me-2"></i> Social Links
+                            </a>
+                        </li>
             <li class="w-100 dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-lightbulb me-2"></i> Quick Links
@@ -112,6 +120,11 @@ $admin_name = $_SESSION['username'] ?? 'Admin';
                     <i class="bi bi-calendar-event me-2"></i> Schedule
                 </a>
             </li>
+             <li class="w-100">
+                            <a href="../feedback/feedback.php" class="nav-link">
+                                <i class="bi bi-chat-square-heart"></i> Feedback
+                            </a>
+                        </li>
             <li class="w-100">
                 <a href="../Messages/" class="nav-link">
                     <i class="bi bi-chat-dots me-2"></i> Messages

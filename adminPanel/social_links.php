@@ -86,6 +86,11 @@ $platforms = ['facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok
                         </ul>
                     </li>
                     <li class="w-100"><a href="Schedule/" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
+                     <li class="w-100">
+                            <a href="../feedback/feedback.php" class="nav-link">
+                                <i class="bi bi-chat-square-heart"></i> Feedback
+                            </a>
+                        </li>
                     <li class="w-100"><a href="Messages/" class="nav-link"><i class="bi bi-chat-dots me-2"></i> Messages</a></li>
                     <li class="w-100"><a href="FAQ/" class="nav-link"><i class="bi bi-question-circle me-2"></i> FAQ</a></li>
                     <li class="w-100"><a href="Users/" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>

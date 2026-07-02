@@ -56,12 +56,12 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body>
+<body class="overflow-x-hidden">
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+        <div class="row flex-nowrap"> 
+            
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar border-end"> 
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100">
                     <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 fw-bolder" style="display: flex;align-items:center;color:black;">
                             <img height="35px" src="../images/edutechLogo.png" alt="">&nbsp; GD Edu Tech
@@ -78,7 +78,7 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                 <i class="bi bi-grid me-2"></i> Categories
                             </a>
                         </li>
-<li class="w-100">
+                        <li class="w-100">
                             <a href="../Admissions/" class="nav-link">
                                 <i class="bi bi-person-plus me-2"></i> Student Admission
                             </a>
@@ -146,10 +146,8 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                 </div>
             </div>
 
-            <!-- Main Content -->
             <div class="col py-3">
                 <div class="container-fluid">
-                    <!-- Header -->
                     <div class="row mb-4">
                         <div class="col">
                             <h2>User Management</h2>
@@ -162,7 +160,6 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                         </div>
                     </div>
 
-                    <!-- Alert Messages -->
                     <?php if (isset($_SESSION['message'])): ?>
                         <div class="alert alert-<?php echo $_SESSION['message_type']; ?> alert-dismissible fade show" role="alert">
                             <?php
@@ -174,14 +171,12 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                         </div>
                     <?php endif; ?>
 
-                    <!-- Users Table -->
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <!-- Tabs -->
                             <ul class="nav nav-tabs mb-4" id="userTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab">
-                                        <i class="bi bi-mortarboard me-2"></i>Students
+                                        <i class="bi bi-mortarboard me-2"></i><span>Students</span>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
@@ -191,22 +186,20 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                 </li>
                             </ul>
 
-                            <!-- Tab Content -->
                             <div class="tab-content" id="userTabsContent">
-                                <!-- Students Tab -->
                                 <div class="tab-pane fade show active" id="students" role="tabpanel">
                                     <div class="table-responsive">
                                         <table class="table table-hover mb-0">
                                             <thead class="bg-primary text-white">
                                                 <tr>
-                                                    <th class="py-3 px-4 fw-bold">ID</th>
-                                                    <th class="py-3 px-4 fw-bold">Username</th>
-                                                    <th class="py-3 px-4 fw-bold">Email</th>
-                                                    <th class="py-3 px-4 fw-bold">First Name</th>
-                                                    <th class="py-3 px-4 fw-bold">Last Name</th>
-                                                    <th class="py-3 px-4 fw-bold">Status</th>
-                                                    <th class="py-3 px-4 fw-bold">Date Joined</th>
-                                                    <th class="py-3 px-4 fw-bold text-center">Actions</th>
+                                                    <th class="py-3  fw-bold">ID</th>
+                                                    <th class="py-3  fw-bold">Username</th>
+                                                    <th class="py-3  fw-bold">Email</th>
+                                                    <th class="py-3  fw-bold">First Name</th>
+                                                    <th class="py-3  fw-bold">Last Name</th>
+                                                    <th class="py-3  fw-bold">Status</th>
+                                                    <th class="py-3  fw-bold">Date Joined</th>
+                                                    <th class="py-3  fw-bold text-center">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -218,8 +211,8 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                                 while ($user = mysqli_fetch_assoc($students_result)): 
                                                 ?>
                                                     <tr class="align-middle">
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['user_id']); ?></td>
-                                                        <td class="px-4">
+                                                        <td class=""><?php echo htmlspecialchars($user['user_id']); ?></td>
+                                                        <td class="">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="rounded-circle bg-primary text-white me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                                                     <?php echo strtoupper(substr($user['username'], 0, 1)); ?>
@@ -227,16 +220,16 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                                                 <?php echo htmlspecialchars($user['username']); ?>
                                                             </div>
                                                         </td>
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['email']); ?></td>
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['first_name']); ?></td>
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['last_name']); ?></td>
-                                                        <td class="px-4">
+                                                        <td class=""><?php echo htmlspecialchars($user['email']); ?></td>
+                                                        <td class=""><?php echo htmlspecialchars($user['first_name']); ?></td>
+                                                        <td class=""><?php echo htmlspecialchars($user['last_name']); ?></td>
+                                                        <td class="">
                                                             <span class="badge <?php echo $user['status'] == 'active' ? 'bg-success' : ($user['status'] == 'inactive' ? 'bg-warning' : 'bg-danger'); ?> text-white">
                                                                 <?php echo htmlspecialchars($user['status']); ?>
                                                             </span>
                                                         </td>
-                                                        <td class="px-4"><?php echo date('Y-m-d', strtotime($user['date_joined'])); ?></td>
-                                                        <td class="px-4 text-center">
+                                                        <td class=""><?php echo date('Y-m-d', strtotime($user['date_joined'])); ?></td>
+                                                        <td class=" text-center">
                                                             <div class="btn-group" role="group">
                                                                 <a href="edit_user.php?id=<?php echo $user['user_id']; ?>" 
                                                                    class="btn btn-sm btn-outline-primary rounded me-1" 
@@ -258,20 +251,19 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                     </div>
                                 </div>
 
-                                <!-- Staff Tab -->
                                 <div class="tab-pane fade" id="staff" role="tabpanel">
                                     <div class="table-responsive">
                                         <table class="table table-hover mb-0">
                                             <thead class="bg-primary text-white">
                                                 <tr>
-                                                    <th class="py-3 px-4 fw-bold">ID</th>
-                                                    <th class="py-3 px-4 fw-bold">Username</th>
-                                                    <th class="py-3 px-4 fw-bold">Email</th>
-                                                    <th class="py-3 px-4 fw-bold">First Name</th>
-                                                    <th class="py-3 px-4 fw-bold">Last Name</th>
-                                                    <th class="py-3 px-4 fw-bold">Status</th>
-                                                    <th class="py-3 px-4 fw-bold">Date Joined</th>
-                                                    <th class="py-3 px-4 fw-bold text-center">Actions</th>
+                                                    <th class="py-3  fw-bold">ID</th>
+                                                    <th class="py-3  fw-bold">Username</th>
+                                                    <th class="py-3  fw-bold">Email</th>
+                                                    <th class="py-3  fw-bold">First Name</th>
+                                                    <th class="py-3  fw-bold">Last Name</th>
+                                                    <th class="py-3  fw-bold">Status</th>
+                                                    <th class="py-3  fw-bold">Date Joined</th>
+                                                    <th class="py-3  fw-bold text-center">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -283,8 +275,8 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                                 while ($user = mysqli_fetch_assoc($staff_result)): 
                                                 ?>
                                                     <tr class="align-middle">
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['user_id']); ?></td>
-                                                        <td class="px-4">
+                                                        <td class=""><?php echo htmlspecialchars($user['user_id']); ?></td>
+                                                        <td class="">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="rounded-circle bg-primary text-white me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                                                     <?php echo strtoupper(substr($user['username'], 0, 1)); ?>
@@ -292,16 +284,16 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                                                 <?php echo htmlspecialchars($user['username']); ?>
                                                             </div>
                                                         </td>
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['email']); ?></td>
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['first_name']); ?></td>
-                                                        <td class="px-4"><?php echo htmlspecialchars($user['last_name']); ?></td>
-                                                        <td class="px-4">
+                                                        <td class=""><?php echo htmlspecialchars($user['email']); ?></td>
+                                                        <td class=""><?php echo htmlspecialchars($user['first_name']); ?></td>
+                                                        <td class=""><?php echo htmlspecialchars($user['last_name']); ?></td>
+                                                        <td class="">
                                                             <span class="badge <?php echo $user['status'] == 'active' ? 'bg-success' : ($user['status'] == 'inactive' ? 'bg-warning' : 'bg-danger'); ?> text-white">
                                                                 <?php echo htmlspecialchars($user['status']); ?>
                                                             </span>
                                                         </td>
-                                                        <td class="px-4"><?php echo date('Y-m-d', strtotime($user['date_joined'])); ?></td>
-                                                        <td class="px-4 text-center">
+                                                        <td class=""><?php echo date('Y-m-d', strtotime($user['date_joined'])); ?></td>
+                                                        <td class=" text-center">
                                                             <div class="btn-group" role="group">
                                                                 <a href="edit_user.php?id=<?php echo $user['user_id']; ?>" 
                                                                    class="btn btn-sm btn-outline-primary rounded me-1" 
@@ -333,55 +325,18 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <style>
-        /* Fix layout for Users page specifically */
-        .container-fluid .row {
-            margin: 0;
+        /* Hide scrollbar for the sticky sidebar but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
         
+        /* Ensure the sidebar background stays solid over content if scrolling */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 250px; /* Fixed width for sidebar */
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .col.py-3 {
-            margin-left: 250px; /* Space for fixed sidebar */
-            width: calc(100% - 250px);
-            min-height: 100vh;
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-        
-        /* Ensure main content doesn't overlap */
-        .main-content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: relative;
-                height: auto;
-                width: 100%;
-            }
-            
-            .col.py-3 {
-                margin-left: 0;
-                width: 100%;
-                padding-left: 15px;
-                padding-right: 15px;
-            }
-            
-            .main-content-wrapper {
-                margin-left: 0;
-                padding: 15px;
-            }
+            background-color: #fff; 
         }
     </style>
 </body>

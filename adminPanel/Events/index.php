@@ -65,6 +65,11 @@ $events_q = mysqli_query($conn, "SELECT e.*, u.username AS organizer_name FROM E
                                 <i class="bi bi-journal-text me-2"></i> Scholarship Applications
                             </a></li>
 					<li class="w-100"><a href="../Events/" class="nav-link active"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+					     <li class="w-100">
+                            <a href="../social_links.php" class="nav-link">
+                                <i class="bi bi-link-45deg me-2"></i> Social Links
+                            </a>
+                        </li>
 					<li class="w-100 dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-lightbulb me-2"></i> Quick Links
@@ -75,6 +80,11 @@ $events_q = mysqli_query($conn, "SELECT e.*, u.username AS organizer_name FROM E
                             </ul>
             </li>
             <li class="w-100"><a href="../Schedule/" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
+			 <li class="w-100">
+                            <a href="../feedback/feedback.php" class="nav-link">
+                                <i class="bi bi-chat-square-heart"></i> Feedback
+                            </a>
+                        </li>
 					<li class="w-100"><a href="../Messages/" class="nav-link"><i class="bi bi-chat-dots me-2"></i> Messages</a></li>
 					<li class="w-100"><a href="../FAQ/" class="nav-link"><i class="bi bi-question-circle me-2"></i> FAQ</a></li>
 					<li class="w-100"><a href="../Users/" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>

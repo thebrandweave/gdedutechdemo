@@ -67,14 +67,22 @@ $course_id = $_GET['course_id'] ?? 1;
             height: 10px;
             border-radius: 5px;
         }
+
+    </style>
+     <style>
+            .hide-scrollbar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+  <div class="container-fluid">
+        <div class="row flex-nowrap"> <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar"> 
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100">
                     <a href="student_dashboard.php" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 fw-bolder" style="display: flex;align-items:center;"><img height="35px" src="../../Images/Logos/edutechLogo.png" alt="">&nbsp; GD Edu Tech</span>
                     </a>
