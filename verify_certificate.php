@@ -452,14 +452,14 @@ if (isset($_GET['student_id'])) {
                                     </span>
                                 </div>
 
-                                <div class="d-flex gap-3 justify-content-center mt-3">
-                                    <a href="adminPanel/Admissions/download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-outline-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
+                                <!-- <div class="d-flex gap-3 justify-content-center mt-3"> -->
+                                    <!-- <a href="adminPanel/Admissions/download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-outline-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
                                         <i class="bi bi-download me-2"></i>Download QR
-                                    </a>
+                                    </a> -->
                                     <!-- <button onclick="window.print();" class="btn btn-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
                                         <i class="bi bi-printer me-2"></i>Print Page
                                     </button> -->
-                                </div>
+                                <!-- </div> -->
                             </div>
 
                             <!-- Right Column: Info Details arranged 2 in a line (Bigger Font) -->
