@@ -49,8 +49,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
     $end_date = mysqli_real_escape_string($conn, trim($_POST['end_date']));
     $key_skills = mysqli_real_escape_string($conn, trim($_POST['key_skills']));
 
-    if (empty($student_name) || empty($college) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($internship) || empty($start_date) || empty($end_date) || empty($key_skills)) {
-        $_SESSION['message'] = "All fields are required.";
+    if (empty($student_name) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($start_date) || empty($end_date) || empty($key_skills)) {
+        $_SESSION['message'] = "Required fields are missing.";
         $_SESSION['message_type'] = "danger";
     } else {
         // Begin transaction to ensure safe ID generation
@@ -102,8 +102,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['edit_admissio
     $end_date = mysqli_real_escape_string($conn, trim($_POST['end_date']));
     $key_skills = mysqli_real_escape_string($conn, trim($_POST['key_skills']));
 
-    if (empty($student_name) || empty($college) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($internship) || empty($start_date) || empty($end_date) || empty($key_skills)) {
-        $_SESSION['message'] = "All fields are required.";
+    if (empty($student_name) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($start_date) || empty($end_date) || empty($key_skills)) {
+        $_SESSION['message'] = "Required fields are missing.";
         $_SESSION['message_type'] = "danger";
     } else {
         $update_query = "UPDATE student_admissions SET 
@@ -354,11 +354,11 @@ try {
                                                         </div>
                                                     </td>
                                                     <td class="px-4"><?php echo htmlspecialchars($admission['student_name']); ?></td>
-                                                    <td class="px-4"><?php echo htmlspecialchars($admission['college']); ?></td>
+                                                    <td class="px-4"><?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?></td>
                                                     <td class="px-4"><?php echo htmlspecialchars($admission['phone_number']); ?></td>
                                                     <td class="px-4"><?php echo htmlspecialchars($admission['email_id']); ?></td>
                                                     <td class="px-4"><?php echo htmlspecialchars($admission['course_applied']); ?></td>
-                                                    <td class="px-4"><span class="badge bg-secondary"><?php echo htmlspecialchars($admission['internship']); ?></span></td>
+                                                    <td class="px-4"><span class="badge bg-secondary"><?php echo htmlspecialchars($admission['internship'] ?: 'None'); ?></span></td>
                                                     <td class="px-4 text-nowrap"><?php echo $admission['start_date'] ? date('d M Y', strtotime($admission['start_date'])) : '-'; ?></td>
                                                     <td class="px-4 text-nowrap"><?php echo $admission['end_date'] ? date('d M Y', strtotime($admission['end_date'])) : '-'; ?></td>
                                                     <td class="px-4"><span class="text-truncate d-inline-block" style="max-width: 120px;" title="<?php echo htmlspecialchars($admission['key_skills']); ?>"><?php echo htmlspecialchars($admission['key_skills'] ?? '-'); ?></span></td>
@@ -433,8 +433,8 @@ try {
                             <input type="text" class="form-control" id="student_name" name="student_name" required placeholder="Enter student full name">
                         </div>
                         <div class="mb-3">
-                            <label for="college" class="form-label">College <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="college" name="college" required placeholder="Enter college name">
+                            <label for="college" class="form-label">College <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name (or leave empty if independent)">
                         </div>
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
@@ -479,8 +479,8 @@ try {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="internship" class="form-label">Internship <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="internship" name="internship" required placeholder="e.g. Yes (3 Months), No, Completed">
+                            <label for="internship" class="form-label">Internship <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="internship" name="internship" placeholder="e.g. Yes (3 Months), No, Completed">
                         </div>
                         <div class="mb-3">
                             <label for="start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
@@ -520,8 +520,8 @@ try {
                             <input type="text" class="form-control" id="edit_student_name" name="student_name" required placeholder="Enter student full name">
                         </div>
                         <div class="mb-3">
-                            <label for="edit_college" class="form-label">College <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_college" name="college" required placeholder="Enter college name">
+                            <label for="edit_college" class="form-label">College <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="edit_college" name="college" placeholder="Enter college name (or leave empty if independent)">
                         </div>
                         <div class="mb-3">
                             <label for="edit_phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
@@ -558,8 +558,8 @@ try {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="edit_internship" class="form-label">Internship <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_internship" name="internship" required placeholder="e.g. Yes (3 Months), No, Completed">
+                            <label for="edit_internship" class="form-label">Internship <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="edit_internship" name="internship" placeholder="e.g. Yes (3 Months), No, Completed">
                         </div>
                         <div class="mb-3">
                             <label for="edit_start_date" class="form-label">Start Date <span class="text-danger">*</span></label>

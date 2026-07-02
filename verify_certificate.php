@@ -75,7 +75,7 @@ if (isset($_GET['student_id'])) {
         }
 
         .search-btn {
-            background: linear-gradient(135deg, #ff6b35 0%, #ff5216 100%);
+            background: linear-gradient(135deg, #c94a55 0%, #d4634e 100%);
             color: white;
             border: none;
             font-weight: 600;
@@ -465,36 +465,40 @@ if (isset($_GET['student_id'])) {
                             <!-- Right Column: Info Details arranged 2 in a line (Bigger Font) -->
                             <div class="col-md-7 ps-md-5">
                                 <div class="row g-4 info-list">
-                                    <div class="col-sm-6 info-item">
-                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-building text-primary me-2"></i>College / Institution</div>
+                                    <?php if (!empty(trim($admission['college']))): ?>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-building text-primary me-2"></i>College / Institution:</div>
                                         <div class="info-value text-dark fs-5 fw-bold"><?php echo htmlspecialchars($admission['college']); ?></div>
                                     </div>
-                                    <div class="col-sm-6 info-item">
-                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-journal-bookmark text-primary me-2"></i>Course Enrolled</div>
+                                    <?php endif; ?>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-journal-bookmark text-primary me-2"></i>Course Enrolled:</div>
                                         <div class="info-value text-primary fs-5 fw-bold"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
                                     </div>
-                                    <div class="col-sm-6 info-item">
-                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-envelope text-primary me-2"></i>Email Address</div>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-envelope text-primary me-2"></i>Email Address:</div>
                                         <div class="info-value text-break fs-5 fw-semibold"><a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>" class="text-decoration-none"><?php echo htmlspecialchars($admission['email_id']); ?></a></div>
                                     </div>
-                                    <div class="col-sm-6 info-item">
-                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-telephone text-primary me-2"></i>Phone Number</div>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-telephone text-primary me-2"></i>Phone Number:</div>
                                         <div class="info-value text-dark fs-5 fw-semibold"><?php echo htmlspecialchars($admission['phone_number']); ?></div>
                                     </div>
-                                    <div class="col-sm-6 info-item">
-                                        <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-calendar3 text-primary me-2"></i>Training Duration</div>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-calendar3 text-primary me-2"></i>Training Duration:</div>
                                         <div class="info-value text-dark fs-6 fw-semibold">
                                             <?php echo date('d M Y', strtotime($admission['start_date'])); ?> to <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
                                         </div>
                                     </div>
-                                    <?php if (!empty($admission['internship'])): ?>
-                                        <div class="col-sm-6 info-item">
-                                            <div class="info-label text-secondary fw-semibold mb-1 fs-6"><i class="bi bi-briefcase text-primary me-2"></i>Internship</div>
-                                            <div class="info-value"><span class="badge bg-success-subtle text-success border border-success-subtle fs-6 px-3 py-2 fw-semibold"><?php echo htmlspecialchars($admission['internship']); ?></span></div>
+                                    <?php if (!empty(trim($admission['internship']))): ?>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-briefcase text-primary me-2"></i>Internship:</div>
+                                        <div class="info-value">
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-6 px-3 py-2 fw-semibold"><?php echo htmlspecialchars($admission['internship']); ?></span>
                                         </div>
+                                    </div>
                                     <?php endif; ?>
-                                    <div class="col-12 info-item mt-4">
-                                        <div class="info-label text-secondary fw-semibold mb-2 fs-6"><i class="bi bi-tags text-primary me-2"></i>Key Software / Skills</div>
+                                    <div class="col-12 info-item d-flex align-items-baseline flex-wrap mt-4">
+                                        <div class="info-label text-secondary fw-semibold fs-6 me-2"><i class="bi bi-tags text-primary me-2"></i>Key Software / Skills:</div>
                                         <div class="info-value d-flex flex-wrap gap-2">
                                             <?php 
                                             $skills = explode(",", $admission['key_skills']);

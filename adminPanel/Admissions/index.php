@@ -50,8 +50,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
     $end_date = mysqli_real_escape_string($conn, trim($_POST['end_date']));
     $key_skills = mysqli_real_escape_string($conn, trim($_POST['key_skills']));
 
-    if (empty($student_name) || empty($college) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($internship) || empty($start_date) || empty($end_date) || empty($key_skills)) {
-        $_SESSION['message'] = "All fields are required.";
+    if (empty($student_name) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($start_date) || empty($end_date) || empty($key_skills)) {
+        $_SESSION['message'] = "Required fields are missing.";
         $_SESSION['message_type'] = "danger";
     } else {
         // Begin transaction to ensure safe ID generation
@@ -103,8 +103,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['edit_admissio
     $end_date = mysqli_real_escape_string($conn, trim($_POST['end_date']));
     $key_skills = mysqli_real_escape_string($conn, trim($_POST['key_skills']));
 
-    if (empty($student_name) || empty($college) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($internship) || empty($start_date) || empty($end_date) || empty($key_skills)) {
-        $_SESSION['message'] = "All fields are required.";
+    if (empty($student_name) || empty($phone_number) || empty($email_id) || empty($course_applied) || empty($start_date) || empty($end_date) || empty($key_skills)) {
+        $_SESSION['message'] = "Required fields are missing.";
         $_SESSION['message_type'] = "danger";
     } else {
         $update_query = "UPDATE student_admissions SET 
@@ -295,7 +295,7 @@ try {
                                 <i class="bi bi-plus-circle me-2"></i>New Admission
                             </button>
                         </div>
-                    </div>
+                    </div>  
 
                     <!-- Alert Messages -->
                     <?php if (isset($_SESSION['message'])): ?>
@@ -354,8 +354,8 @@ try {
                                                         </div>
                                                     </td>
                                                     <td class="px-2"><?php echo htmlspecialchars($admission['student_name']); ?></td>
-                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['college']); ?>">
-                                                        <div class="text-truncate" style="max-width: 120px;"><?php echo htmlspecialchars($admission['college']); ?></div>
+                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?>">
+                                                        <div class="text-truncate" style="max-width: 120px;"><?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?></div>
                                                     </td>
                                                     <td class="px-2 text-nowrap"><?php echo htmlspecialchars($admission['phone_number']); ?></td>
                                                     <td class="px-2" title="<?php echo htmlspecialchars($admission['email_id']); ?>">
@@ -364,7 +364,7 @@ try {
                                                     <td class="px-2" title="<?php echo htmlspecialchars($admission['course_applied']); ?>">
                                                         <div class="text-truncate" style="max-width: 110px;"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
                                                     </td>
-                                                    <td class="px-2"><span class="badge bg-secondary" style="font-size: 0.75rem;"><?php echo htmlspecialchars($admission['internship']); ?></span></td>
+                                                    <td class="px-2"><span class="badge bg-secondary" style="font-size: 0.75rem;"><?php echo htmlspecialchars($admission['internship'] ?: 'None'); ?></span></td>
                                                     <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo $admission['start_date'] ? date('d M Y', strtotime($admission['start_date'])) : '-'; ?></td>
                                                     <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo $admission['end_date'] ? date('d M Y', strtotime($admission['end_date'])) : '-'; ?></td>
                                                     <td class="px-2" title="<?php echo htmlspecialchars($admission['key_skills']); ?>">
@@ -441,8 +441,14 @@ try {
                             <input type="text" class="form-control" id="student_name" name="student_name" required placeholder="Enter student full name">
                         </div>
                         <div class="mb-3">
-                            <label for="college" class="form-label">College <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="college" name="college" required placeholder="Enter college name">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" role="switch" id="has_college" onchange="toggleOptionalField('', 'college')">
+                                <label class="form-check-label" for="has_college">Student is attending a College</label>
+                            </div>
+                            <div id="college_wrapper" style="display: none;">
+                                <label for="college" class="form-label">College</label>
+                                <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
@@ -457,19 +463,25 @@ try {
                             <select class="form-select" id="course_applied" name="course_applied" required>
                                 <option value="" disabled selected>Select a course</option>
                                 <option value="Full Stack Development">Full Stack Development</option>
-                                <option value="Architectural Design course">Architectural Design course</option>
-                                <option value="Interior Design course">Interior Design course</option>
+                                <option value="Architectural Design ">Architectural Design</option>
+                                <option value="Interior Design ">Interior Design</option>
                                 <option value="Digital Marketing">Digital Marketing</option>
                                 <option value="Graphic Design & Video Editing">Graphic Design & Video Editing</option>
-                                <option value="Photography & Camera Handling">Photography & Camera Handling</option>
+                                <option value="Graphic Design ">Graphic Design </option>
+                                <option value="Visual Media Program">Visual Media Program</option>
+                                <option value="Tally & GST">Tally & GST</option>
+                                <option value="Advanced Excel">Advanced Excel</option>
                                 <?php 
                                 $listed_courses = [
                                     "Full Stack Development",
-                                    "Architectural Design course",
-                                    "Interior Design course",
+                                    "Architectural Design ",
+                                    "Interior Design ",
                                     "Digital Marketing",
                                     "Graphic Design & Video Editing",
-                                    "Photography & Camera Handling"
+                                    "Graphic Design",
+                                    "Visual Media Program",
+                                    "Tally & GST",
+                                    "Advanced Excel"
                                 ];
                                 if ($courses_query && mysqli_num_rows($courses_query) > 0): 
                                     mysqli_data_seek($courses_query, 0);
@@ -487,8 +499,14 @@ try {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="internship" class="form-label">Internship <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="internship" name="internship" required placeholder="e.g. Yes (3 Months), No, Completed">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" role="switch" id="has_internship" onchange="toggleOptionalField('', 'internship')">
+                                <label class="form-check-label" for="has_internship">Internship Included</label>
+                            </div>
+                            <div id="internship_wrapper" style="display: none;">
+                                <label for="internship" class="form-label">Internship Details</label>
+                                <input type="text" class="form-control" id="internship" name="internship" placeholder="e.g. Yes (3 Months), Completed">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
@@ -528,8 +546,14 @@ try {
                             <input type="text" class="form-control" id="edit_student_name" name="student_name" required placeholder="Enter student full name">
                         </div>
                         <div class="mb-3">
-                            <label for="edit_college" class="form-label">College <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_college" name="college" required placeholder="Enter college name">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" role="switch" id="edit_has_college" onchange="toggleOptionalField('edit_', 'college')">
+                                <label class="form-check-label" for="edit_has_college">Student is attending a College</label>
+                            </div>
+                            <div id="edit_college_wrapper" style="display: none;">
+                                <label for="edit_college" class="form-label">College</label>
+                                <input type="text" class="form-control" id="edit_college" name="college" placeholder="Enter college name">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
@@ -566,8 +590,14 @@ try {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="edit_internship" class="form-label">Internship <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_internship" name="internship" required placeholder="e.g. Yes (3 Months), No, Completed">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" role="switch" id="edit_has_internship" onchange="toggleOptionalField('edit_', 'internship')">
+                                <label class="form-check-label" for="edit_has_internship">Internship Included</label>
+                            </div>
+                            <div id="edit_internship_wrapper" style="display: none;">
+                                <label for="edit_internship" class="form-label">Internship Details</label>
+                                <input type="text" class="form-control" id="edit_internship" name="internship" placeholder="e.g. Yes (3 Months), Completed">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
@@ -593,23 +623,60 @@ try {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+    // Shows/hides the College or Internship input based on its toggle switch.
+    // prefix is '' for the Add modal, 'edit_' for the Edit modal.
+    function toggleOptionalField(prefix, field) {
+        const checkbox = document.getElementById(prefix + 'has_' + field);
+        const wrapper = document.getElementById(prefix + field + '_wrapper');
+        const input = document.getElementById(prefix + field);
+        const show = checkbox.checked;
+        wrapper.style.display = show ? 'block' : 'none';
+        if (!show) {
+            input.value = '';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const editButtons = document.querySelectorAll('.edit-btn');
         const editModal = new bootstrap.Modal(document.getElementById('editAdmissionModal'));
-        
+
+        // Reset the Add Admission modal's toggles every time it's opened
+        document.getElementById('addAdmissionModal').addEventListener('show.bs.modal', function() {
+            document.getElementById('has_college').checked = false;
+            document.getElementById('has_internship').checked = false;
+            toggleOptionalField('', 'college');
+            toggleOptionalField('', 'internship');
+        });
+
         editButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 document.getElementById('edit_id').value = this.getAttribute('data-id');
                 document.getElementById('edit_student_name').value = this.getAttribute('data-name');
-                document.getElementById('edit_college').value = this.getAttribute('data-college');
                 document.getElementById('edit_phone_number').value = this.getAttribute('data-phone');
                 document.getElementById('edit_email_id').value = this.getAttribute('data-email');
                 document.getElementById('edit_course_applied').value = this.getAttribute('data-course');
-                document.getElementById('edit_internship').value = this.getAttribute('data-internship');
                 document.getElementById('edit_start_date').value = this.getAttribute('data-start');
                 document.getElementById('edit_end_date').value = this.getAttribute('data-end');
                 document.getElementById('edit_key_skills').value = this.getAttribute('data-skills');
-                
+
+                // College toggle: only switch it on and show the field if a value already exists
+                const collegeVal = this.getAttribute('data-college') || '';
+                document.getElementById('edit_college').value = collegeVal;
+                document.getElementById('edit_has_college').checked = collegeVal.trim() !== '';
+                toggleOptionalField('edit_', 'college');
+                if (collegeVal.trim() !== '') {
+                    document.getElementById('edit_college').value = collegeVal; // restore after toggle clears it
+                }
+
+                // Internship toggle: only switch it on and show the field if a value already exists
+                const internshipVal = this.getAttribute('data-internship') || '';
+                document.getElementById('edit_internship').value = internshipVal;
+                document.getElementById('edit_has_internship').checked = internshipVal.trim() !== '';
+                toggleOptionalField('edit_', 'internship');
+                if (internshipVal.trim() !== '') {
+                    document.getElementById('edit_internship').value = internshipVal; // restore after toggle clears it
+                }
+
                 editModal.show();
             });
         });
