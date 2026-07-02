@@ -35,28 +35,56 @@ $feedbacks = $conn->query($query);
     <link rel="stylesheet" href="../css/style.css">
 
     <style>
-
-        .feedback-card{
-            transition: 0.3s ease;
-            overflow: hidden;
+        /* Modern Feedback Card Styles */
+        .feedback-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
+            border-radius: 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding-top: 2rem;
         }
 
-        .feedback-card:hover{
-            transform: translateY(-5px);
+        .feedback-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06) !important;
+            border-color: rgba(0, 0, 0, 0.15) !important;
         }
 
-        .feedback-image{
-            height: 220px;
+        .avatar-container {
+            position: absolute;
+            top: -35px;
+            left: 24px;
+            z-index: 2;
+        }
+
+        .feedback-avatar {
+            height: 70px;
+            width: 70px;
             object-fit: cover;
-            width: 100%;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+            background-color: #f8f9fa;
         }
 
-        .status-badge{
-            font-size: 13px;
-            padding: 6px 12px;
-            border-radius: 30px;
+        .status-badge {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 5px 12px;
+            border-radius: 20px;
         }
-
+        
+        .feedback-quote {
+            font-style: italic;
+            line-height: 1.6;
+            color: #495057;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 14px;
+        }
     </style>
 
 </head>
@@ -244,7 +272,109 @@ $feedbacks = $conn->query($query);
 
                 </div>
 
-                <div class="row">
+          <div class="row" style="margin-top: 40px;"> <!-- Margin added to allow breathing room for top avatars -->
+
+    <?php while($row = $feedbacks->fetch_assoc()): ?>
+
+        <div class="col-lg-4 col-md-6 mb-5"> <!-- Adjusted margin-bottom for overlap spacing -->
+
+            <div class="card feedback-card border-0 h-100">
+
+                <!-- Floating Round Avatar Container -->
+                <div class="avatar-container">
+                    <?php if(!empty($row['student_image'])): ?>
+                        <img 
+                            src="../../uploads/feedback/<?php echo $row['student_image']; ?>" 
+                            class="feedback-avatar"
+                            alt="<?php echo htmlspecialchars($row['student_name']); ?>"
+                        >
+                    <?php else: ?>
+                        <img 
+                            src="../images/default-course.png" 
+                            class="feedback-avatar"
+                            alt="Default Profile"
+                        >
+                    <?php endif; ?>
+                </div>
+
+                <div class="card-body d-flex flex-column pt-4 px-4 pb-4">
+
+                    <!-- Header Row: Name & Status -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1 text-dark">
+                                <?php echo htmlspecialchars($row['student_name']); ?>
+                            </h5>
+                            <span class="text-muted small">
+                                <i class="bi bi-mortarboard me-1"></i>
+                                <?php echo htmlspecialchars($row['college_name']); ?>
+                            </span>
+                        </div>
+
+                        <div>
+                            <?php
+                            $status = $row['status'];
+                            if($status == 'approved'){
+                                echo '<span class="badge bg-success-subtle text-success border border-success-subtle status-badge">Approved</span>';
+                            }
+                            elseif($status == 'rejected'){
+                                echo '<span class="badge bg-danger-subtle text-danger border border-danger-subtle status-badge">Rejected</span>';
+                            }
+                            else{
+                                echo '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle status-badge">Pending</span>';
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <!-- Course Meta Tag -->
+                    <div class="mb-3">
+                        <span class="badge bg-light text-secondary border px-2 py-1.5 font-monospace fs-7">
+                            <i class="bi bi-book me-1 text-primary"></i>
+                            <?php echo htmlspecialchars($row['course_name']); ?>
+                        </span>
+                    </div>
+
+                    <!-- Stars Section -->
+                    <div class="mb-3 text-warning fs-6">
+                        <?php
+                        for($i=1; $i<=$row['rating']; $i++){
+                            echo '★'; // Using solid star character for crispness
+                        }
+                        ?>
+                    </div>
+
+                    <!-- Styled Quote Block -->
+                    <p class="feedback-quote flex-grow-1 mb-4 text-secondary small">
+                        "<?php echo htmlspecialchars($row['feedback']); ?>"
+                    </p>
+
+                    <!-- Clean Actions Grid -->
+                    <div class="d-flex gap-2 mt-auto">
+                        <a 
+                            href="../approve-feedback.php?id=<?php echo $row['feedback_id']; ?>" 
+                            class="btn btn-success btn-sm w-100 rounded-3 py-2 d-flex align-items-center justify-content-center"
+                        >
+                            <i class="bi bi-check-circle me-1.5"></i> Approve
+                        </a>
+
+                        <a 
+                            href="../reject-feedback.php?id=<?php echo $row['feedback_id']; ?>" 
+                            class="btn btn-outline-danger btn-sm w-100 rounded-3 py-2 d-flex align-items-center justify-content-center"
+                        >
+                            <i class="bi bi-x-circle me-1.5"></i> Reject
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    <?php endwhile; ?>
+
+</div>
 
                     <?php while($row = $feedbacks->fetch_assoc()): ?>
 
