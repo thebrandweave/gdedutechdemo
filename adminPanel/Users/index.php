@@ -98,6 +98,11 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                                 <i class="bi bi-calendar2-event me-2"></i> Events
                             </a>
                         </li>
+                        <li class="w-100">
+                         <a href="../social_links.php" class="nav-link">
+                                <i class="bi bi-link-45deg me-2"></i> Social Links
+                            </a>
+                        </li>
                         <li class="w-100 dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-lightbulb me-2"></i> Quick Links
@@ -110,6 +115,11 @@ $admin_name = $_SESSION['first_name'] ?? 'Admin';
                         <li class="w-100">
                             <a href="../Schedule/" class="nav-link">
                                 <i class="bi bi-calendar-event me-2"></i> Schedule
+                            </a>
+                        </li>
+                               <li class="w-100">
+                            <a href="../feedback/feedback.php" class="nav-link">
+                                <i class="bi bi-chat-square-heart"></i> Feedback
                             </a>
                         </li>
                         <li class="w-100">

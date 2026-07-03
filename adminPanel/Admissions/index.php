@@ -54,6 +54,34 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
         $_SESSION['message'] = "Required fields are missing.";
         $_SESSION['message_type'] = "danger";
     } else {
+        
+        // Handle Image Upload using Absolute Path
+        $profile_image = NULL;
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+            
+            // __DIR__ gets the exact current folder path to prevent relative path mapping errors
+            $upload_dir = rtrim(__DIR__, '/\\') . '/../../uploads/profiles/';
+            
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+            
+            $file_ext = strtolower(pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION));
+            
+            if(in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $new_filename = 'profile_' . time() . '_' . rand(1000, 9999) . '.' . $file_ext;
+                $destination = $upload_dir . $new_filename;
+                
+                if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $destination)) {
+                    $profile_image = $new_filename;
+                } else {
+                    // If it still fails, it will tell you exactly where it tried to save it
+                    $_SESSION['message'] = "Upload Failed: Could not save to " . $destination;
+                    $_SESSION['message_type'] = "danger";
+                }
+            }
+        }
+
         // Begin transaction to ensure safe ID generation
         mysqli_begin_transaction($conn);
         
@@ -72,12 +100,16 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
         $student_id = "GDEDU" . str_pad($next_num, 4, "0", STR_PAD_LEFT);
         
         // Insert record
-        $insert_query = "INSERT INTO student_admissions (student_id, student_name, college, phone_number, email_id, course_applied, internship, start_date, end_date, key_skills) 
-                         VALUES ('$student_id', '$student_name', '$college', '$phone_number', '$email_id', '$course_applied', '$internship', '$start_date', '$end_date', '$key_skills')";
+        $insert_query = "INSERT INTO student_admissions (student_id, profile_image, student_name, college, phone_number, email_id, course_applied, internship, start_date, end_date, key_skills) 
+                         VALUES ('$student_id', " . ($profile_image ? "'$profile_image'" : "NULL") . ", '$student_name', '$college', '$phone_number', '$email_id', '$course_applied', '$internship', '$start_date', '$end_date', '$key_skills')";
         
         if (mysqli_query($conn, $insert_query)) {
             mysqli_commit($conn);
-            $_SESSION['message'] = "Student admitted successfully! Generated ID: " . $student_id;
+            if ($profile_image) {
+                $_SESSION['message'] = "Student admitted successfully with profile image! ID: " . $student_id;
+            } else {
+                $_SESSION['message'] = "Student admitted without image. Defaulting to initials. ID: " . $student_id;
+            }
             $_SESSION['message_type'] = "success";
         } else {
             mysqli_rollback($conn);
@@ -107,7 +139,25 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['edit_admissio
         $_SESSION['message'] = "Required fields are missing.";
         $_SESSION['message_type'] = "danger";
     } else {
+        // Handle Image Upload for Edit
+        $image_update_query = "";
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+           $upload_dir = rtrim(__DIR__, '/\\') . '/../../uploads/profiles/';
+            if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+            
+            $file_ext = strtolower(pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION));
+            if(in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $new_filename = 'profile_' . time() . '_' . rand(1000, 9999) . '.' . $file_ext;
+                if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $upload_dir . $new_filename)) {
+                    // This creates the SQL snippet for the image
+                    $image_update_query = "profile_image = '$new_filename', ";
+                }
+            }
+        }
+        
+        // ADDED $image_update_query right below SET
         $update_query = "UPDATE student_admissions SET 
+                         $image_update_query
                          student_name = '$student_name', 
                          college = '$college', 
                          phone_number = '$phone_number', 
@@ -191,7 +241,7 @@ try {
           <!-- Sidebar -->
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-                    <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-decoration-none">
+                    <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-decoration-none text-black">
                         <span class="fs-5 fw-bolder d-flex align-items-center">
                             <img height="35px" src="../images/edutechLogo.png">
                             &nbsp; GD Edu Tech
@@ -328,6 +378,7 @@ try {
                                         <tr>
                                             <th class="py-2 px-2 fw-bold">Student ID</th>
                                             <th class="py-2 px-2 fw-bold text-center">QR Code</th>
+                                            <th class="py-2 px-2 fw-bold text-center">Profile</th>
                                             <th class="py-2 px-2 fw-bold">Name</th>
                                             <th class="py-2 px-2 fw-bold">College</th>
                                             <th class="py-2 px-2 fw-bold">Phone Number</th>
@@ -363,6 +414,24 @@ try {
                                                             </a>
                                                         </div>
                                                     </td>
+                                                    <td class="px-2 text-center align-middle">
+    <?php if (!empty($admission['profile_image'])): ?>
+        <img src="../../uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #dee2e6;">
+    <?php else: ?>
+        <div style="width: 40px; height: 40px; border-radius: 50%; background:linear-gradient(90deg, #0078a8, #d15b50) ;color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; margin: 0 auto;">
+            <?php 
+                $name_parts = explode(' ', trim($admission['student_name']));
+                // Get first letter of first name
+                $initials = strtoupper(substr($name_parts[0], 0, 1));
+                // Get first letter of last name if it exists
+                if (count($name_parts) > 1) {
+                    $initials .= strtoupper(substr(end($name_parts), 0, 1));
+                }
+                echo htmlspecialchars($initials);
+            ?>
+        </div>
+    <?php endif; ?>
+</td>
                                                     <td class="px-2"><?php echo htmlspecialchars($admission['student_name']); ?></td>
                                                     <td class="px-2" title="<?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?>">
                                                         <div class="text-truncate" style="max-width: 120px;"><?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?></div>
@@ -440,12 +509,16 @@ try {
     <div class="modal fade" id="addAdmissionModal" tabindex="-1" aria-labelledby="addAdmissionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="index.php" method="POST">
+                <form action="index.php" method="POST" enctype="multipart/form-data">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="addAdmissionModalLabel">New Student Admission</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="mb-3">
+    <label for="profile_image" class="form-label">Profile Image (Optional)</label>
+    <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+</div>
                         <div class="mb-3">
                             <label for="student_name" class="form-label">Student Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="student_name" name="student_name" required placeholder="Enter student full name">
@@ -540,17 +613,22 @@ try {
         </div>
     </div>
 
-    <!-- Edit Admission Modal -->
-    <div class="modal fade" id="editAdmissionModal" tabindex="-1" aria-labelledby="editAdmissionModalLabel" aria-hidden="true">
+<div class="modal fade" id="editAdmissionModal" tabindex="-1" aria-labelledby="editAdmissionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="index.php" method="POST">
+                <form action="index.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="edit_id">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="editAdmissionModalLabel">Edit Student Admission</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit_profile_image" class="form-label">Update Profile Image (Optional)</label>
+                            <input type="file" class="form-control" id="edit_profile_image" name="profile_image" accept="image/*">
+                            <small class="text-muted">Leave blank to keep the current image.</small>
+                        </div>
+                        
                         <div class="mb-3">
                             <label for="edit_student_name" class="form-label">Student Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="edit_student_name" name="student_name" required placeholder="Enter student full name">

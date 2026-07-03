@@ -356,6 +356,14 @@ if (isset($_GET['student_id'])) {
             margin-top: 6px;
             border: 1px solid #e2e8f0;
         }
+        .profile-image-actual {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #f0f9ff;
+            box-shadow: 0 5px 15px rgba(3, 105, 161, 0.1);
+        }
     </style>
 </head>
 
@@ -428,19 +436,22 @@ if (isset($_GET['student_id'])) {
                             <!-- Left Column: Avatar, Name, ID, Actions -->
                             <div class="col-md-4 text-center border-end-md pb-4 pb-md-0">
                                 <!-- Avatar/Initials -->
-                                <div class="profile-avatar-container mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2rem;">
-                                    <div class="profile-avatar-initials d-flex align-items-center justify-content-center h-100 fw-bold">
-                                        <?php
-                                        $words = explode(" ", $admission['student_name']);
-                                        $initials = "";
-                                        foreach ($words as $w) {
-                                            $initials .= strtoupper(substr($w, 0, 1));
-                                        }
-                                        echo htmlspecialchars(substr($initials, 0, 2));
-                                        ?>
-                                    </div>
+                            <div class="profile-avatar-container mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2rem;">
+                                    <?php if (!empty($admission['profile_image'])): ?>
+                                        <img src="./uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" class="profile-image-actual">
+                                    <?php else: ?>
+                                        <div class="profile-avatar-initials d-flex align-items-center justify-content-center h-100 fw-bold w-100">
+                                            <?php
+                                            $words = explode(" ", $admission['student_name']);
+                                            $initials = "";
+                                            foreach ($words as $w) {
+                                                $initials .= strtoupper(substr($w, 0, 1));
+                                            }
+                                            echo htmlspecialchars(substr($initials, 0, 2));
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
-                                
                                 <h3 class="student-profile-name fw-bold mb-3"><?php echo htmlspecialchars($admission['student_name']); ?></h3>
                                 
                                 <div class="mb-4">
