@@ -401,7 +401,7 @@ if (isset($_GET['student_id'])) {
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-lock text-muted"></i></span>
                                 <input type="text" class="form-control bg-light border-start-0 ps-0" id="student_id" name="student_id" 
-                                       placeholder="Enter Student ID (e.g., GDEDU1001)" value="<?php echo htmlspecialchars($student_id); ?>" required>
+                                       placeholder="Enter Student ID " value="<?php echo htmlspecialchars($student_id); ?>" required>
                             </div>
                         </div>
                         <div class="col-md-3 d-grid">
