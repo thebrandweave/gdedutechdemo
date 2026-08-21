@@ -1,7 +1,7 @@
 <?php 
 $host = $_SERVER['HTTP_HOST'];
 
-if (strpos($host, 'gdedutech.com') !== false) {
+if (strpos($host, 'gdedutech.com') !== true) {
     $conn = new mysqli("localhost", "u232955123_gdedutech", "Brandweave@24", "u232955123_gdedutech");
 } else {
     $conn = new mysqli("localhost", "root", "", "gdedutech");
