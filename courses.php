@@ -338,7 +338,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                 }
 
                 .badge {
-                    background:rgba(233, 235, 236, 0.7) !important;
+                    background:rgba(3, 4, 4, 0.7) !important;
                     border: 1px solid rgba(207, 210, 211, 0.36);
                     color: black;
                 }
