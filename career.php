@@ -8,6 +8,12 @@ require_once './Configurations/config.php';
 // Fetch active job listings
 $query = "SELECT * FROM Careers WHERE status = 'Active' ORDER BY created_at DESC";
 $result = mysqli_query($conn, $query);
+$jobs = [];
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $jobs[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +89,106 @@ $result = mysqli_query($conn, $query);
             justify-content: center;
             margin: 0 auto 20px auto;
             font-size: 1.8rem;
+        }
+
+        /* Life at GD Edu Tech 3-Column Zig-Zag Styling */
+        .life-zigzag-section {
+            position: relative;
+            background: #ffffff;
+            border-radius: 36px;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.04);
+            border: 1px solid #e2e8f0;
+            padding: 50px 30px;
+        }
+
+        .life-zigzag-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 12px 35px -10px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .life-zigzag-card:hover {
+            transform: translateY(-8px) !important;
+            box-shadow: 0 25px 50px -10px rgba(13, 114, 152, 0.18);
+            border-color: #0d7298;
+        }
+
+        .life-card-img-wrap {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .life-card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .life-zigzag-card:hover .life-card-img-wrap img {
+            transform: scale(1.08);
+        }
+
+        .life-card-number-tag {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(13, 114, 152, 0.95);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .life-card-body {
+            padding: 28px 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        @media (min-width: 992px) {
+            .zigzag-col-1 {
+                margin-top: 0px;
+            }
+            .zigzag-col-2 {
+                margin-top: 45px;
+            }
+            .zigzag-col-3 {
+                margin-top: 0px;
+            }
+        }
+
+        /* Wavy Dashed Track Styling */
+        .cta-wavy-track {
+            position: absolute;
+            width: 220px;
+            height: 130px;
+            z-index: 1;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .cta-wavy-track.track-left {
+            top: 540px;
+            left: 720px;
+        }
+
+        .cta-wavy-track.track-right {
+            bottom: 360px;
+            right: 590px;
         }
 
         /* Job Card Premium Styling */
@@ -262,10 +368,142 @@ $result = mysqli_query($conn, $query);
             </div>
         </div>
     </section>
+    <!-- Life at GD Edu Tech (3 Alternating Rows / Zig-Zag Layout) -->
+    <section class="py-5 position-relative overflow-hidden">
+        <!-- Wavy Dashed Track Decor Left & Right -->
+        <svg class="cta-wavy-track track-right d-none d-lg-block" viewBox="0 0 220 130" fill="none" stroke="#7e858d" stroke-width="3" stroke-dasharray="6 6">
+            <path d="M10,110 C70,20 140,120 210,20" />
+        </svg>
+        <svg class="cta-wavy-track track-left d-none d-lg-block" viewBox="0 0 220 130" fill="none" stroke="#7e858d" stroke-width="3" stroke-dasharray="6 6">
+            <path d="M10,20 C80,120 150,20 210,110" />
+        </svg>
 
+        <div class="container py-3 position-relative z-2">
+            
+            <!-- Section Header -->
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <span class="badge bg-warning bg-opacity-20 text-dark border border-warning-subtle px-3 py-1.5 rounded-pill mb-3 fw-semibold">
+                        <i class="bi bi-heart-fill me-1 text-danger"></i> OUR WORKPLACE CULTURE
+                    </span>
+                    <h2 class="display-6 top-section-title mb-2" data-aos="fade-up">Life at <span class="cta-gold-text">GD Edu Tech</span></h2>
+                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">See what makes our environment special, collaborative, and rewarding</p>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column gap-5">
+                
+                <!-- Row 1: Image Left | Details Right -->
+                <div class="row align-items-center g-4 g-lg-5" data-aos="fade-up">
+                    <div class="col-lg-6">
+                        <div class="position-relative overflow-hidden shadow-lg" style="border-radius: 24px;">
+                            <img src="./Images/Others/workspace.jpeg" onerror="this.onerror=null; this.src='./Images/Others/career.png';" alt="Modern Workspace" class="img-fluid w-100 object-fit-cover" style="height: 360px; border-radius: 24px;">
+                            <span style="background-color: #0078a8;" class="badge  text-white position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill fw-bold shadow-sm">
+                                01 / WORKSPACE
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ps-lg-3">
+                            <span class="text-primary fw-bold text-uppercase tracking-wider small d-block mb-1">State-of-the-Art Infrastructure</span>
+                            <h3 class="fw-bold text-dark mb-3">Modern & Inspiring Workspace</h3>
+                            <p class="text-secondary lead fs-6 mb-4" style="line-height: 1.7;">
+                                Our office is designed to foster innovation, focus, and collaboration. Equipped with high-speed fiber internet, ergonomic workstations, quiet focus pods, and interactive conference rooms.
+                            </p>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                               
+                                </div>
+                                <div class="col-sm-6">
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2 (Zig-Zag Flipped): Details Left | Image Right -->
+                <div class="row align-items-center g-4 g-lg-5 flex-column-reverse flex-lg-row" data-aos="fade-up" data-aos-delay="100">
+                    <div class="col-lg-6">
+                        <div class="pe-lg-3">
+                            <span class="text-warning fw-bold text-uppercase tracking-wider small d-block mb-1">Vibrant Community</span>
+                            <h3 class="fw-bold text-dark mb-3">Team Building & Celebrations</h3>
+                            <p class="text-secondary lead fs-6 mb-4" style="line-height: 1.7;">
+                                We believe work should be fun and fulfilling! From quarterly team off-site retreats and hackathons to festival celebrations and weekly Friday game nights, we celebrate every win together.
+                            </p>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                               
+                                </div>
+                                <div class="col-sm-6">
+                          
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="position-relative overflow-hidden shadow-lg" style="border-radius: 24px;">
+                            <img src="./Images/Others/events.jpeg" onerror="this.onerror=null; this.src='./Images/Others/career2.png';" alt="Team Events" class="img-fluid w-100 object-fit-cover" style="height: 360px; border-radius: 24px;">
+                            <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill fw-bold shadow-sm">
+                                02 / COMMUNITY
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Image Left | Details Right -->
+                <div class="row align-items-center g-4 g-lg-5" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-lg-6">
+                        <div class="position-relative overflow-hidden shadow-lg" style="border-radius: 24px;">
+                            <img src="./Images/Others/culture.jpeg" onerror="this.onerror=null; this.src='./Images/Others/career3.png';" alt="Learning Culture" class="img-fluid w-100 object-fit-cover" style="height: 360px; border-radius: 24px;">
+                            <span style="background-color: #d35850;" class="badge  text-white position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill fw-bold shadow-sm">
+                                03 / LEARNING
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ps-lg-3">
+                            <span style="color:#d35850;" class=" fw-bold text-uppercase tracking-wider small d-block mb-1">Career & Professional Development</span>
+                            <h3 class="fw-bold text-dark mb-3">Continuous Learning & Growth</h3>
+                            <p class="text-secondary lead fs-6 mb-4" style="line-height: 1.7;">
+                                Your growth is our priority. We offer 100% sponsored certification courses, 1-on-1 executive mentorship, skill allowances, and clear internal promotion pathways.
+                            </p>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                  
+                                </div>
+                                <div class="col-sm-6">
+                                 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
     <!-- Current Openings Section -->
     <section class="py-5 bg-white">
         <div class="container py-2">
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
+                    <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                    <span class="fw-semibold"><?php echo htmlspecialchars($_SESSION['success']); ?></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                    <span class="fw-semibold"><?php echo htmlspecialchars($_SESSION['error']); ?></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+
             <div class="row mb-4 align-items-end">
                 <div class="col-lg-6">
                     <h2 class="display-6 top-section-title mb-1" data-aos="fade-up">Current Openings</h2>
@@ -280,8 +518,8 @@ $result = mysqli_query($conn, $query);
                 </div>
             </div>
             <div class="row g-4 pt-3">
-                <?php if ($result && mysqli_num_rows($result) > 0): ?>
-                    <?php while ($job = mysqli_fetch_assoc($result)): ?>
+                <?php if (!empty($jobs)): ?>
+                    <?php foreach ($jobs as $job): ?>
                         <div class="col-lg-6" data-aos="fade-up" data-job-type="<?php echo htmlspecialchars($job['job_type']); ?>">
                             <div class="career-job-card h-100 p-4 d-flex flex-column">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
@@ -302,36 +540,31 @@ $result = mysqli_query($conn, $query);
                                     </div>
                                 </div>
                                 
-                                <p class="card-text text-secondary mb-4 flex-grow-0" style="line-height: 1.6; font-size: 0.95rem;">
-                                    <?php echo htmlspecialchars($job['job_description']); ?>
+                                <!-- Job Description -->
+                                <p class="card-text text-secondary mb-4 flex-grow-1" style="line-height: 1.6; font-size: 0.95rem;">
+                                    <?php 
+                                        $desc = htmlspecialchars($job['job_description']);
+                                        echo (strlen($desc) > 220) ? substr($desc, 0, 220) . '...' : $desc;
+                                    ?>
                                 </p>
 
-                                <div class="job-requirements mb-4 flex-grow-1">
-                                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-list-check me-1.5 text-primary"></i> Key Requirements:</h6>
-                                    <ul class="requirements-list">
-                                        <?php
-                                        $requirements = explode("\n", $job['requirements']);
-                                        foreach ($requirements as $requirement) {
-                                            if (!empty(trim($requirement))) {
-                                                echo '<li><i class="bi bi-check-circle-fill text-success me-2 fs-6"></i>' . htmlspecialchars(trim($requirement)) . '</li>';
-                                            }
-                                        }
-                                        ?>
-                                    </ul>
-                                </div>
-
+                                <!-- Bottom Bar with More Button & Apply Now Button -->
                                 <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top gap-2 mt-auto">
                                     <div class="job-meta small text-muted">
-                                        <span class="me-3 d-inline-block"><i class="bi bi-clock me-1 text-primary"></i> Posted <?php echo date('M d, Y', strtotime($job['created_at'])); ?></span>
-                                        <span class="d-inline-block"><i class="bi bi-calendar-event me-1 text-danger"></i> Deadline: <?php echo date('M d, Y', strtotime($job['application_deadline'])); ?></span>
+                                        <span class="d-inline-block"><i class="bi bi-clock me-1 text-primary"></i> Posted <?php echo date('M d, Y', strtotime($job['created_at'])); ?></span>
                                     </div>
-                                    <a href="apply.php?id=<?php echo $job['job_id']; ?>" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-decoration-none">
-                                        Apply Now <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#jobModal<?php echo $job['job_id']; ?>">
+                                            More <i class="bi bi-arrow-right-circle ms-1"></i>
+                                        </button>
+                                        <a href="apply.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-decoration-none">
+                                            Apply Now <i class="bi bi-send-fill ms-1"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <div class="col-12 text-center" data-aos="fade-up">
                         <div class="alert alert-info py-4 rounded-4 border-0 shadow-sm" role="alert">
@@ -344,52 +577,101 @@ $result = mysqli_query($conn, $query);
         </div>
     </section>
 
-    <!-- Life at GD Edu Tech -->
-    <section class="py-5">
-        <div class="container py-2">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-6 top-section-title mb-2" data-aos="fade-up">Life at GD Edu Tech</h2>
-                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">See what makes our workplace special</p>
+    <!-- Job Details Modals (Placed outside transformed parent container) -->
+    <?php if (!empty($jobs)): ?>
+        <?php foreach ($jobs as $job): ?>
+            <div class="modal fade" id="jobModal<?php echo $job['job_id']; ?>" tabindex="-1" aria-labelledby="jobModalLabel<?php echo $job['job_id']; ?>" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                        <div class="modal-header text-white p-4" style="background: linear-gradient(135deg, #0d7298 0%, #065d7d 100%);">
+                            <div>
+                                <span class="badge bg-white text-primary px-3 py-1.5 rounded-pill mb-2 fw-semibold">
+                                    <i class="bi bi-briefcase-fill me-1"></i>
+                                    <?php echo htmlspecialchars($job['job_type']); ?>
+                                </span>
+                                <h4 class="modal-title fw-bold text-white mb-1" id="jobModalLabel<?php echo $job['job_id']; ?>"><?php echo htmlspecialchars($job['job_title']); ?></h4>
+                                <?php if (!empty($job['company_name'])): ?>
+                                    <p class="text-white-50 mb-2 small"><i class="bi bi-building me-1"></i> <?php echo htmlspecialchars($job['company_name']); ?></p>
+                                <?php endif; ?>
+                                <div class="d-flex flex-wrap align-items-center text-white-50 small gap-3">
+                                    <span><i class="bi bi-geo-alt-fill text-warning me-1"></i><strong class="text-white">Location:</strong> <?php echo htmlspecialchars($job['location']); ?></span>
+                                    <span><i class="bi bi-cash-stack text-success me-1"></i><strong class="text-white">Salary:</strong> <?php echo htmlspecialchars($job['salary_range']); ?> per annum</span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4" style="max-height: 70vh; overflow-y: auto;">
+                            <!-- Full Job Description -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-file-text-fill text-primary me-2"></i>Job Description & Overview</h6>
+                                <div class="p-3 bg-light rounded-3 text-secondary" style="line-height: 1.7; font-size: 0.95rem;">
+                                    <?php echo nl2br(htmlspecialchars($job['job_description'])); ?>
+                                </div>
+                            </div>
+
+                            <!-- Key Requirements List -->
+                            <?php if (!empty(trim($job['requirements']))): ?>
+                                <div class="mb-4">
+                                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-list-check text-primary me-2"></i>Key Requirements & Qualifications</h6>
+                                    <ul class="ps-0 mb-0" style="list-style: none;">
+                                        <?php
+                                        $requirements = explode("\n", $job['requirements']);
+                                        foreach ($requirements as $requirement) {
+                                            if (!empty(trim($requirement))) {
+                                                echo '<li class="mb-2 d-flex align-items-start small text-secondary"><i class="bi bi-check-circle-fill text-success me-2 fs-6 mt-0.5"></i><span>' . htmlspecialchars(trim($requirement)) . '</span></li>';
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Benefits & Perks List -->
+                            <?php if (!empty(trim($job['benefits']))): ?>
+                                <div class="mb-4">
+                                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-gift-fill text-warning me-2"></i>Benefits & Perks</h6>
+                                    <ul class="ps-0 mb-0" style="list-style: none;">
+                                        <?php
+                                        $benefits = explode("\n", $job['benefits']);
+                                        foreach ($benefits as $benefit) {
+                                            if (!empty(trim($benefit))) {
+                                                echo '<li class="mb-2 d-flex align-items-start small text-secondary"><i class="bi bi-star-fill text-warning me-2 fs-6 mt-0.5"></i><span>' . htmlspecialchars(trim($benefit)) . '</span></li>';
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Meta Info -->
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="p-3 border rounded-3 bg-white">
+                                        <div class="text-muted small"><i class="bi bi-clock text-primary me-1"></i> Posted Date</div>
+                                        <div class="fw-bold text-dark"><?php echo date('F d, Y', strtotime($job['created_at'])); ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="p-3 border rounded-3 bg-white">
+                                        <div class="text-muted small"><i class="bi bi-calendar-event text-danger me-1"></i> Application Deadline</div>
+                                        <div class="fw-bold text-dark"><?php echo date('F d, Y', strtotime($job['application_deadline'])); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light p-3 border-top-0 d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            <a href="apply.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-decoration-none shadow-sm">
+                                Apply Now <i class="bi bi-send-fill ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6" data-aos="fade-up">
-                    <div class="life-card">
-                        <div class="overflow-hidden">
-                            <img src="./Images/Others/office-1.jpg" alt="Office Life" class="life-card-img">
-                        </div>
-                        <div class="p-4">
-                            <h5 class="fw-bold text-dark mb-2">Modern Workspace</h5>
-                            <p class="text-muted small mb-0">State-of-the-art facilities designed for productivity and collaboration.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="life-card">
-                        <div class="overflow-hidden">
-                            <img src="./Images/Others/office-2.jpg" alt="Team Events" class="life-card-img">
-                        </div>
-                        <div class="p-4">
-                            <h5 class="fw-bold text-dark mb-2">Team Events</h5>
-                            <p class="text-muted small mb-0">Regular team building activities, workshops, and celebrations.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="life-card">
-                        <div class="overflow-hidden">
-                            <img src="./Images/Others/office-3.jpg" alt="Learning Culture" class="life-card-img">
-                        </div>
-                        <div class="p-4">
-                            <h5 class="fw-bold text-dark mb-2">Learning Culture</h5>
-                            <p class="text-muted small mb-0">Continuous learning and professional development opportunities.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+
 
 
     <!-- Footer -->

@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 session_start();
 require_once './Configurations/config.php';
 
-// Get job_id from URL
-$job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
+// Get job_id from URL (supports both job_id and id parameters)
+$job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : (isset($_GET['id']) ? intval($_GET['id']) : 0);
 
 // Fetch job details
 $job = null;
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = mysqli_real_escape_string($conn, trim($_POST['email']));
         $phone = mysqli_real_escape_string($conn, trim($_POST['phone']));
         $cover_letter = mysqli_real_escape_string($conn, trim($_POST['cover_letter']));
-        $portfolio_url = !empty($_POST['portfolio_url']) ? mysqli_real_escape_string($conn, trim($_POST['portfolio_url'])) : NULL;
+        $portfolio_url = !empty($_POST['portfolio']) ? mysqli_real_escape_string($conn, trim($_POST['portfolio'])) : (!empty($_POST['portfolio_url']) ? mysqli_real_escape_string($conn, trim($_POST['portfolio_url'])) : NULL);
         
         // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -90,9 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mysqli_stmt_bind_param($stmt, "isssssss", $job_id, $first_name, $last_name, $email, $phone, $resume_path, $cover_letter, $portfolio_url);
                 
                 if (mysqli_stmt_execute($stmt)) {
-                    // Set success flag in session and add JavaScript to show toast
+                    // Set success flag in session
                     $_SESSION['show_toast'] = true;
-                    $_SESSION['success'] = "Your application has been submitted successfully! We'll get back to you soon.";
+                    $_SESSION['success'] = "Your application has been submitted successfully! We'll review your application and get back to you soon.";
                     header("Location: career.php");
                     exit();
                 } else {
@@ -121,7 +121,7 @@ $days_remaining = $interval->days;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apply - <?php echo htmlspecialchars($job['job_title']); ?> - GD Edu Tech</title>
+    <title>Apply for <?php echo htmlspecialchars($job['job_title']); ?> - GD Edu Tech</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -132,6 +132,9 @@ $days_remaining = $interval->days;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom JavaScript -->
     <script src="./js/main.js" defer></script>
         
@@ -139,586 +142,559 @@ $days_remaining = $interval->days;
     <link rel="icon" type="image/png" sizes="32x32" href="./Images/Logos/GD_Only_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./Images/Logos/GD_Only_logo.png">
     <link rel="shortcut icon" href="./Images/Logos/GD_Only_logo.png">
-    <link rel="apple-touch-icon" href="./Images/Logos/GD_Only_logo.png">
-    <meta name="msapplication-TileImage" content="./Images/Logos/GD_Only_logo.png">
+
+    <style>
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Glassmorphic Executive Cards */
+        .apply-job-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 15px 35px -10px rgba(15, 23, 42, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .apply-job-card:hover {
+            box-shadow: 0 20px 45px -10px rgba(13, 114, 152, 0.12);
+        }
+
+        .info-pill-item {
+            background: rgba(13, 114, 152, 0.06);
+            border: 1px solid rgba(13, 114, 152, 0.15);
+            border-radius: 16px;
+            padding: 14px 18px;
+        }
+
+        .info-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #0d7298;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        /* Form Custom Input Fields */
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            border-left: 4px solid #0d7298;
+            padding-left: 12px;
+        }
+
+        .custom-form-input {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 12px 18px;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .custom-form-input:focus {
+            border-color: #0d7298;
+            box-shadow: 0 0 0 4px rgba(13, 114, 152, 0.12);
+            outline: none;
+        }
+
+        /* Custom File Upload Box */
+        .upload-drop-zone {
+            border: 2px dashed #0d7298;
+            border-radius: 18px;
+            background: rgba(13, 114, 152, 0.03);
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-drop-zone:hover {
+            background: rgba(13, 114, 152, 0.08);
+            border-color: #065d7d;
+        }
+
+        .upload-drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .upload-icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(13, 114, 152, 0.12);
+            color: #0d7298;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin: 0 auto 12px auto;
+        }
+
+        /* Gradient Submit Button */
+        .btn-apply-submit {
+            background: linear-gradient(135deg, #0d7298 0%, #065d7d 100%);
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 40px;
+            box-shadow: 0 8px 24px rgba(13, 114, 152, 0.28);
+            transition: all 0.3s ease;
+        }
+
+        .btn-apply-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(13, 114, 152, 0.38);
+            color: #ffffff;
+        }
+
+        .btn-cancel-back {
+            border: 2px solid #94a3b8;
+            color: #475569;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 12px 30px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-cancel-back:hover {
+            background: #94a3b8;
+            color: #ffffff;
+        }
+
+        .requirements-list-styled {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .requirements-list-styled li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 10px;
+            font-size: 0.93rem;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .requirements-list-styled li::before {
+            content: "\f26a";
+            font-family: "bootstrap-icons";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: #10b981;
+            font-size: 1.05rem;
+        }
+    </style>
 </head>
+
 <body>
     <?php include 'navbar.php'; ?>
 
-    <!-- Alert Messages -->
-    <?php if (isset($_SESSION['success'])): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-bottom: 0; border-radius: 0; background-color: #28a745; color: white; border: none; padding: 15px 20px; font-weight: 500;">
-        <div class="container d-flex align-items-center">
-            <i class="bi bi-check-circle-fill me-2" style="font-size: 1.2rem;"></i>
-            <div><?php echo $_SESSION['success']; ?></div>
-            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-    <?php unset($_SESSION['success']); ?>
-    <?php endif; ?>
+    <!-- Redesigned Executive Hero Banner -->
+    <section class="about-page-header position-relative overflow-hidden w-100 my-0">
+        <div class="about-header-glow-1"></div>
+        <div class="about-header-glow-2"></div>
+        <div class="about-header-pattern"></div>
 
-    <?php if (isset($_SESSION['error'])): ?>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 0; border-radius: 0; background-color: #dc3545; color: white; border: none; padding: 15px 20px; font-weight: 500;">
-        <div class="container d-flex align-items-center">
-            <i class="bi bi-exclamation-triangle-fill me-2" style="font-size: 1.2rem;"></i>
-            <div><?php echo $_SESSION['error']; ?></div>
-            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-    <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
-
-    <!-- Page Header -->
-    <section class="page-header position-relative overflow-hidden">
-        <div class="container position-relative py-5">
-            <div class="row align-items-center">
-                <div class="col-12" data-aos="fade-right">
+        <div class="container position-relative z-2 py-4">
+            <div class="row align-items-center text-start g-4">
+                <div class="col-lg-7" data-aos="fade-right">
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-3">
-                            <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Home</a></li>
-                            <li class="breadcrumb-item"><a href="careers.php" class="text-white-50">Careers</a></li>
-                            <li class="breadcrumb-item active text-white" aria-current="page">Apply</li>
+                        <ol class="breadcrumb about-breadcrumb px-3 py-1.5 rounded-pill mb-3 d-inline-flex">
+                            <li class="breadcrumb-item"><a href="index.php" class="text-black text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
+                            <li class="breadcrumb-item"><a href="career.php" class="text-black text-decoration-none">Careers</a></li>
+                            <li class="breadcrumb-item active text-black" aria-current="page">Application</li>
                         </ol>
                     </nav>
-                    <h1 class="text-white display-6 fw-bold mb-2"><?php echo htmlspecialchars($job['job_title']); ?></h1>
-                    <p class="text-white-50 mb-0">
-                        <i class="bi bi-geo-alt me-2"></i><?php echo htmlspecialchars($job['location']); ?>
+
+                    <span class="badge bg-warning bg-opacity-20 text-dark border border-warning-subtle px-3 py-1.5 rounded-pill mb-2 fw-semibold">
+                        <i class="bi bi-briefcase-fill me-1 text-warning"></i> <?php echo htmlspecialchars($job['job_type']); ?>
+                    </span>
+
+                    <h1 class="display-5 fw-bold text-black mb-3">
+                        Apply For <span class="cta-gold-text"><?php echo htmlspecialchars($job['job_title']); ?></span>
+                    </h1>
+
+                    <p class="lead text-black-50 mb-0" style="max-width: 650px;">
+                        <i class="bi bi-geo-alt-fill text-danger me-1"></i> <?php echo htmlspecialchars($job['location']); ?>
                         <span class="mx-3">|</span>
-                        <i class="bi bi-briefcase me-2"></i><?php echo htmlspecialchars($job['job_type']); ?>
+                        <i class="bi bi-cash-stack text-success me-1"></i> <?php echo htmlspecialchars($job['salary_range']); ?> / annum
                     </p>
+                </div>
+
+                <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
+                    <div class="about-header-card text-start">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="rounded-circle bg-opacity-20 p-3 text-warning">
+                                <i class="bi bi-rocket-takeoff-fill fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-black fw-bold mb-0">Fast-Track Hiring</h6>
+                                <span class="text-black-50 small">Direct Application Portal</span>
+                            </div>
+                        </div>
+                        <p class="text-black-50 small mb-0" style="line-height: 1.5;">
+                            Submit your application and resume to connect directly with GD Edu Tech recruitment team.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="page-header-shape">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+
+        <div class="page-header-shape position-absolute bottom-0 start-0 w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none" style="height: 40px; display: block; width: 100%;">
+                <path fill="#f8fafc" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,58.7C672,43,768,21,864,21.3C960,21,1056,43,1152,53.3C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1056,120,960,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
             </svg>
         </div>
     </section>
 
-    <!-- Application Section -->
+    <!-- Main Content Section -->
     <section class="py-5">
-        <div class="container">
+        <div class="container py-2">
+
+            <!-- Floating Alert Messages -->
             <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert" data-aos="fade-down">
-                    <?php 
-                    echo $_SESSION['error'];
-                    unset($_SESSION['error']);
-                    ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4 p-3" role="alert" data-aos="fade-down">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-danger"></i>
+                        <div>
+                            <strong class="d-block">Submission Error</strong>
+                            <span><?php echo htmlspecialchars($_SESSION['error']); ?></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
-            <div class="row g-5">
-                <!-- Job Details Section -->
+            <div class="row g-4">
+                
+                <!-- Left Sidebar: Job Summary Card -->
                 <div class="col-lg-5">
-                    <div class="sticky-top" style="top: 100px;">
-                        <div class="premium-card p-4 mb-4" data-aos="fade-right">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <span class="badge bg-primary rounded-pill px-3 py-2">
-                                    <?php echo htmlspecialchars($job['job_type']); ?>
+                    <div class="sticky-top" style="top: 100px; z-index: 10;">
+                        <div class="apply-job-card p-4 mb-4" data-aos="fade-right">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-1.5 rounded-pill fw-semibold">
+                                    <i class="bi bi-briefcase-fill me-1"></i> <?php echo htmlspecialchars($job['job_type']); ?>
                                 </span>
-                                <span class="text-muted">
-                                    <i class="bi bi-calendar-event me-1"></i>
-                                    <?php echo $days_remaining; ?> days left
-                                </span>
+                             
                             </div>
 
-                            <h3 class="fw-bold mb-3"><?php echo htmlspecialchars($job['job_title']); ?></h3>
+                            <h3 class="fw-bold text-dark mb-1"><?php echo htmlspecialchars($job['job_title']); ?></h3>
+                            <?php if (!empty($job['company_name'])): ?>
+                                <p class="text-muted small mb-3"><i class="bi bi-building me-1"></i> <?php echo htmlspecialchars($job['company_name']); ?></p>
+                            <?php endif; ?>
 
-                            <div class="mb-4">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="contact-icon me-3">
-                                        <i class="bi bi-geo-alt"></i>
+                            <div class="d-flex flex-column gap-2 mb-4">
+                                <div class="info-pill-item d-flex align-items-center gap-3">
+                                    <div class="info-icon-box">
+                                        <i class="bi bi-geo-alt-fill"></i>
                                     </div>
                                     <div>
-                                        <small class="text-muted d-block">Location</small>
-                                        <strong><?php echo htmlspecialchars($job['location']); ?></strong>
+                                        <span class="text-muted small d-block">Work Location</span>
+                                        <strong class="text-dark"><?php echo htmlspecialchars($job['location']); ?></strong>
                                     </div>
                                 </div>
-                            
 
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="contact-icon me-3">
+                                <div class="info-pill-item d-flex align-items-center gap-3">
+                                    <div class="info-icon-box" style="background: #10b981;">
                                         <i class="bi bi-cash-stack"></i>
                                     </div>
                                     <div>
-                                        <small class="text-muted d-block">Salary Range</small>
-                                        <strong><?php echo htmlspecialchars($job['salary_range']); ?></strong>
+                                        <span class="text-muted small d-block">Compensation</span>
+                                        <strong class="text-dark"><?php echo htmlspecialchars($job['salary_range']); ?> / annum</strong>
                                     </div>
                                 </div>
 
-                                <div class="d-flex align-items-center">
-                                    <div class="contact-icon me-3">
-                                        <i class="bi bi-calendar-check"></i>
+                                <div class="info-pill-item d-flex align-items-center gap-3">
+                                    <div class="info-icon-box" style="background: #f59e0b;">
+                                        <i class="bi bi-calendar-event-fill"></i>
                                     </div>
                                     <div>
-                                        <small class="text-muted d-block">Application Deadline</small>
-                                        <strong><?php echo $formatted_deadline; ?></strong>
+                                        <span class="text-muted small d-block">Deadline</span>
+                                        <strong class="text-dark"><?php echo $formatted_deadline; ?></strong>
                                     </div>
                                 </div>
                             </div>
 
-                            <hr>
+                            <hr class="my-3 text-secondary opacity-25">
 
-                            <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Job Description</h5>
-                                <p class="text-muted" style="line-height: 1.8;">
+                            <!-- Job Description Accordion -->
+                            <div class="mb-3">
+                                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-file-text-fill text-primary me-2"></i>Job Description</h6>
+                                <p class="text-secondary small mb-0" style="line-height: 1.7;">
                                     <?php echo nl2br(htmlspecialchars($job['job_description'])); ?>
                                 </p>
                             </div>
 
-                            <?php if (!empty($job['requirements'])): ?>
-                            <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Requirements</h5>
-                                <p class="text-muted" style="line-height: 1.8;">
-                                    <?php echo nl2br(htmlspecialchars($job['requirements'])); ?>
-                                </p>
-                            </div>
+                            <?php if (!empty(trim($job['requirements']))): ?>
+                                <div class="mb-3">
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-list-check text-primary me-2"></i>Requirements</h6>
+                                    <ul class="requirements-list-styled mb-0">
+                                        <?php
+                                        $requirements = explode("\n", $job['requirements']);
+                                        foreach ($requirements as $req) {
+                                            if (!empty(trim($req))) {
+                                                echo '<li>' . htmlspecialchars(trim($req)) . '</li>';
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
                             <?php endif; ?>
 
-                            <?php if (!empty($job['responsibilities'])): ?>
-                            <div>
-                                <h5 class="fw-bold mb-3">Responsibilities</h5>
-                                <p class="text-muted" style="line-height: 1.8;">
-                                    <?php echo nl2br(htmlspecialchars($job['responsibilities'])); ?>
-                                </p>
-                            </div>
+                            <?php if (!empty(trim($job['benefits']))): ?>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-gift-fill text-warning me-2"></i>Benefits</h6>
+                                    <ul class="requirements-list-styled mb-0">
+                                        <?php
+                                        $benefits = explode("\n", $job['benefits']);
+                                        foreach ($benefits as $ben) {
+                                            if (!empty(trim($ben))) {
+                                                echo '<li>' . htmlspecialchars(trim($ben)) . '</li>';
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
                             <?php endif; ?>
                         </div>
 
-                        <div class="premium-card p-4" data-aos="fade-right" data-aos-delay="100">
-                            <h5 class="fw-bold mb-3">Need Help?</h5>
-                            <p class="text-muted mb-3">Have questions about this position? Feel free to reach out to our HR team.</p>
-                            <a href="contact.php" class="btn btn-outline-primary w-100">
-                                <i class="bi bi-envelope me-2"></i>Contact HR
-                            </a>
+                        <!-- HR Support Contact Card -->
+                        <div class="apply-job-card p-4" data-aos="fade-right" data-aos-delay="100">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary">
+                                    <i class="bi bi-headset fs-3"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">Need Assistance?</h6>
+                                    <p class="text-muted small mb-0">Contact our HR desk at <a href="mailto:gdedutech24@gmail.com" class="text-primary text-decoration-none fw-semibold">gdedutech24@gmail.com</a></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Application Form Section -->
+                <!-- Right Side: Application Form Card -->
                 <div class="col-lg-7">
-                    <div class="premium-card p-4 p-lg-5" data-aos="fade-left">
-                        <h3 class="fw-bold mb-2">Submit Your Application</h3>
-                        <p class="text-muted mb-4">Fill in your details below and we'll get back to you as soon as possible.</p>
+                    <div class="apply-job-card p-4 p-lg-5" data-aos="fade-left">
+                        <div class="border-bottom pb-3 mb-4">
+                            <h3 class="fw-bold text-dark mb-1">Submit Your Application</h3>
+                            <p class="text-muted small mb-0">Complete all required fields below to submit your job application.</p>
+                        </div>
 
-                        <form method="POST" enctype="multipart/form-data" id="applicationForm">
-                            <!-- Personal Information -->
+                        <form method="POST" enctype="multipart/form-data" id="applicationForm" class="needs-validation" novalidate>
+                            
+                            <!-- 1. Personal Information Section -->
                             <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Personal Information</h5>
+                                <h5 class="form-section-title mb-3">1. Personal Details</h5>
                                 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" required>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="first_name" class="form-label fw-semibold text-secondary small mb-1">First Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control custom-form-input" id="first_name" name="first_name" placeholder="John" required>
+                                        <div class="invalid-feedback">Please enter your first name.</div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" required>
+                                    <div class="col-md-6">
+                                        <label for="last_name" class="form-label fw-semibold text-secondary small mb-1">Last Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control custom-form-input" id="last_name" name="last_name" placeholder="Doe" required>
+                                        <div class="invalid-feedback">Please enter your last name.</div>
                                     </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label fw-semibold text-secondary small mb-1">Email Address <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control custom-form-input" id="email" name="email" placeholder="john.doe@example.com" required>
+                                        <div class="invalid-feedback">Please enter a valid email address.</div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
-                                        <input type="tel" class="form-control form-control-lg" id="phone" name="phone" required>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label fw-semibold text-secondary small mb-1">Phone Number <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control custom-form-input" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
+                                        <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
                                     </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="portfolio" class="form-label">Portfolio/Website (Optional)</label>
-                                    <input type="url" class="form-control form-control-lg" id="portfolio" name="portfolio" placeholder="https://yourportfolio.com">
+                                    <div class="col-12">
+                                        <label for="portfolio" class="form-label fw-semibold text-secondary small mb-1">Portfolio / LinkedIn / GitHub URL (Optional)</label>
+                                        <input type="url" class="form-control custom-form-input" id="portfolio" name="portfolio" placeholder="https://linkedin.com/in/yourprofile">
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Resume Upload -->
+                            <!-- 2. Resume Upload Section -->
                             <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Resume/CV</h5>
-                                <label for="resume" class="form-label">Upload Resume <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control form-control-lg" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
-                                <small class="text-muted">Accepted formats: PDF, DOC, DOCX (Max 5MB)</small>
+                                <h5 class="form-section-title mb-3">2. Resume / CV Upload</h5>
+                                
+                                <div class="upload-drop-zone" id="dropZone">
+                                    <div class="upload-icon-circle">
+                                        <i class="bi bi-cloud-arrow-up-fill"></i>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-1" id="fileLabel">Click or Drag & Drop Resume File</h6>
+                                    <p class="text-muted small mb-0">Supported Formats: <strong>PDF, DOC, DOCX</strong> (Max 5MB)</p>
+                                    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+                                </div>
+                                <div id="resumeFeedback" class="invalid-feedback d-none text-danger mt-1 small">Please select a valid PDF, DOC, or DOCX resume file under 5MB.</div>
                             </div>
 
-                            <!-- Cover Letter -->
+                            <!-- 3. Cover Letter Section -->
                             <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Cover Letter</h5>
-                                <label for="cover_letter" class="form-label">Why are you interested in this position? <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="cover_letter" name="cover_letter" rows="6" required placeholder="Tell us about yourself and why you're a great fit for this role..." minlength="100"></textarea>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <small class="text-muted">Minimum 100 characters</small>
-                                    <small id="charCount" class="text-muted">0/100 characters</small>
+                                <h5 class="form-section-title mb-3">3. Cover Letter</h5>
+                                <label for="cover_letter" class="form-label fw-semibold text-secondary small mb-1">Why are you interested in this position? <span class="text-danger">*</span></label>
+                                <textarea class="form-control custom-form-input" id="cover_letter" name="cover_letter" rows="5" placeholder="Share your relevant experience, key skills, and enthusiasm for this role..." required minlength="100"></textarea>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted small">Minimum 100 characters required</small>
+                                    <small id="charCount" class="fw-bold text-muted">0 / 100</small>
                                 </div>
-                                <div class="progress mt-2" style="height: 5px;">
-                                    <div id="charProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress mt-1" style="height: 6px; border-radius: 10px; background: #e2e8f0;">
+                                    <div id="charProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%; border-radius: 10px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <div id="coverLetterFeedback" class="invalid-feedback">Cover letter must be at least 100 characters long.</div>
+                                <div id="coverLetterFeedback" class="text-danger small mt-1" style="display: none;">Cover letter must be at least 100 characters long.</div>
                             </div>
 
-                            <!-- Terms and Conditions -->
+                            <!-- 4. Declaration Checkbox -->
                             <div class="mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terms" required>
-                                    <label class="form-check-label" for="terms">
-                                        I agree to the <a href="#" class="text-primary">Terms and Conditions</a> and <a href="#" class="text-primary">Privacy Policy</a> <span class="text-danger">*</span>
+                                    <input class="form-check-input" type="checkbox" id="terms" required style="width: 18px; height: 18px;">
+                                    <label class="form-check-label text-secondary small ms-2" for="terms">
+                                        I certify that the information provided is true and complete to the best of my knowledge. <span class="text-danger">*</span>
                                     </label>
+                                    <div class="invalid-feedback">You must agree before submitting.</div>
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-pill">
-                                    <i class="bi bi-send me-2"></i>Submit Application
-                                </button>
-                                <a href="careers.php" class="btn btn-outline-secondary btn-lg rounded-pill">
-                                    <i class="bi bi-arrow-left me-2"></i>Back to Careers
+                            <!-- Submit Action Row -->
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top">
+                                <a href="career.php" class="btn-cancel-back">
+                                    <i class="bi bi-arrow-left me-1"></i> Back to Careers
                                 </a>
+                                <button type="submit" class="btn-apply-submit">
+                                    <span>SUBMIT APPLICATION</span>
+                                    <i class="bi bi-send-fill ms-2"></i>
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Include footer -->
+    <!-- Footer -->
     <?php include 'footer.php'; ?>
 
-    <!-- Bootstrap JS Bundle with Popper -->
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS Animation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <!-- Back to Top Button -->
-    <script src="js/back-to-top.js"></script>
     
-    <!-- Toast Notification -->
-    <div id="successToast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999; display: none;">
-        <div class="toast show bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <strong class="me-auto">Success</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close" onclick="hideToast()"></button>
-            </div>
-            <div class="toast-body">
-                <p class="mb-0">Your application has been submitted successfully! We'll get back to you soon.</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Toast Notification Script -->
     <script>
-        // Function to show success toast
-        function showSuccessToast() {
-            const toast = document.getElementById('successToast');
-            toast.style.display = 'block';
-            
-            // Automatically hide after 5 seconds
-            setTimeout(function() {
-                hideToast();
-            }, 5000);
-        }
-        
-        // Function to hide toast
-        function hideToast() {
-            const toast = document.getElementById('successToast');
-            toast.style.display = 'none';
-        }
-        
-        // Check if form was just submitted successfully
-        <?php if(isset($_POST['submit']) && !isset($_SESSION['error'])): ?>
-        document.addEventListener('DOMContentLoaded', function() {
-            showSuccessToast();
+        // Initialize AOS
+        AOS.init({
+            duration: 900,
+            easing: 'ease-in-out',
+            once: true
         });
-        <?php endif; ?>
-    </script>
-    
-    <!-- Cover Letter Validation Script -->
-    <script>
+
+        // Interactive File Upload & Drag-Drop Preview
         document.addEventListener('DOMContentLoaded', function() {
+            const resumeInput = document.getElementById('resume');
+            const fileLabel = document.getElementById('fileLabel');
+            const resumeFeedback = document.getElementById('resumeFeedback');
+
+            if (resumeInput) {
+                resumeInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const fileSizeMB = file.size / 1024 / 1024;
+                        const allowedExts = ['pdf', 'doc', 'docx'];
+                        const ext = file.name.split('.').pop().toLowerCase();
+
+                        if (fileSizeMB > 5) {
+                            alert('Resume file size must be less than 5MB.');
+                            resumeInput.value = '';
+                            fileLabel.textContent = 'Click or Drag & Drop Resume File';
+                            return;
+                        }
+
+                        if (!allowedExts.includes(ext)) {
+                            alert('Only PDF, DOC, and DOCX files are permitted.');
+                            resumeInput.value = '';
+                            fileLabel.textContent = 'Click or Drag & Drop Resume File';
+                            return;
+                        }
+
+                        fileLabel.innerHTML = `<span class="text-success"><i class="bi bi-file-earmark-check-fill me-1"></i> Selected: ${file.name} (${fileSizeMB.toFixed(2)} MB)</span>`;
+                    }
+                });
+            }
+
+            // Cover Letter Live Character Count & Progress
             const coverLetter = document.getElementById('cover_letter');
             const charCount = document.getElementById('charCount');
             const charProgress = document.getElementById('charProgress');
             const coverLetterFeedback = document.getElementById('coverLetterFeedback');
             const form = document.getElementById('applicationForm');
-            
-            // Update character count and progress bar
-            function updateCharCount() {
-                const length = coverLetter.value.length;
-                const minLength = 100;
-                const percentage = Math.min(100, Math.floor((length / minLength) * 100));
-                
-                charCount.textContent = length + '/' + minLength + ' characters';
-                charProgress.style.width = percentage + '%';
-                charProgress.setAttribute('aria-valuenow', percentage);
-                
-                // Change progress bar color based on length
-                if (length < minLength) {
+
+            function updateProgress() {
+                if (!coverLetter) return;
+                const len = coverLetter.value.trim().length;
+                const min = 100;
+                const pct = Math.min(100, Math.floor((len / min) * 100));
+
+                charCount.textContent = `${len} / ${min}`;
+                charProgress.style.width = `${pct}%`;
+
+                if (len < min) {
                     charProgress.classList.remove('bg-success');
                     charProgress.classList.add('bg-primary');
-                    coverLetter.classList.add('is-invalid');
-                    coverLetterFeedback.style.display = 'block';
+                    coverLetterFeedback.style.display = (len > 0) ? 'block' : 'none';
                 } else {
                     charProgress.classList.remove('bg-primary');
                     charProgress.classList.add('bg-success');
-                    coverLetter.classList.remove('is-invalid');
                     coverLetterFeedback.style.display = 'none';
                 }
             }
-            
-            // Initial update
-            updateCharCount();
-            
-            // Update on input
-            coverLetter.addEventListener('input', updateCharCount);
-            
-            // Form validation
-            form.addEventListener('submit', function(event) {
-                if (coverLetter.value.length < 100) {
-                    event.preventDefault();
-                    coverLetter.classList.add('is-invalid');
-                    coverLetterFeedback.style.display = 'block';
-                    coverLetter.focus();
-                }
-            });
-        });
-    </script>
-    
-    <style>
-        .icon-box-small {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 1.25rem;
-            transition: all 0.3s ease;
-        }
 
-        .icon-box-small:hover {
-            transform: scale(1.1);
-        }
-        
-        .contact-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 40px;
-            width: 40px;
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            color: #0078a8;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contact-icon:hover {
-            background-color: #0078a8;
-            color: #ffffff;
-            transform: translateY(-3px);
-        }
-
-        .badge {
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            padding: 0.5rem 1rem;
-            background-color: #0078a8 !important;
-            color: #fff;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.15);
-        }
-
-        .form-control,
-        .form-select {
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .form-control-lg,
-        .form-select-lg {
-            border-radius: 0.5rem;
-        }
-
-        .form-floating > label {
-            color: #64748b;
-        }
-
-        .form-floating > .form-control:focus ~ label,
-        .form-floating > .form-control:not(:placeholder-shown) ~ label,
-        .form-floating > .form-select ~ label {
-            color: var(--primary);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 150px;
-            border-radius: 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, #0056b3 100%);
-            border: none;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: 0 4px 15px rgba(var(--bs-primary-rgb), 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(var(--bs-primary-rgb), 0.4);
-        }
-
-        .btn-outline-primary {
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-primary:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(var(--bs-primary-rgb), 0.3);
-        }
-
-        .btn-outline-secondary {
-            border: 2px solid #6c757d;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-secondary:hover {
-            transform: translateY(-2px);
-        }
-
-        .sticky-top {
-            transition: all 0.3s ease;
-        }
-
-        @media (max-width: 991.98px) {
-            .sticky-top {
-                position: relative !important;
-                top: 0 !important;
+            if (coverLetter) {
+                coverLetter.addEventListener('input', updateProgress);
+                updateProgress();
             }
-        }
 
-        .premium-card {
-            border: none;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        .premium-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Form validation styles */
-        .was-validated .form-control:valid,
-        .was-validated .form-select:valid {
-            border-color: #28a745;
-        }
-
-        .was-validated .form-control:invalid,
-        .was-validated .form-select:invalid {
-            border-color: #dc3545;
-        }
-
-        /* File upload styling */
-        input[type="file"]::file-selector-button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 1rem;
-        }
-
-        input[type="file"]::file-selector-button:hover {
-            background-color: #0078a8;
-        }
-    </style>
-
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
-
-        // Form validation
-        (function () {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
+            // Form Submit Validation
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    const len = coverLetter ? coverLetter.value.trim().length : 0;
+                    if (len < 100) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        if (coverLetterFeedback) coverLetterFeedback.style.display = 'block';
+                        if (coverLetter) coverLetter.focus();
                     }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
-
-        // File upload validation
-        document.getElementById('resume').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const fileSize = file.size / 1024 / 1024; // in MB
-                const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                
-                if (fileSize > 5) {
-                    alert('File size must be less than 5MB');
-                    e.target.value = '';
-                    return;
-                }
-                
-                if (!allowedTypes.includes(file.type)) {
-                    alert('Only PDF, DOC, and DOCX files are allowed');
-                    e.target.value = '';
-                    return;
-                }
-            }
-        });
-
-        // Cover letter character count
-        const coverLetter = document.getElementById('cover_letter');
-        const minChars = 100;
-        
-        coverLetter.addEventListener('input', function() {
-            const charCount = this.value.length;
-            const small = this.nextElementSibling;
-            
-            if (charCount < minChars) {
-                small.textContent = `${charCount}/${minChars} characters (minimum required)`;
-                small.classList.add('text-danger');
-                small.classList.remove('text-success');
-            } else {
-                small.textContent = `${charCount} characters`;
-                small.classList.remove('text-danger');
-                small.classList.add('text-success');
-            }
-        });
-
-        // Form submission
-        document.getElementById('applicationForm').addEventListener('submit', function(e) {
-            const coverLetterValue = coverLetter.value.trim();
-            
-            if (coverLetterValue.length < minChars) {
-                e.preventDefault();
-                alert(`Cover letter must be at least ${minChars} characters long.`);
-                coverLetter.focus();
-                return false;
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
             }
         });
     </script>

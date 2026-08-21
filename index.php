@@ -216,6 +216,153 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
     margin-top: 15px;
     font-size: 17px;
 }
+/* --- Offline Courses Section Styling --- */
+
+.offline-courses-section {
+    padding: 60px 0;
+    background-color: #f8f9fa; /* Light background for the section */
+}
+
+.offline-banner-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 50px 30px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+}
+
+.highlight-gold {
+    color: #f5a623; /* Gold color matching your highlight */
+}
+
+/* --- Course Card Styling --- */
+.course-grid-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    position: relative;
+}
+
+.course-grid-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+.course-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Image Thumbnail & Badge */
+.course-card-thumb {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.course-grid-card:hover .thumb-img {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.category-pill-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.95); /* Gold */
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+/* Card Body */
+.course-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.course-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2b2b2b;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.course-card-btn {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #040302;
+    transition: color 0.3s;
+}
+
+.course-card-btn i {
+    transition: transform 0.3s;
+}
+
+.course-grid-card:hover .course-card-btn i {
+    transform: translateX(5px); /* Arrow moves right on hover */
+}
+
+/* --- Swiper Customization --- */
+.offline-courses-swiper {
+    padding-bottom: 60px; /* Space for pagination bullets */
+    padding-top: 10px;
+}
+
+/* Navigation Arrows */
+.offline-swiper-prev,
+.offline-swiper-next {
+    color: #0a0908;
+    background: #fff;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    top: 45%;
+}
+
+.offline-swiper-prev::after,
+.offline-swiper-next::after {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Pagination Bullets */
+.offline-swiper-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: #d3d3d3;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.offline-swiper-pagination .swiper-pagination-bullet-active {
+    background: #fffefb;
+    width: 24px;
+    border-radius: 5px;
+}
 
 /* PREMIUM CARD */
 .modern-feedback-card{
