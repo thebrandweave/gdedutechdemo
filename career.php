@@ -4,6 +4,10 @@ error_reporting(E_ALL);
 
 session_start();
 require_once './Configurations/config.php';
+
+// Fetch active job listings
+$query = "SELECT * FROM Careers WHERE status = 'Active' ORDER BY created_at DESC";
+$result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>
@@ -22,133 +26,237 @@ require_once './Configurations/config.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/style.css">
-       <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom JavaScript -->
     <script src="./js/main.js" defer></script>
-        
     <link rel="icon" type="image/png" href="./Images/Logos/GD_Only_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./Images/Logos/GD_Only_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./Images/Logos/GD_Only_logo.png">
     <link rel="shortcut icon" href="./Images/Logos/GD_Only_logo.png">
     <link rel="apple-touch-icon" href="./Images/Logos/GD_Only_logo.png">
-    <meta name="msapplication-TileImage" content="./Images/Logos/GD_Only_logo.png">
+
+    <style>
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Top Section Text Enforcement - Black & Dark High-Contrast */
+        .top-section-title {
+            color: #000000 !important;
+            font-weight: 800 !important;
+        }
+
+        .top-section-subtitle {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+        }
+
+        /* Benefit Cards */
+        .career-benefit-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            padding: 35px 25px;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+        }
+
+        .career-benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -10px rgba(13, 114, 152, 0.16);
+            border-color: rgba(13, 114, 152, 0.3);
+        }
+
+        .benefit-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: rgba(13, 114, 152, 0.1);
+            color: #0d7298;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            font-size: 1.8rem;
+        }
+
+        /* Job Card Premium Styling */
+        .career-job-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .career-job-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px -10px rgba(13, 114, 152, 0.16);
+            border-color: rgba(13, 114, 152, 0.3);
+        }
+
+        .job-title-text {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1.35rem;
+        }
+
+        .job-salary-pill {
+            background: rgba(13, 114, 152, 0.08);
+            border: 1px solid rgba(13, 114, 152, 0.2);
+            padding: 8px 16px;
+            border-radius: 12px;
+            text-align: right;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .requirements-list li {
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.92rem;
+            color: #334155;
+        }
+
+        .life-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+            transition: all 0.4s ease;
+        }
+
+        .life-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(13, 114, 152, 0.15);
+        }
+
+        .life-card-img {
+            height: 220px;
+            object-fit: cover;
+            width: 100%;
+            transition: transform 0.4s ease;
+        }
+
+        .life-card:hover .life-card-img {
+            transform: scale(1.05);
+        }
+
+        .career-hero-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 360px;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.18));
+            transition: transform 0.4s ease;
+        }
+
+        .career-hero-image:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+    </style>
 </head>
 <body>
     <?php include 'navbar.php'; ?>
-    
-    <!-- Toast Notification -->
-    <div id="successToast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999; display: none;">
-        <div class="toast show bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <strong class="me-auto">Success</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close" onclick="hideToast()"></button>
-            </div>
-            <div class="toast-body">
-                <p class="mb-0">Your application has been submitted successfully! We'll get back to you soon.</p>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // Function to show success toast
-        function showSuccessToast() {
-            const toast = document.getElementById('successToast');
-            toast.style.display = 'block';
-            
-            // Automatically hide after 5 seconds
-            setTimeout(function() {
-                hideToast();
-            }, 5000);
-        }
-        
-        // Function to hide toast
-        function hideToast() {
-            const toast = document.getElementById('successToast');
-            toast.style.display = 'none';
-        }
-        
-        // Check if redirected from successful form submission
-        <?php if(isset($_SESSION['success']) && isset($_SESSION['show_toast'])): ?>
-        document.addEventListener('DOMContentLoaded', function() {
-            showSuccessToast();
-            <?php unset($_SESSION['show_toast']); ?>
-        });
-        <?php endif; ?>
-    </script>
 
-    <!-- Page Header -->
-    <section class="page-header position-relative overflow-hidden">
-        <div class="container position-relative py-7">
-            <div class="row align-items-center">
-                <div class="col-md-7" data-aos="fade-right">
+    <!-- Redesigned Executive Hero Banner -->
+    <section class="about-page-header position-relative overflow-hidden w-100 my-0">
+        <div class="about-header-glow-1"></div>
+        <div class="about-header-glow-2"></div>
+        <div class="about-header-pattern"></div>
+
+        <div class="container position-relative z-2 py-4">
+            <div class="row align-items-center text-start g-4">
+                <div class="col-lg-7" data-aos="fade-right">
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-3">
-                            <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Home</a></li>
-                            <li class="breadcrumb-item active text-white" aria-current="page">Careers</li>
+                        <ol class="breadcrumb about-breadcrumb px-3 py-1.5 rounded-pill mb-3 d-inline-flex">
+                            <li class="breadcrumb-item"><a href="index.php" class="text-black text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
+                            <li class="breadcrumb-item active text-black" aria-current="page">Careers</li>
                         </ol>
                     </nav>
-                    <h1 class="text-white display-5 fw-bold mb-3">Join Our Team</h1>
-                    <p class="text-white-50 lead mb-0">Be part of our mission to transform education through technology and innovation.</p>
+
+                    <h1 class="display-4 fw-bold text-black mb-3">
+                        Join Our <span class="cta-gold-text">Career Team</span>
+                    </h1>
+
+                    <p class="lead text-black-50 mb-4" style="max-width: 650px;">
+                        Be part of our mission to transform education through technology, innovation, and career development.
+                    </p>
                 </div>
-                <div class="col-md-5" data-aos="fade-left">
-                    <img src="./Images/Others/career2.png" alt="Careers" class="career-hero-image">
+
+                <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
+                    <div class="position-relative d-inline-block">
+                        <div class="position-absolute top-50 start-50 translate-middle rounded-circle  bg-opacity-20 blur-2xl" style="width: 220px; height: 220px;  z-index: 1;"></div>
+                        <img src="./Images/Others/career3.png" alt="Careers" class="img-fluid position-relative z-2 career-hero-image">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="page-header-shape">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+
+        <div class="page-header-shape position-absolute bottom-0 start-0 w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none" style="height: 40px; display: block; width: 100%;">
+                <path fill="#f8fafc" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,58.7C672,43,768,21,864,21.3C960,21,1056,43,1152,53.3C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1056,120,960,120C864,120,768,120,672,120C576,120,480,120,384,120C288,120,192,120,96,120C48,120L0,120Z"></path>
             </svg>
         </div>
     </section>
 
     <!-- Why Join Us Section -->
     <section class="py-5">
-        <div class="container">
+        <div class="container py-2">
             <div class="row text-center mb-5">
                 <div class="col-lg-8 mx-auto">
-                    <h2 class="section-heading" data-aos="fade-up">Why Join GD Edu Tech?</h2>
-                    <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Discover the benefits of being part of our innovative team</p>
+                    <h2 class="display-6 top-section-title mb-2" data-aos="fade-up">Why Join GD Edu Tech?</h2>
+                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">Discover the benefits of being part of our innovative team</p>
                 </div>
             </div>
             <div class="row g-4">
                 <div class="col-lg-3 col-md-6" data-aos="fade-up">
-                    <div class="premium-card text-center p-4 h-100">
-                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 mb-4 mx-auto" style="width: 80px; height: 80px">
-                            <i class="bi bi-graph-up-arrow fs-2 text-primary"></i>
+                    <div class="career-benefit-card text-center">
+                        <div class="benefit-icon-wrapper">
+                            <i class="bi bi-graph-up-arrow"></i>
                         </div>
-                        <h5>Growth Opportunities</h5>
-                        <p class="text-muted">Continuous learning and career advancement in a fast-growing company.</p>
+                        <h5 class="fw-bold text-dark mb-2">Growth Opportunities</h5>
+                        <p class="text-muted small mb-0">Continuous learning and career advancement in a fast-growing tech company.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="premium-card text-center p-4 h-100">
-                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 mb-4 mx-auto" style="width: 80px; height: 80px">
-                            <i class="bi bi-heart-pulse fs-2 text-primary"></i>
+                    <div class="career-benefit-card text-center">
+                        <div class="benefit-icon-wrapper">
+                            <i class="bi bi-heart-pulse"></i>
                         </div>
-                        <h5>Work-Life Balance</h5>
-                        <p class="text-muted">Flexible work arrangements and comprehensive wellness programs.</p>
+                        <h5 class="fw-bold text-dark mb-2">Work-Life Balance</h5>
+                        <p class="text-muted small mb-0">Flexible work arrangements and comprehensive wellness programs.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="premium-card text-center p-4 h-100">
-                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 mb-4 mx-auto" style="width: 80px; height: 80px">
-                            <i class="bi bi-people fs-2 text-primary"></i>
+                    <div class="career-benefit-card text-center">
+                        <div class="benefit-icon-wrapper">
+                            <i class="bi bi-people"></i>
                         </div>
-                        <h5>Great Culture</h5>
-                        <p class="text-muted">Collaborative environment with diverse and talented professionals.</p>
+                        <h5 class="fw-bold text-dark mb-2">Great Culture</h5>
+                        <p class="text-muted small mb-0">Collaborative environment with diverse, talented, and passion-driven professionals.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="premium-card text-center p-4 h-100">
-                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 mb-4 mx-auto" style="width: 80px; height: 80px">
-                            <i class="bi bi-trophy fs-2 text-primary"></i>
+                    <div class="career-benefit-card text-center">
+                        <div class="benefit-icon-wrapper">
+                            <i class="bi bi-trophy"></i>
                         </div>
-                        <h5>Competitive Benefits</h5>
-                        <p class="text-muted">Attractive compensation, health insurance, and learning allowances.</p>
+                        <h5 class="fw-bold text-dark mb-2">Competitive Benefits</h5>
+                        <p class="text-muted small mb-0">Attractive compensation, health benefits, and continuous skill allowances.</p>
                     </div>
                 </div>
             </div>
@@ -156,107 +264,127 @@ require_once './Configurations/config.php';
     </section>
 
     <!-- Current Openings Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            
-            <div class="row mb-5">
+    <section class="py-5 bg-white">
+        <div class="container py-2">
+            <div class="row mb-4 align-items-end">
                 <div class="col-lg-6">
-                    <h2 class="section-heading" data-aos="fade-up">Current Openings</h2>
-                    <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Join our team and be part of something extraordinary</p>
+                    <h2 class="display-6 top-section-title mb-1" data-aos="fade-up">Current Openings</h2>
+                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">Join our team and be part of something extraordinary</p>
                 </div>
-                <div class="col-lg-6 text-lg-end" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-6 text-lg-end mt-3 mt-lg-0" data-aos="fade-up" data-aos-delay="200">
                     <div class="btn-group" role="group" aria-label="Job filter">
-                        <button type="button" class="btn btn-primary active filter-btn" data-filter="all">All</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="Full-time">Full-time</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="Part-time">Part-time</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="Contract">Contract</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="Internship">Internship</button>
+                        <button type="button" class="btn btn-dark rounded-pill px-4 py-2 me-2 active" data-filter="all">All Jobs</button>
+                        <button type="button" class="btn btn-outline-dark rounded-pill px-4 py-2 me-2" data-filter="Full-time">Full-time</button>
+                        <button type="button" class="btn btn-outline-dark rounded-pill px-4 py-2" data-filter="Remote">Remote</button>
                     </div>
                 </div>
             </div>
-            <div class="row g-4" id="job-listings">
-                <!-- No jobs message (hidden by default) -->
-                <div id="no-jobs-message" class="col-12 text-center" style="display: none;" data-aos="fade-up">
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        <span id="no-jobs-text">No job openings available at the moment. Please check back later.</span>
-                    </div>
-                </div>
-                
-                <?php
-                // Fetch active job listings from the database
-                $query = "SELECT * FROM Careers WHERE status = 'Active' AND application_deadline >= CURDATE() ORDER BY created_at DESC";
-                $result = mysqli_query($conn, $query);
-                
-                if (mysqli_num_rows($result) > 0) {
-                    while ($job = mysqli_fetch_assoc($result)) {
-                        // Format the deadline date
-                        $deadline = new DateTime($job['application_deadline']);
-                        $formatted_deadline = $deadline->format('M d, Y');
-                        
-                        // Calculate days remaining
-                        $today = new DateTime();
-                        $interval = $today->diff($deadline);
-                        $days_remaining = $interval->days;
-                        $deadline_class = ($days_remaining <= 7) ? 'text-danger' : 'text-muted';
-                ?>
-                <div class="col-lg-6 job-item" data-category="<?php echo htmlspecialchars($job['job_type']); ?>" data-job-type="<?php echo htmlspecialchars($job['job_type']); ?>" data-aos="fade-up">
-                    <div class="job-card-new">
-                        <div class="job-tag"><?php echo htmlspecialchars($job['job_type']); ?></div>
-                        <div class="job-card-content">
-                            <div class="job-location">
-                                <i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($job['location']); ?>
+            <div class="row g-4 pt-3">
+                <?php if ($result && mysqli_num_rows($result) > 0): ?>
+                    <?php while ($job = mysqli_fetch_assoc($result)): ?>
+                        <div class="col-lg-6" data-aos="fade-up" data-job-type="<?php echo htmlspecialchars($job['job_type']); ?>">
+                            <div class="career-job-card h-100 p-4 d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-1.5 rounded-pill mb-2 fw-semibold">
+                                            <i class="bi bi-briefcase-fill me-1"></i>
+                                            <?php echo htmlspecialchars($job['job_type']); ?>
+                                        </span>
+                                        <h4 class="job-title-text mb-2"><?php echo htmlspecialchars($job['job_title']); ?></h4>
+                                        <div class="d-flex align-items-center text-secondary small">
+                                            <i class="bi bi-geo-alt-fill text-danger me-1.5"></i>
+                                            <span class="fw-semibold"><?php echo htmlspecialchars($job['location']); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="job-salary-pill ms-2">
+                                        <span class="text-primary fw-bold fs-6"><?php echo htmlspecialchars($job['salary_range']); ?></span>
+                                        <span class="text-muted small d-block">per annum</span>
+                                    </div>
+                                </div>
+                                
+                                <p class="card-text text-secondary mb-4 flex-grow-0" style="line-height: 1.6; font-size: 0.95rem;">
+                                    <?php echo htmlspecialchars($job['job_description']); ?>
+                                </p>
+
+                                <div class="job-requirements mb-4 flex-grow-1">
+                                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-list-check me-1.5 text-primary"></i> Key Requirements:</h6>
+                                    <ul class="requirements-list">
+                                        <?php
+                                        $requirements = explode("\n", $job['requirements']);
+                                        foreach ($requirements as $requirement) {
+                                            if (!empty(trim($requirement))) {
+                                                echo '<li><i class="bi bi-check-circle-fill text-success me-2 fs-6"></i>' . htmlspecialchars(trim($requirement)) . '</li>';
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top gap-2 mt-auto">
+                                    <div class="job-meta small text-muted">
+                                        <span class="me-3 d-inline-block"><i class="bi bi-clock me-1 text-primary"></i> Posted <?php echo date('M d, Y', strtotime($job['created_at'])); ?></span>
+                                        <span class="d-inline-block"><i class="bi bi-calendar-event me-1 text-danger"></i> Deadline: <?php echo date('M d, Y', strtotime($job['application_deadline'])); ?></span>
+                                    </div>
+                                    <a href="apply.php?id=<?php echo $job['job_id']; ?>" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-decoration-none">
+                                        Apply Now <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="job-salary-range">
-                                ₹ <?php echo str_replace('₹', '', htmlspecialchars($job['salary_range'])); ?>
-                            </div>
-                            
-                            <h3 class="job-title"><?php echo htmlspecialchars($job['job_title']); ?></h3>
-                            
-                            <p class="job-description"><?php echo nl2br(substr(htmlspecialchars($job['job_description']), 0, 140)) . '...'; ?></p>
                         </div>
-                        
-                        <div class="job-footer">
-                            <div class="deadline <?php echo $deadline_class; ?>">
-                                <i class="bi bi-calendar-event"></i> Deadline: <?php echo $formatted_deadline; ?>
-                                <?php if ($days_remaining <= 7): ?>
-                                    (<?php echo $days_remaining; ?> days left)
-                                <?php endif; ?>
-                            </div>
-                            <a href="apply.php?job_id=<?php echo $job['job_id']; ?>" class="learn-more">
-                                Learn More
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="col-12 text-center" data-aos="fade-up">
+                        <div class="alert alert-info py-4 rounded-4 border-0 shadow-sm" role="alert">
+                            <i class="bi bi-info-circle fs-3 me-2"></i>
+                            <span class="fs-5 fw-semibold">No job openings available at the moment. Please check back later.</span>
                         </div>
                     </div>
-                </div>
-                <?php
-                    }
-                } else {
-                    // Show the no-jobs-message div when no jobs are found
-                    echo '<script>document.getElementById("no-jobs-message").style.display = "block";</script>';
-                }
-                ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section" data-aos="fade-up">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h2 class="display-5 fw-bold text-white mb-4">Ready to Join Our Team?</h2>
-                    <p class="lead text-white-50 mb-5">Take the first step towards an exciting career with GD Edu Tech.</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="btn btn-light btn-lg px-5 rounded-pill">
-                            Apply Now <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
-                        <a href="contact.php" class="btn btn-outline-light btn-lg px-5 rounded-pill">
-                            Contact Us
-                        </a>
+    <!-- Life at GD Edu Tech -->
+    <section class="py-5">
+        <div class="container py-2">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="display-6 top-section-title mb-2" data-aos="fade-up">Life at GD Edu Tech</h2>
+                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">See what makes our workplace special</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up">
+                    <div class="life-card">
+                        <div class="overflow-hidden">
+                            <img src="./Images/Others/office-1.jpg" alt="Office Life" class="life-card-img">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold text-dark mb-2">Modern Workspace</h5>
+                            <p class="text-muted small mb-0">State-of-the-art facilities designed for productivity and collaboration.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="life-card">
+                        <div class="overflow-hidden">
+                            <img src="./Images/Others/office-2.jpg" alt="Team Events" class="life-card-img">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold text-dark mb-2">Team Events</h5>
+                            <p class="text-muted small mb-0">Regular team building activities, workshops, and celebrations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="life-card">
+                        <div class="overflow-hidden">
+                            <img src="./Images/Others/office-3.jpg" alt="Learning Culture" class="life-card-img">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="fw-bold text-dark mb-2">Learning Culture</h5>
+                            <p class="text-muted small mb-0">Continuous learning and professional development opportunities.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -264,298 +392,43 @@ require_once './Configurations/config.php';
     </section>
 
 
-    <!-- Include footer -->
+    <!-- Footer -->
     <?php include 'footer.php'; ?>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS Animation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <!-- Back to Top Button -->
-    <script src="js/back-to-top.js"></script>
-    
-    <!-- Job Filtering Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize AOS
-            AOS.init({
-                duration: 800,
-                easing: 'ease-in-out',
-                once: true
-            });
-            
-            // Job filtering functionality
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const jobItems = document.querySelectorAll('.job-item');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active', 'btn-primary'));
-                    filterButtons.forEach(btn => btn.classList.add('btn-outline-primary'));
-                    
-                    // Add active class to clicked button
-                    this.classList.remove('btn-outline-primary');
-                    this.classList.add('active', 'btn-primary');
-                    
-                    const filter = this.getAttribute('data-filter');
-                    
-                    // Show/hide job items based on filter
-                    jobItems.forEach(item => {
-                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-
-    <style>
-        /* Job Card Styling - Matching Course Card Design */
-        .job-card-new {
-            position: relative;
-            background: #ffffff;
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-            padding: 0;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .job-card-new:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        
-        .job-tag {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--primary);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1;
-        }
-        
-        .job-card-content {
-            padding: 1.5rem;
-        }
-        
-        .job-location, .job-salary-range {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            display: inline-block;
-            margin-right: 15px;
-            font-weight: 500;
-        }
-        
-        .job-location i, .job-salary-range i {
-            margin-right: 5px;
-            color: var(--primary);
-        }
-        
-        .job-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 15px 0;
-            line-height: 1.4;
-        }
-        
-        .job-description {
-            color: #64748b;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .job-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding: 1rem 1.5rem;
-            border-top: 1px solid #e2e8f0;
-        }
-        
-        .deadline {
-            font-size: 0.875rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-        
-        .deadline i {
-            margin-right: 5px;
-            color: #94a3b8;
-        }
-        
-        .learn-more {
-            display: inline-flex;
-            align-items: center;
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        
-        .learn-more i {
-            margin-left: 6px;
-            transition: transform 0.3s ease;
-            font-size: 0.85rem;
-        }
-        
-        .learn-more:hover {
-            color:rgb(0, 0, 0);
-            transform: translateY(-2px);
-        }
-        
-        .learn-more:hover i {
-            transform: translateX(5px);
-        }
-        
-        /* Mobile Responsiveness */
-        @media (max-width: 767.98px) {
-            .job-card-new {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-            
-            .job-tag {
-                top: 20px;
-                right: 20px;
-                font-size: 0.7rem;
-                padding: 4px 10px;
-            }
-            
-            .job-title {
-                font-size: 1.3rem;
-                margin: 12px 0;
-            }
-            
-            .job-location, .job-salary-range {
-                font-size: 0.8rem;
-                margin-bottom: 6px;
-            }
-            
-            .job-footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .learn-more {
-                margin-top: 10px;
-            }
-        }
-
-        .career-hero-image {
-            max-width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            animation: float 6s ease-in-out infinite;
-            transition: transform 0.3s ease;
-            box-shadow: none;
-            border: none;
-        }
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
-        }
-    </style>
-
-    <script>
-        // Initialize AOS
         AOS.init({
             duration: 1000,
             easing: 'ease-in-out',
-            once: true,
-            mirror: false
+            once: true
         });
 
         // Job filtering functionality
         document.addEventListener('DOMContentLoaded', function() {
             const filterButtons = document.querySelectorAll('[data-filter]');
             const jobCards = document.querySelectorAll('[data-job-type]');
-            const noJobsMessage = document.getElementById('no-jobs-message');
-            const noJobsText = document.getElementById('no-jobs-text');
-
-            // Function to check if any jobs are visible
-            function checkVisibleJobs(filter) {
-                let visibleCount = 0;
-                jobCards.forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-job-type') === filter) {
-                        card.style.display = 'block';
-                        visibleCount++;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-                
-                // Show or hide the no jobs message
-                if (visibleCount === 0) {
-                    noJobsMessage.style.display = 'block';
-                    if (filter === 'all') {
-                        noJobsText.textContent = 'No job openings available at the moment. Please check back later.';
-                    } else {
-                        noJobsText.textContent = 'No ' + filter + ' positions available at the moment. Please try another category or check back later.';
-                    }
-                } else {
-                    noJobsMessage.style.display = 'none';
-                }
-                
-                return visibleCount;
-            }
-            
-            // Initial check (in case there are no jobs at all)
-            if (jobCards.length === 0) {
-                noJobsMessage.style.display = 'block';
-            }
 
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Update active button
                     filterButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.classList.remove('btn-primary');
-                        btn.classList.add('btn-outline-primary');
+                        btn.classList.remove('active', 'btn-dark', 'text-white');
+                        btn.classList.add('btn-outline-dark');
                     });
-                    this.classList.add('active');
-                    this.classList.remove('btn-outline-primary');
-                    this.classList.add('btn-primary');
+                    this.classList.add('active', 'btn-dark', 'text-white');
+                    this.classList.remove('btn-outline-dark');
 
                     const filter = this.getAttribute('data-filter');
-                    
-                    // Filter job cards and check if any are visible
-                    checkVisibleJobs(filter);
+
+                    jobCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-job-type') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
                 });
             });
         });

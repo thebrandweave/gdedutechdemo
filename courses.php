@@ -88,108 +88,102 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 <body>
     <?php include 'navbar.php'; ?>
 
-    <!-- Page Header -->
-    <section class="course-header">
-        <!-- Animated Background Elements -->
-        <div class="animated-bg">
-            <div class="circle-1" data-aos="fade-right" data-aos-duration="1500"></div>
-            <div class="circle-2" data-aos="fade-left" data-aos-duration="1500" data-aos-delay="200"></div>
-            <div class="circle-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="400"></div>
-        </div>
+    <!-- Redesigned Executive Course Header -->
+    <section class="about-page-header position-relative overflow-hidden w-100 my-0">
+        <!-- Ambient Decorative Glows & Pattern -->
+        <div class="about-header-glow-1"></div>
+        <div class="about-header-glow-2"></div>
+        <div class="about-header-pattern"></div>
 
-        <div class="container">
-            <!-- Header Content -->
-            <div class="row align-items-center">
-                <div class="col-lg-7" data-aos="fade-right" data-aos-duration="1000">
-                    <div class="header-content">
-                        <div class="header-badge" data-aos="fade-up" data-aos-delay="200">
-                            <i class="bi bi-mortarboard-fill me-2"></i>Explore Our Course Catalog
+        <div class="container position-relative z-2 py-4">
+            <div class="row align-items-center g-5">
+                <!-- Left Column: Title & Info -->
+                <div class="col-lg-7 text-start" data-aos="fade-right">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb about-breadcrumb px-3 py-1.5 rounded-pill mb-3 d-inline-flex">
+                            <li class="breadcrumb-item"><a href="index.php" class="text-black text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
+                            <li class="breadcrumb-item active text-black" aria-current="page">Courses</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-4 fw-bold text-black mb-3">
+                        Find Your Perfect <span class="cta-gold-text">Learning Path</span>
+                    </h1>
+
+                    <p class="lead text-black mb-4" style="max-width: 620px;">
+                        Choose from <?php echo $total_courses; ?>+ courses across <?php echo count($categories); ?> categories. Learn from industry experts and transform your career with hands-on projects.
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-3 align-items-center pt-2">
+                        <div class="about-header-badge">
+                            <i class="bi bi-collection-play-fill text-warning"></i>
+                            <span style="color: #0f172a;"> <?php echo $total_courses; ?>+ Published Courses</span>
                         </div>
-                        <h1 class="header-title" data-aos="fade-up" data-aos-delay="400">
-                            Find Your Perfect <span class="highlight">Learning Path</span>
-                        </h1>
-                        <p class="header-subtitle" data-aos="fade-up" data-aos-delay="600">
-                            Choose from <?php echo $total_courses; ?>+ courses across <?php echo count($categories); ?> categories. 
-                            Learn from industry experts and transform your career with hands-on projects and real-world applications.
-                        </p>
-                        
-                        <!-- Course Stats -->
-                        <div class="course-stats" data-aos="fade-up" data-aos-delay="800">
-                            <div class="stat-card">
-                                <div class="stat-icon">
-                                    <i class="bi bi-collection-play"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <h3><span class="counter"><?php echo $total_courses; ?></span>+</h3>
-                                    <p>Total Courses</p>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon">
-                                    <i class="bi bi-grid-3x3-gap"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <h3><span class="counter"><?php echo count($categories); ?></span>+</h3>
-                                    <p>Categories</p>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon">
-                                    <i class="bi bi-people"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <h3><span class="counter">5000</span>+</h3>
-                                    <p>Active Students</p>
-                                </div>
-                            </div>
+                        <div class="about-header-badge">
+                            <i class="bi bi-grid-3x3-gap-fill text-info"></i>
+                            <span style="color: #0f172a;"><?php echo count($categories); ?> Categories</span>
+                        </div>
+                        <div class="about-header-badge">
+                            <i class="bi bi-people-fill text-success"></i>
+                            <span style="color: #0f172a;">5000+ Active Students</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Search Panel -->
-                <div class="col-lg-5 d-none d-lg-block" data-aos="fade-left" data-aos-duration="1000">
-                    <div class="search-panel">
-                        <div class="panel-header">
-                            <h4><i class="bi bi-search me-2"></i>Find Your Course</h4>
-                            <p>Search through our extensive course catalog</p>
+                <!-- Right Column: Interactive Search Panel -->
+                <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
+                    <div class="about-header-card bg-white text-start p-4 p-md-4.5 rounded-4 shadow-lg border-0" style="max-width: 440px; margin-left: auto;">
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <div class="rounded-circle  bg-opacity-20 p-3 text-warning d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                                <i class="bi bi-search fs-3 text-warning"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-dark fw-bold mb-0 fs-5">Search Courses</h5>
+                                <span class="text-muted small">Filter by topic or category</span>
+                            </div>
                         </div>
+
                         <form id="courseSearchForm" class="course-search-form">
-                            <div class="form-group" data-aos="fade-up" data-aos-delay="200">
-                                <div class="search-input-group">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" name="search" 
-                                           id="searchInput"
-                                           class="form-control" 
-                                           placeholder="What do you want to learn?" 
-                                           value="<?php echo htmlspecialchars($search); ?>">
-                                    <div class="search-spinner spinner-border spinner-border-sm text-primary d-none" role="status">
+                            <div class="mb-3">
+                                <label class="form-label text-dark fw-semibold small mb-1.5">Keywords</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-1 border-secondary-subtle text-dark px-3"><i class="bi bi-search fs-6 text-dark"></i></span>
+                                    <input type="text" name="search" id="searchInput" class="form-control bg-light border-1 border-secondary-subtle text-dark px-3" placeholder="What do you want to learn?" value="<?php echo htmlspecialchars($search); ?>" style="color: #0f172a !important;">
+                                    <div class="search-spinner spinner-border spinner-border-sm text-warning d-none position-absolute end-0 me-3 top-50 translate-middle-y" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" data-aos="fade-up" data-aos-delay="400">
-                                <div class="category-select-group">
-                                    <i class="bi bi-grid"></i>
-                                    <select name="category" id="categorySelect" class="form-select">
+
+                            <div class="mb-4">
+                                <label class="form-label text-dark fw-semibold small mb-1.5">Category</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-1 border-secondary-subtle text-dark px-3"><i class="bi bi-grid-fill fs-6 text-dark"></i></span>
+                                    <select name="category" id="categorySelect" class="form-select bg-light border-1 border-secondary-subtle text-dark px-3" style="color: #0f172a !important;">
                                         <option value="0">All Categories</option>
                                         <?php foreach ($categories as $category): ?>
-                                            <option value="<?php echo $category['category_id']; ?>" 
-                                                    <?php echo $category_filter == $category['category_id'] ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($category['name']); ?> 
-                                                (<?php echo $category['course_count']; ?>)
+                                            <option value="<?php echo $category['category_id']; ?>" <?php echo $category_filter == $category['category_id'] ? 'selected' : ''; ?>>
+                                                <?php echo htmlspecialchars($category['name']); ?> (<?php echo $category['course_count']; ?>)
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="search-btn" data-aos="fade-up" data-aos-delay="600">
-                                <span class="btn-text">Search Courses</span>
-                                <i class="bi bi-arrow-right ms-2"></i>
+
+                            <button type="submit" class="btn btn-dark w-100 rounded-pill py-2.5 fw-bold text-white d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                <span>Search Catalog</span>
+                                <i class="bi bi-arrow-right fs-5"></i>
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="page-header-shape position-absolute bottom-0 start-0 w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none" style="height: 40px; display: block; width: 100%;">
+                <path fill="#ffffff" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,58.7C672,43,768,21,864,21.3C960,21,1056,43,1152,53.3C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
         </div>
     </section>
 
@@ -546,167 +540,238 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
     </section>
 
 <!-- Offline Courses Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="section-title">Offline Courses</h2>
-                <p class="text-muted">Join our in-person classroom training programs</p>
+<section class="py-5 bg-light position-relative overflow-hidden">
+    <div class="container py-4">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto" data-aos="fade-up">
+                <div class="cta-badge d-inline-flex align-items-center px-3 py-1 rounded-pill mb-3">
+                    <i class="bi bi-geo-alt-fill text-warning me-2"></i><span style="color: #030303;">In-Person Training</span>
+                </div>
+                <h2 class="display-6 fw-bold mb-3">Classroom <span class="highlight-gold">Offline Courses</span></h2>
+                <p class="lead text-muted">
+                    Join our state-of-the-art classroom training programs with hands-on practical labs and expert mentorship.
+                </p>
             </div>
         </div>
 
         <div class="row g-4">
 
-            <!-- Course 1 -->
-    <div class="col-lg-4 col-md-6">
-                <div class="premium-card h-100 course-card"
+            <!-- Course 1: Full Stack -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="offline-course-card"
                      onclick="openCourseModal(
-            'Full Stack Development',
-            './Images/Others/web.jpg',
-            'Complete 16-week program covering HTML, CSS, JavaScript, ReactJs or NextJs, Node.js, MongoDB, REST APIs, Postman, Git , Github and real-world projects.',
-              ['Offline', '16 Weeks', 'Certification']
-                    )"
-                    style="cursor:pointer;">
+                        'Full Stack Development',
+                        './Images/Others/web.jpg',
+                        'Complete 16-week program covering HTML, CSS, JavaScript, ReactJs or NextJs, Node.js, MongoDB, REST APIs, Postman, Git, Github and real-world projects.',
+                        ['Offline', '16 Weeks', 'Certification']
+                     )"
+                     style="cursor:pointer;">
 
-                    <div class="position-relative">
-                        <img src="./Images/Others/web.jpg" class="card-img-top" style="height:200px; object-fit:cover;">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                           Full Stack Development
+                    <div class="offline-card-img-wrapper">
+                        <img src="./Images/Others/web.jpg" alt="Full Stack Development" class="offline-card-img">
+                        <span class="badge bg-dark bg-opacity-75 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill position-absolute top-0 end-0 m-3">
+                            <i class="bi bi-code-slash me-1 text-warning"></i> Full Stack
                         </span>
                     </div>
 
-               
-        <div class="card-body p-4">
-            <h5 class="card-title mb-3">Full Stack Development</h5>
-            <p class="text-muted">Click to explore course details</p>
-        </div>
+                    <div class="offline-card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                            <span><i class="bi bi-clock me-1 text-primary"></i> 16 Weeks</span>
+                            <span>•</span>
+                            <span><i class="bi bi-award me-1 text-success"></i> Certificate</span>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">Full Stack Development</h5>
+                        <!-- <p class="text-muted small mb-3">Master front-end, back-end, REST APIs, and database engineering.</p> -->
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-dark w-100 rounded-pill py-2 text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                                <span>Explore Course</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Course 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="premium-card h-100 course-card"
+            <!-- Course 2: Architecture -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="offline-course-card"
                     onclick="openCourseModal(
-                        'Architectural Design course',
+                        'Architectural Design Course',
                         './Images/Others/architecture.jpg',
-                        'Master the fundamentals and advanced concepts of architectural design through this comprehensive program. Learn to create functional, aesthetic, and sustainable designs using industry-standard tools like AutoCAD, Revit, SketchUp, V-Ray, and Lumion. This course covers space planning, 3D modeling, rendering, and interior design, with a strong focus on real-world projects and practical experience.',
-                          ['Offline', '16 Weeks', 'Certification']
+                        'Master the fundamentals and advanced concepts of architectural design through this comprehensive program. Learn AutoCAD, Revit, SketchUp, V-Ray, and Lumion with hands-on practical experience.',
+                        ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
-                    <div class="position-relative">
-                        <img src="./Images/Others/architecture.jpg" class="card-img-top" style="height:200px; object-fit:cover;">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                            Architecture
+                    <div class="offline-card-img-wrapper">
+                        <img src="./Images/Others/architecture.jpg" alt="Architectural Design" class="offline-card-img">
+                        <span class="badge bg-dark bg-opacity-75 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill position-absolute top-0 end-0 m-3">
+                            <i class="bi bi-building me-1 text-warning"></i> Architecture
                         </span>
                     </div>
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3">Architectural Design course</h5>
-                        <p class="text-muted">Click to explore course details</p>
+                    <div class="offline-card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                            <span><i class="bi bi-clock me-1 text-primary"></i> 16 Weeks</span>
+                            <span>•</span>
+                            <span><i class="bi bi-award me-1 text-success"></i> Certificate</span>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">Architectural Design Course</h5>
+                        <!-- <p class="text-muted small mb-3">Learn 3D modeling, AutoCAD, Revit, space planning, and Lumion.</p> -->
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-dark w-100 rounded-pill py-2 text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                                <span>Explore Course</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
-     <!-- Course 3 -->
-                        <div class="col-lg-4 col-md-6">
-                <div class="premium-card h-100 course-card"
+            <!-- Course 3: Interior Design -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="offline-course-card"
                     onclick="openCourseModal(
-                        'Interior Design course',
+                        'Interior Design Course',
                         './Images/Others/int.jpg',
-                        'Step into the world of creative interiors and learn how to design stylish, functional spaces from concept to completion. This course teaches you space planning, color combinations, lighting design, furniture layout, and modern interior trends.',
-                          ['Offline', '16 Weeks', 'Certification']
+                        'Step into the world of creative interiors and learn how to design stylish, functional spaces from concept to completion. Covers space planning, color schemes, lighting, and furniture layout.',
+                        ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
-                    <div class="position-relative">
-                        <img src="./Images/Others/int.jpg" class="card-img-top" style="height:200px; object-fit:cover;">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                            Interior Design
+                    <div class="offline-card-img-wrapper">
+                        <img src="./Images/Others/int.jpg" alt="Interior Design" class="offline-card-img">
+                        <span class="badge bg-dark bg-opacity-75 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill position-absolute top-0 end-0 m-3">
+                            <i class="bi bi-palette me-1 text-warning"></i> Interior Design
                         </span>
                     </div>
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3"> Interior Design course</h5>
-                        <p class="text-muted">Click to explore course details</p>
+                    <div class="offline-card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                            <span><i class="bi bi-clock me-1 text-primary"></i> 16 Weeks</span>
+                            <span>•</span>
+                            <span><i class="bi bi-award me-1 text-success"></i> Certificate</span>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">Interior Design Course</h5>
+                        <!-- <p class="text-muted small mb-3">Master space planning, color harmonies, lighting design, and styling.</p> -->
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-dark w-100 rounded-pill py-2 text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                                <span>Explore Course</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Course 4 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="premium-card h-100 course-card"
+            <!-- Course 4: Digital Marketing -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="offline-course-card"
                     onclick="openCourseModal(
                         'Digital Marketing',
                         './Images/Others/market.jpg',
-                        'Master SEO, SMM, PPC, Google Ads, content marketing, analytics, WordPress, and Photoshop.',
-                          ['Offline', '16 Weeks', 'Certification']
+                        'Master SEO, SMM, PPC, Google Ads, content marketing, web analytics, WordPress, and digital design tools.',
+                        ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
-                    <div class="position-relative">
-                        <img src="./Images/Others/market.jpg" class="card-img-top" style="height:200px; object-fit:cover;">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                           Digital Marketing
+                    <div class="offline-card-img-wrapper">
+                        <img src="./Images/Others/market.jpg" alt="Digital Marketing" class="offline-card-img">
+                        <span class="badge bg-dark bg-opacity-75 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill position-absolute top-0 end-0 m-3">
+                            <i class="bi bi-graph-up-arrow me-1 text-warning"></i> Marketing
                         </span>
                     </div>
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3">Digital Marketing</h5>
-                        <p class="text-muted">Click to explore course details</p>
+                    <div class="offline-card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                            <span><i class="bi bi-clock me-1 text-primary"></i> 16 Weeks</span>
+                            <span>•</span>
+                            <span><i class="bi bi-award me-1 text-success"></i> Certificate</span>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">Digital Marketing</h5>
+                        <!-- <p class="text-muted small mb-3">Master SEO, Google Ads, Social Media Marketing, and Analytics.</p> -->
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-dark w-100 rounded-pill py-2 text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                                <span>Explore Course</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Course 5 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="premium-card h-100 course-card"
+            <!-- Course 5: Graphic Design -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="offline-course-card"
                     onclick="openCourseModal(
                         'Graphic Design & Video Editing',
                         './Images/Others/designer.jpg',
-                        'Learn Canva, Photoshop, Illustrator, Premiere Pro, After Effects, and DaVinci Resolve.',
-                          ['Offline', '16 Weeks', 'Certification']
+                        'Learn Canva, Photoshop, Illustrator, Premiere Pro, After Effects, and DaVinci Resolve for professional content creation.',
+                        ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
-                    <div class="position-relative">
-                        <img src="./Images/Others/designer.jpg" class="card-img-top" style="height:200px; object-fit:cover;">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                           Graphic Design
+                    <div class="offline-card-img-wrapper">
+                        <img src="./Images/Others/designer.jpg" alt="Graphic Design & Video Editing" class="offline-card-img">
+                        <span class="badge bg-dark bg-opacity-75 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill position-absolute top-0 end-0 m-3">
+                            <i class="bi bi-vector-pen me-1 text-warning"></i> Graphic & Video
                         </span>
                     </div>
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3">Graphic Design & Video Editing</h5>
-                        <p class="text-muted">Click to explore course details</p>
+                    <div class="offline-card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                            <span><i class="bi bi-clock me-1 text-primary"></i> 16 Weeks</span>
+                            <span>•</span>
+                            <span><i class="bi bi-award me-1 text-success"></i> Certificate</span>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">Graphic Design &amp; Video Editing</h5>
+                        <!-- <p class="text-muted small mb-3">Learn Photoshop, Illustrator, Premiere Pro, and Motion Graphics.</p> -->
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-dark w-100 rounded-pill py-2 text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                                <span>Explore Course</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- Course 6-->
-            <div class="col-lg-4 col-md-6">
-                <div class="premium-card h-100 course-card"
+
+            <!-- Course 6: Photography -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="offline-course-card"
                     onclick="openCourseModal(
-                        ' Photography & Camera Handling',
+                        'Photography & Camera Handling',
                         './Images/Others/designer.jpeg',
-                    'Learn professional photography, camera handling, lighting techniques, framing, and photo composition.',
-                      ['Offline', '16 Weeks', 'Certification']
+                        'Learn professional photography, camera handling, studio lighting techniques, framing, and photo composition.',
+                        ['Offline', '16 Weeks', 'Certification']
                     )"
                     style="cursor:pointer;">
 
-                    <div class="position-relative">
-                        <img src="./Images/Others/designer.jpeg" class="card-img-top" style="height:200px; object-fit:cover;">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                                Photography & Camera Handling
+                    <div class="offline-card-img-wrapper">
+                        <img src="./Images/Others/designer1.jpeg" alt="Photography & Camera Handling" class="offline-card-img">
+                        <span class="badge bg-dark bg-opacity-75 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill position-absolute top-0 end-0 m-3">
+                            <i class="bi bi-camera me-1 text-warning"></i> Photography
                         </span>
                     </div>
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3">     Photography & Camera Handling</h5>
-                        <p class="text-muted">Click to explore course details</p>
+                    <div class="offline-card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                            <span><i class="bi bi-clock me-1 text-primary"></i> 16 Weeks</span>
+                            <span>•</span>
+                            <span><i class="bi bi-award me-1 text-success"></i> Certificate</span>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">Photography &amp; Camera Handling</h5>
+                        <!-- <p class="text-muted small mb-3">Master studio lighting, framing, composition, and camera settings.</p> -->
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-dark w-100 rounded-pill py-2 text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                                <span>Explore Course</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
@@ -779,40 +844,7 @@ function openCourseModal(title, image, description, badges) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <!-- CTA Section -->
-    <section class="cta-section" data-aos="fade-up">
-        <div class="floating-shape shape-1" data-aos="fade-right" data-aos-delay="200"></div>
-        <div class="floating-shape shape-2" data-aos="fade-left" data-aos-delay="400"></div>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8 mx-auto text-center">
-                    <div class="cta-badge" data-aos="fade-up" data-aos-delay="200">
-                        <i class="bi bi-stars me-2"></i>Limited Time Offer
-                    </div>
-                    <h2 class="display-5 fw-bold mb-4" data-aos="fade-up" data-aos-delay="400">Ready to Start Learning?</h2>
-                    <p class="lead mb-5" data-aos="fade-up" data-aos-delay="600">Join thousands of students already learning with GD Edu Tech. Get started today and enjoy special discounts!</p>
-                    <div class="cta-buttons d-flex justify-content-center gap-3" data-aos="fade-up" data-aos-delay="800">
-                        <a href="./studentPanel/signup.php" class="btn btn-light btn-lg px-5 rounded-pill">
-                            Get Started Today <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
-                        <a href="#" class="btn btn-outline-light btn-lg px-5 rounded-pill">
-                            View Pricing <i class="bi bi-tag ms-2"></i>
-                        </a>
-                    </div>
-                    <div class="cta-features mt-5 d-flex justify-content-center gap-4" data-aos="fade-up" data-aos-delay="1000">
-                        <div class="feature-item">
-                            <i class="bi bi-lightning-fill text-light mb-2"></i>
-                            <p class="mb-0 text-light">Instant Access</p>
-                        </div>
-                        <div class="feature-item">
-                            <i class="bi bi-headset text-light mb-2"></i>
-                            <p class="mb-0 text-light">24/7 Support</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
     <!-- Course Details Modal -->
 <div class="modal fade" id="courseModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">

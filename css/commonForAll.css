@@ -1,0 +1,182 @@
+/* Universal Responsive Styles for GD Edu Tech
+   Enforces full mobile and tablet responsiveness across all pages
+   WITHOUT altering desktop layouts (all rules are scoped inside max-width media queries).
+*/
+
+/* --- Base Fluid Overflow Prevention --- */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img, video, iframe, svg, canvas {
+    max-width: 100%;
+}
+
+/* --- Container Responsive Adjustments --- */
+@media (max-width: 1199.98px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/* --- Tablet / Medium Screen Adjustments (max-width: 991.98px) --- */
+@media (max-width: 991.98px) {
+    /* Navbar Responsive Fixes */
+    .navbar {
+        top: 10px !important;
+        width: 94% !important;
+        left: 3% !important;
+        padding: 8px 16px !important;
+    }
+
+    .navbar-collapse {
+        background: #ffffff !important;
+        margin-top: 12px !important;
+        border-radius: 18px !important;
+        padding: 20px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .navbar-nav {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    .navbar-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+        margin-top: 15px !important;
+        gap: 10px !important;
+    }
+
+    .navbar-actions .btn-login,
+    .navbar-actions .btn-signup {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+
+    /* General Layout & Section Headers */
+    .section-header .heading,
+    h1, .h1 {
+        font-size: 2.2rem !important;
+    }
+    
+    h2, .h2 {
+        font-size: 1.8rem !important;
+    }
+
+    /* Grid Stacking on Tablets */
+    .row > [class*="col-"] {
+        margin-bottom: 20px;
+    }
+    
+    .row > [class*="col-"]:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Responsive Tables */
+    .table-responsive, table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* --- Mobile / Small Screen Adjustments (max-width: 767.98px) --- */
+@media (max-width: 767.98px) {
+    /* Spacing & Typography */
+    body {
+        font-size: 14px;
+    }
+
+    .section-header {
+        margin-bottom: 30px !important;
+    }
+
+    .section-header .heading,
+    h1, .h1 {
+        font-size: 1.75rem !important;
+        line-height: 1.25 !important;
+    }
+
+    h2, .h2 {
+        font-size: 1.45rem !important;
+    }
+
+    h3, .h3 {
+        font-size: 1.25rem !important;
+    }
+
+    .lead {
+        font-size: 0.95rem !important;
+    }
+
+    /* Card Padding on Mobile */
+    .card, .hero-certified-card, .login-container, .signup-container {
+        /* padding: 20px !important; */
+        border-radius: 16px !important;
+    }
+
+    /* Form Layouts */
+    .form-control, .form-select, input[type="text"], input[type="email"], input[type="password"] {
+        font-size: 14px !important;
+        padding: 10px 14px !important;
+    }
+
+    /* Hero Section Stacking */
+    .hero-person-wrapper {
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0px 0 !important;
+    }
+
+    .hero-person-img {
+        max-height: 320px !important;
+        width: auto !important;
+        margin: 0 auto !important;
+        display: block !important;
+        animation: none !important;
+    }
+
+    .hero-certified-wrapper {
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        margin-top: 20px !important;
+        justify-content: center !important;
+    }
+
+    /* Footer Mobile Centering */
+    footer, .footer {
+        /* text-align: start; */
+    }
+
+    footer .social-links, .footer-social {
+        justify-content: center;
+        margin-top: 15px;
+    }
+}
+
+/* --- Ultra Small Devices (max-width: 480px) --- */
+@media (max-width: 480px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .navbar-brand img {
+        height: 32px !important;
+    }
+
+    .section-header .heading,
+    h1, .h1 {
+        font-size: 1.5rem !important;
+    }
+}

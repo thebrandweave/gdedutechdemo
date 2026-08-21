@@ -10,99 +10,97 @@ $current_year = date('Y');
 <footer class="footer">
     <div class="container">
         <div class="footer-top">
-            <div class="footer-logo-section" data-aos="fade" data-aos-duration="1200">
+            <div class="footer-logo-section">
                 <div class="logo-container">
                     <img src="./Images/Logos/GD_Full_logo.png" alt="GD Edu Tech Logo">
                 </div>
                 <p class="tagline">Empowering minds through quality education and innovative learning solutions. Join us in shaping the future of education.</p>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com/gdedutechofficial/" target="_blank" class="social-icon" data-aos="fade" data-aos-delay="200"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.linkedin.com/company/gd-edu-tech/"target="_blank" class="social-icon" data-aos="fade" data-aos-delay="300"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://www.instagram.com/gd_edu__tech/" target="_blank" class="social-icon" data-aos="fade" data-aos-delay="400"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.youtube.com/@GDEDUTECH" target="_blank" class="social-icon" data-aos="fade" data-aos-delay="500"><i class="fab fa-youtube"></i></a>
-                        </div>
+                    <a href="https://www.facebook.com/gdedutechofficial/" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.linkedin.com/company/gd-edu-tech/" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/gd_edu__tech/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@GDEDUTECH" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
 
-                    <div class="ventures">
+                <div class="ventures">
                     <h2 class="ventures-title">
                         <a href="https://goldendream.in/">
                         PRO GEE DEE VENTURES
                         </a>
                     </h2>
                 </div>
-                  <div class="certification-badges">
-
-    <div class="cert-badge-item">
-        <img
-            src="./Images/Others/badge.png"
-            alt="ISO Certified"
-            class="cert-badge-image"
-        >
-    </div>
-
-    <div class="cert-badge-item">
-        <img
-            src="./Images/Others/badge1.png"
-            alt="Industry Approved"
-            class="cert-badge-image"
-        >
-    </div>
-
-</div>
+                <div class="certification-badges">
+                    <div class="cert-badge-item">
+                        <img src="./Images/Others/badge.png" alt="ISO Certified" class="cert-badge-image">
                     </div>
-            <div class="footer-links-section" data-aos="fade" data-aos-duration="1200" data-aos-delay="100">
-                <h3 class="footer-heading">Quick Links</h3>
-                            <ul class="footer-links">
-                    <li data-aos="fade" data-aos-delay="100"><a href="index.php">Home</a></li>
-                    <li data-aos="fade" data-aos-delay="250"><a href="courses.php">Courses</a></li>
-                    <!-- <li data-aos="fade" data-aos-delay="100"><a href="blog.php">Blog</a></li> -->
-                    <li data-aos="fade" data-aos-delay="100"><a href="events.php">Events</a></li>
-                    <li data-aos="fade" data-aos-delay="200"><a href="about.php">About Us</a></li>
-                    <li data-aos="fade" data-aos-delay="350"><a href="career.php">Careers</a></li>
-                    <li data-aos="fade" data-aos-delay="350"><a href="scholarship.php">Apply Scholarship</a></li>
-                    <li data-aos="fade" data-aos-delay="300"><a href="contact.php">Contact</a></li>
-                            </ul>
+                    <div class="cert-badge-item">
+                        <img src="./Images/Others/badge1.png" alt="Industry Approved" class="cert-badge-image">
                     </div>
-
-            <div class="footer-courses-section" data-aos="fade" data-aos-duration="1200" data-aos-delay="200">
-                <h3 class="footer-heading">Popular Courses</h3>
-           <a href="courses.php">     <div class="course-item" data-aos="fade" data-aos-delay="300">
-                    <div class="course-icon"><i class="fas fa-code"></i></div> 
-                    <div class="course-name">Fullstack Development</div>
-                        </div></a>
-              <a href="courses.php">  <div class="course-item" data-aos="fade" data-aos-delay="450">
-                    <div class="course-icon"><i class="fas fa-bullhorn"></i></div>
-                    <div class="course-name">Digital Marketing</div>
-                </div></a>
-               <a href="courses.php"> <div class="course-item" data-aos="fade" data-aos-delay="550">
-                    <div class="course-icon"><i class="fas fa-drafting-compass"></i></div>
-                    <div class="course-name">Architecture Design</div>
-                </div></a>
-             <a href="courses.php">   <div class="course-item" data-aos="fade" data-aos-delay="600">
-                    <div class="course-icon"><i class="fas fa-paint-brush"></i></div>
-                    <div class="course-name">Graphic Designing</div>
-                </div></a>
+                </div>
             </div>
             
-            <div class="footer-contact-section" data-aos="fade" data-aos-duration="1200" data-aos-delay="300">
+            <div class="footer-links-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="courses.php">Courses</a></li>
+                    <!-- <li><a href="blog.php">Blog</a></li> -->
+                    <li><a href="events.php">Events</a></li>
+                    <li><a href="about.php">About Us</a></li>
+                    <li><a href="career.php">Careers</a></li>
+                    <li><a href="scholarship.php">Apply Scholarship</a></li>
+                    <li><a href="contact.php">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-courses-section">
+                <h3 class="footer-heading">Popular Courses</h3>
+                <a href="courses.php">
+                    <div class="course-item">
+                        <div class="course-icon"><i class="fas fa-code"></i></div> 
+                        <div class="course-name">Fullstack Development</div>
+                    </div>
+                </a>
+                <a href="courses.php">
+                    <div class="course-item">
+                        <div class="course-icon"><i class="fas fa-bullhorn"></i></div>
+                        <div class="course-name">Digital Marketing</div>
+                    </div>
+                </a>
+                <a href="courses.php">
+                    <div class="course-item">
+                        <div class="course-icon"><i class="fas fa-drafting-compass"></i></div>
+                        <div class="course-name">Architecture Design</div>
+                    </div>
+                </a>
+                <a href="courses.php">
+                    <div class="course-item">
+                        <div class="course-icon"><i class="fas fa-paint-brush"></i></div>
+                        <div class="course-name">Graphic Designing</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="footer-contact-section">
                 <h3 class="footer-heading">Contact Info</h3>
                 <ul class="contact-info">
-                    <li data-aos="fade" data-aos-delay="400">
+                    <li>
                         <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="contact-text">Kankanady Gate 4th floor, Kankanady Bypass road, Kankanady, Mangalore, Karnataka, India</div>
                     </li>
-                    <li data-aos="fade" data-aos-delay="450">
+                    <li>
                         <div class="contact-icon"><i class="fas fa-envelope"></i></div>
                         <div class="contact-text">gdedutech24@gmail.com</div>
                     </li>
-                    <li data-aos="fade" data-aos-delay="500">
+                    <li>
                         <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
                         <div class="contact-text">+91 7204626299</div>
                     </li>
                 </ul>
                 
-                <h3 class="footer-heading" data-aos="fade" data-aos-delay="550">Newsletter</h3>
-                <p class="tagline" data-aos="fade" data-aos-delay="600">Subscribe to our newsletter for updates</p>
-                <form class="newsletter-form" data-aos="fade" data-aos-delay="650">
+                <h3 class="footer-heading">Newsletter</h3>
+                <p class="tagline">Subscribe to our newsletter for updates</p>
+                <form class="newsletter-form">
                     <input type="email" class="newsletter-input" placeholder="Your email address">
                     <button type="submit" class="newsletter-button"><i class="fas fa-paper-plane"></i></button>
                 </form>
@@ -111,29 +109,17 @@ $current_year = date('Y');
 
         <div class="footer-divider"></div>
         
-        <div class="footer-bottom" data-aos="fade" data-aos-duration="1200" data-aos-delay="400">
+        <div class="footer-bottom">
             <div class="footer-bottom-text">
-                            © <?php echo $current_year; ?> GD Edu Tech. All rights reserved.
+                © <?php echo $current_year; ?> GD Edu Tech. All rights reserved.
             </div>
-            <!-- <div class="footer-bottom-links">
-                <a href="privacy-policy.php" data-aos="fade" data-aos-delay="500">Privacy Policy</a>
-                <a href="terms.php" data-aos="fade" data-aos-delay="550">Terms of Service</a>
-                <a href="cookie-policy.php" data-aos="fade" data-aos-delay="600">Cookie Policy</a>
-                    </div> -->
-            <!-- <div class="developed-by" data-aos="fade" data-aos-delay="650">
-                            <span>Developed by</span>
-                            <img onclick="window.open('https://intelexsolutions.co.in')" 
-                                 src="./Images/Logos/developed_by.png" 
-                                 alt="Developed by Intelex Solutions" 
-                                 class="footer-dev-logo">
-                        </div> -->
-                    </div>
-                </div>
+        </div>
+    </div>
     
     <a href="#" class="back-to-top">
         <i class="bi bi-arrow-up"></i>
     </a>
-    </footer>
+</footer>
 
 <style>
     :root {
@@ -145,10 +131,11 @@ $current_year = date('Y');
     }
 
     .footer {
-        background: linear-gradient(135deg, #fff, #f3f4f6);
+        /* background: linear-gradient(135deg, #fff, #f3f4f6); */
+        background: linear-gradient(112deg, #adc8e3 0%, #cadbec 38%, #dca3ab 80%, #dca3ab 100%);
         box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
         padding: 3rem 0 2rem;
-        border-top: 4px solid var(--primary);
+        border-top: 1px solid var(--primary);
         position: relative;
     }
 
@@ -173,8 +160,8 @@ $current_year = date('Y');
 }
 
 .cert-badge-item{
-    width:80px;
-    height:80px;
+    width:120px;
+    height:120px;
     border-radius:50%;
     /* background:rgba(255,255,255,0.08); */
     /* backdrop-filter:blur(12px); */
@@ -301,7 +288,7 @@ $current_year = date('Y');
     }
 
     .footer-links li a {
-        color: var(--gray);
+        color: black;
         text-decoration: none;
         font-size: 15px;
         transition: all 0.3s ease;
@@ -332,11 +319,12 @@ $current_year = date('Y');
         display: flex;
         align-items: center;
         margin-bottom: 15px;
-        background-color: white;
+        background-color: transparent;
         padding: 10px;
         border-radius: 8px;
+        border:1px solid #575757;
         transition: all 0.3s ease;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        /* box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05); */
     }
 
     .course-item:hover {
@@ -390,7 +378,7 @@ $current_year = date('Y');
 
     .contact-text {
         font-size: 15px;
-        color: var(--gray);
+        color: black;
         line-height: 1.5;
     }
 
@@ -409,7 +397,7 @@ $current_year = date('Y');
     }
 
     .footer-bottom-text {
-        color: var(--gray);
+        color: black;
         font-size: 14px;
     }
 
@@ -529,9 +517,9 @@ $current_year = date('Y');
     }
 
     .ventures-title {
-        font-size: 0.95rem;
+        font-size: 1.2rem;
         font-weight: 700;
-        color: rgb(213, 213, 213);
+        color: rgb(173 173 173);
         text-transform: uppercase;
         letter-spacing: 1px;
         margin: 0;
@@ -554,7 +542,7 @@ $current_year = date('Y');
         }
         
         .footer-bottom {
-            background-color: var(--light);
+            /* background-color: var(--light); */
             flex-direction: column;
             text-align: center;
             gap: 15px;
@@ -611,4 +599,5 @@ $current_year = date('Y');
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

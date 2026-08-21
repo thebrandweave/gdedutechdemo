@@ -88,27 +88,27 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1' && $selectedStatus) {
         foreach ($ajaxRows as $index => $ev) {
             ?>
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
-                <div class="card h-100 shadow-sm border-0 position-relative event-card" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
+                <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative event-card" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
                     <?php if (!empty($ev['main_cover_image'])): ?>
-                        <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="height:200px;object-fit:cover;">
+                        <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="height:220px;object-fit:cover;">
                     <?php else: ?>
-                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:200px;">
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:220px;">
                             <i class="bi bi-calendar-event display-4 text-muted"></i>
                         </div>
                     <?php endif; ?>
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-2 text-muted small">
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="mb-2 text-dark fw-bold small">
                             <?php if (!empty($ev['event_date'])): ?>
-                                <i class="bi bi-calendar3 me-1"></i><?php echo date('M d, Y', strtotime($ev['event_date'])); ?>
+                                <i class="bi bi-calendar3 me-1 text-primary"></i><span class="text-black"><?php echo date('M d, Y', strtotime($ev['event_date'])); ?></span>
                             <?php endif; ?>
                             <?php if (!empty($ev['event_time'])): ?>
-                                <span class="ms-3"><i class="bi bi-clock me-1"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
+                                <span class="ms-3 text-black"><i class="bi bi-clock me-1 text-primary"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
                             <?php endif; ?>
                         </div>
-                        <h5 class="card-title mb-2 text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
-                        <p class="card-text text-muted flex-grow-1 text-clamp-3"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
+                        <h5 class="card-title mb-2 text-black fw-bold text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
+                        <p class="card-text text-secondary flex-grow-1 text-clamp-3"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
                         <?php if (!empty($ev['location'])): ?>
-                            <div class="text-muted small mb-3"><i class="bi bi-geo-alt me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
+                            <div class="text-dark fw-semibold small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -188,132 +188,68 @@ function getSocialIconClass($platform) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/style.css">
-       <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom JavaScript -->
     <script src="./js/main.js" defer></script>
         
     <link rel="icon" type="image/png" href="./Images/Logos/GD_Only_logo.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./Images/Logos/GD_Only_logo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./Images/Logos/GD_Only_logo.png">
-    <link rel="shortcut icon" href="./Images/Logos/GD_Only_logo.png">
-    <link rel="apple-touch-icon" href="./Images/Logos/GD_Only_logo.png">
-    <meta name="msapplication-TileImage" content="./Images/Logos/GD_Only_logo.png">
+
     <style>
-        /* Add custom styles for the events image */
-        .premium-feature-card .card-icon i {
-            color: #0d7298 !important; 
-        }
-        .events-hero-image {
-            max-width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            animation: float 6s ease-in-out infinite;
-            transition: transform 0.3s ease;
-            box-shadow: none;
-            border: none;
+        body {
+            background: #f8fafc;
+            color: #0f172a;
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+        /* Top Section Text Enforcement - Black & Dark High-Contrast */
+        .top-section-title {
+            color: #000000 !important;
+            font-weight: 800 !important;
+        }
+
+        .top-section-subtitle {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+        }
+
+        .event-card-title {
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+
+        .event-card-meta {
+            color: #0f172a !important;
+            font-weight: 600 !important;
         }
 
         /* Event card hover effects */
         .event-card {
-            transition: all 0.3s ease;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -10px rgba(13, 114, 152, 0.18) !important;
+            border-color: rgba(13, 114, 152, 0.3);
         }
 
-        .event-card:hover .card-img-top {
-            transition: transform 0.3s ease;
-        }
-        /* Featured carousel sizing: enforce consistent card height across slides */
-        #featuredEventsCarousel .event-card .row { height: 320px; }
+        /* Featured carousel sizing */
+        #featuredEventsCarousel .event-card .row { min-height: 320px; }
         #featuredEventsCarousel .event-card .col-md-6 { height: 100%; }
         #featuredEventsCarousel .event-card img { height: 100%; object-fit: cover; }
-        #featuredEventsCarousel .event-card .p-4 { height: 100%; display: flex; flex-direction: column; }
-        /* Line clamp utilities and consistent card sizing */
+        
         .text-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 1; }
         .text-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
         .text-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 3; }
-        
-        /* Newsletter Section Styles */
-        .newsletter-section .form-control {
-            height: 3.5rem;
-            border-radius: 50px;
-            padding: 0 1.5rem;
-            font-size: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(10px);
-        }
 
-        .newsletter-section .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .newsletter-section .form-control:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: none;
-            color: white;
-        }
-
-        .newsletter-section .btn-subscribe {
-            height: 3.5rem;
-            border-radius: 50px;
-            padding: 0 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            background: white;
-            color: var(--primary);
-            border: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .newsletter-section .btn-subscribe:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Newsletter Section Mobile Fixes */
-        @media (max-width: 767.98px) {
-            .newsletter-section .input-group {
-                flex-direction: column;
-                gap: 1rem;
-                width: 100%;
-            }
-
-            .newsletter-section .form-control {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-
-            .newsletter-section .btn-subscribe {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
+        .hero-award-img:hover {
+            transform: translateY(-8px) scale(1.03);
         }
     </style>
 </head>
@@ -321,79 +257,100 @@ function getSocialIconClass($platform) {
 <body>
     <?php include 'navbar.php'; ?>
 
-    <!-- Page Header -->
-    <section class="page-header position-relative overflow-hidden">
-        <div class="container position-relative py-7">
-            <div class="row align-items-center">
-                <div class="col-md-7" data-aos="fade-right">
+    <!-- Redesigned Executive Hero Banner -->
+    <section class="about-page-header position-relative overflow-hidden w-100 my-0">
+        <div class="about-header-glow-1"></div>
+        <div class="about-header-glow-2"></div>
+        <div class="about-header-pattern"></div>
+
+        <div class="container position-relative z-2 py-4">
+            <div class="row align-items-center text-start g-4">
+                <div class="col-lg-7" data-aos="fade-right">
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-3">
-                            <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Home</a></li>
-                            <li class="breadcrumb-item active text-white" aria-current="page">Events</li>
+                        <ol class="breadcrumb about-breadcrumb px-3 py-1.5 rounded-pill mb-3 d-inline-flex">
+                            <li class="breadcrumb-item"><a href="index.php" class="text-black text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
+                            <li class="breadcrumb-item active text-black" aria-current="page">Events</li>
                         </ol>
                     </nav>
-                    <h1 class="text-white display-5 fw-bold mb-3">Events</h1>
-                    <p class="text-white-50 lead mb-0">Join our educational events, workshops, and webinars to enhance your learning journey.</p>
+
+                    <h1 class="display-4 fw-bold text-black mb-3">
+                        Educational <span class="cta-gold-text">Events &amp; Workshops</span>
+                    </h1>
+
+                    <p class="lead text-black-50 mb-4" style="max-width: 650px;">
+                        Join our educational events, live interactive workshops, hackathons, and webinars to enhance your learning journey with industry experts.
+                    </p>
                 </div>
-                <div class="col-md-5" data-aos="fade-left">
-                    <!-- <img src="./Images/Others/event2.png" alt="Events" class="events-hero-image"> -->
+
+                <!-- Right Column: Hero Event Image -->
+                <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
+                    <div class="position-relative d-inline-block">
+                        <div class="position-absolute top-50 start-50 translate-middle rounded-circle  bg-opacity-20 blur-2xl" style="width: 320px; height: 320px; filter: blur(40px); z-index: 1;"></div>
+                        <img src="./Images/Others/event.png" alt="Educational Events" class="img-fluid position-relative z-2 hero-award-img" style="max-height: 370px; transition: transform 0.4s ease;">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="page-header-shape">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+
+        <div class="page-header-shape position-absolute bottom-0 start-0 w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none" style="height: 40px; display: block; width: 100%;">
+                <path fill="#f8fafc" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,58.7C672,43,768,21,864,21.3C960,21,1056,43,1152,53.3C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
             </svg>
         </div>
     </section>
 
-    <!-- Featured Now Carousel (Upcoming & Ongoing) -->
+    <!-- Top Featured Section (Happening & Next Up) - High Contrast Black Text -->
     <?php if (!empty($featuredEvents)): ?>
-    <section class="py-4">
-        <div class="container">
-            <div class="row mb-3">
-                <div class="col-lg-6">
-                    <h2 class="section-heading" data-aos="fade-up">Happening & Next Up</h2>
-                    <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">A quick look at ongoing and upcoming events</p>
+    <section class="py-5">
+        <div class="container py-2">
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <h2 class="display-6 top-section-title mb-2" data-aos="fade-up">Happening &amp; Next Up</h2>
+                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">A quick look at ongoing and upcoming events</p>
                 </div>
             </div>
-            <div id="featuredEventsCarousel" class="carousel slide" data-bs-ride="carousel">
+
+            <div id="featuredEventsCarousel" class="carousel slide" data-bs-ride="carousel" data-aos="fade-up">
                 <?php if (count($featuredEvents) > 1): ?>
-                <div class="carousel-indicators">
+                <div class="carousel-indicators mb-n4">
                     <?php foreach ($featuredEvents as $i => $ev): ?>
                         <button type="button" data-bs-target="#featuredEventsCarousel" data-bs-slide-to="<?php echo $i; ?>" class="<?php echo $i===0?'active':''; ?>" aria-current="<?php echo $i===0?'true':'false'; ?>" aria-label="Slide <?php echo $i+1; ?>"></button>
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
-                <div class="carousel-inner">
+
+                <div class="carousel-inner rounded-4 shadow-lg overflow-hidden">
                     <?php foreach ($featuredEvents as $i => $ev): ?>
                     <div class="carousel-item <?php echo $i===0?'active':''; ?>">
-                        <div class="card border-0 shadow-sm overflow-hidden position-relative event-card" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
+                        <div class="card border-0 event-card" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
                             <div class="row g-0 align-items-stretch">
                                 <div class="col-md-6">
                                     <?php if (!empty($ev['main_cover_image'])): ?>
-                                        <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="w-100 h-100" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="object-fit: cover; min-height: 260px;">
+                                        <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="w-100 h-100" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="object-fit: cover; min-height: 320px;">
                                     <?php else: ?>
-                                        <div class="d-flex align-items-center justify-content-center bg-light w-100 h-100" style="min-height: 260px;">
-                                            <i class="bi bi-calendar-event display-4 text-muted"></i>
+                                        <div class="d-flex align-items-center justify-content-center bg-light w-100 h-100" style="min-height: 320px;">
+                                            <i class="bi bi-calendar-event display-3 text-muted"></i>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <div class="col-md-6 d-flex">
-                                    <div class="p-4 d-flex flex-column flex-grow-1">
-                                        <div class="mb-2 text-muted small">
+                                <div class="col-md-6 d-flex bg-white">
+                                    <div class="p-4 p-md-5 d-flex flex-column flex-grow-1">
+                                        <div class="mb-3 event-card-meta small">
                                             <?php if (!empty($ev['event_date'])): ?>
-                                                <i class="bi bi-calendar3 me-1"></i><?php echo date('M d, Y', strtotime($ev['event_date'])); ?>
+                                                <i class="bi bi-calendar3 me-1 text-primary"></i><span class="text-black fw-bold"><?php echo date('M d, Y', strtotime($ev['event_date'])); ?></span>
                                             <?php endif; ?>
                                             <?php if (!empty($ev['event_time'])): ?>
-                                                <span class="ms-3"><i class="bi bi-clock me-1"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
+                                                <span class="ms-3 text-black fw-bold"><i class="bi bi-clock me-1 text-primary"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
                                             <?php endif; ?>
                                         </div>
-                                        <h4 class="mb-2 text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h4>
-                                        <p class="text-muted flex-grow-1 mb-3 text-clamp-3"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
+
+                                        <h3 class="mb-3 text-black fw-bold event-card-title text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h3>
+                                        <p class="text-secondary flex-grow-1 mb-4 text-clamp-3 fs-6"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
+                                        
                                         <?php if (!empty($ev['location'])): ?>
-                                            <div class="text-muted small mb-3"><i class="bi bi-geo-alt me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
+                                            <div class="text-black fw-semibold small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1.5"></i><?php echo htmlspecialchars($ev['location']); ?></div>
                                         <?php endif; ?>
+                                        
                                         <?php 
                                             $links = $eventIdToSocialLinks[intval($ev['event_id'])] ?? [];
                                             if (!empty($links)):
@@ -404,7 +361,7 @@ function getSocialIconClass($platform) {
                                                     $url = $lnk['url'];
                                                     if (!$url) { continue; }
                                                 ?>
-                                                    <a href="<?php echo htmlspecialchars($url); ?>" target="_blank" rel="noopener" class="text-muted" aria-label="<?php echo htmlspecialchars($lnk['platform']); ?> link">
+                                                    <a href="<?php echo htmlspecialchars($url); ?>" target="_blank" rel="noopener" class="text-dark fs-5" aria-label="<?php echo htmlspecialchars($lnk['platform']); ?> link">
                                                         <i class="<?php echo htmlspecialchars($icon); ?>"></i>
                                                     </a>
                                                 <?php endforeach; ?>
@@ -418,13 +375,14 @@ function getSocialIconClass($platform) {
                     </div>
                     <?php endforeach; ?>
                 </div>
+
                 <?php if (count($featuredEvents) > 1): ?>
                 <button class="carousel-control-prev" type="button" data-bs-target="#featuredEventsCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#featuredEventsCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
                 <?php endif; ?>
@@ -433,11 +391,9 @@ function getSocialIconClass($platform) {
     </section>
     <?php endif; ?>
 
-    
-
-    <!-- Events Section -->
-    <section class="py-5">
-        <div class="container">
+    <!-- Events Section Grid with Category Filters -->
+    <section class="py-5 bg-white">
+        <div class="container py-2">
             <?php 
             $hasAnyEvents = false;
             foreach ($sectionsData as $statusKey => $section) {
@@ -449,91 +405,91 @@ function getSocialIconClass($platform) {
             
             if (!$hasAnyEvents): 
             ?>
-                <div class="row mb-4 mt-2">
-                    <div class="col-lg-6 col-12">
-                        <h3 class="section-heading" data-aos="fade-up">Latest Events</h3>
-                        <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Stay updated with our upcoming events</p>
+                <div class="row mb-4">
+                    <div class="col-lg-8">
+                        <h3 class="display-6 top-section-title mb-2" data-aos="fade-up">Latest Events</h3>
+                        <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">Stay updated with our upcoming events</p>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-12" data-aos="fade-up">
-                        <?php if (!empty($eventCategories)): ?>
-                            <?php $allActive = $selectedCategoryId === 0 ? 'btn-primary text-white' : 'btn-outline-primary'; ?>
-                            <a href="events.php" class="btn btn-sm rounded-pill me-2 mb-3 <?php echo $allActive; ?>">All</a>
-                            <?php foreach ($eventCategories as $cat): 
-                                $isActive = ($selectedCategoryId === intval($cat['category_id'])) ? 'btn-primary text-white' : 'btn-outline-primary';
-                            ?>
-                                <a href="events.php?category_id=<?php echo intval($cat['category_id']); ?>" class="btn btn-sm rounded-pill me-2 mb-3 <?php echo $isActive; ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                </div> -->
+
                 <div class="row g-4">
                     <div class="col-12">
-                        <div class="alert alert-info text-center" role="alert">
-                            <i class="bi bi-info-circle me-2"></i> No event posts available at the moment. Please check back later.
+                        <div class="alert alert-info text-center py-4 rounded-4 border-0 shadow-sm" role="alert">
+                            <i class="bi bi-info-circle fs-3 me-2"></i>
+                            <span class="fs-5 fw-semibold">No event posts available at the moment. Please check back later.</span>
                         </div>
                     </div>
                 </div>
-                <div class="my-5"></div>
             <?php else: ?>
                 <?php foreach ($sectionsData as $statusKey => $section): ?>
                     <?php if (!empty($section['events'])): ?>
-                        <div class="row mb-4 mt-2">
-                            <div class="col-lg-6 col-12">
-                                <h3 class="section-heading" data-aos="fade-up"><?php echo htmlspecialchars($section['label']); ?></h3>
+                        <div class="row mb-4 align-items-end">
+                            <div class="col-lg-8">
+                                <h3 class="display-6 top-section-title mb-1" data-aos="fade-up"><?php echo htmlspecialchars($section['label']); ?></h3>
                                 <?php if (!empty($section['subtitle'])): ?>
-                                    <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100"><?php echo htmlspecialchars($section['subtitle']); ?></p>
+                                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100"><?php echo htmlspecialchars($section['subtitle']); ?></p>
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="row">
+
+                        <!-- Category Filter Chips -->
+                        <div class="row mb-4">
                             <div class="col-12" data-aos="fade-up">
                                 <?php if (!empty($eventCategories)): ?>
-                                    <?php $allActive = $selectedCategoryId === 0 ? 'btn-primary text-white' : 'btn-outline-primary'; ?>
-                                    <a href="events.php" class="btn btn-sm rounded-pill me-2 mb-3 <?php echo $allActive; ?>">All</a>
+                                    <?php $allActive = $selectedCategoryId === 0 ? 'btn-dark text-white' : 'btn-outline-dark'; ?>
+                                    <a href="events.php" class="btn btn-sm rounded-pill px-3 py-1.5 me-2 mb-2 fw-semibold <?php echo $allActive; ?>">All</a>
                                     <?php foreach ($eventCategories as $cat): 
-                                        $isActive = ($selectedCategoryId === intval($cat['category_id'])) ? 'btn-primary text-white' : 'btn-outline-primary';
+                                        $isActive = ($selectedCategoryId === intval($cat['category_id'])) ? 'btn-dark text-white' : 'btn-outline-dark';
                                     ?>
-                                        <a href="events.php?category_id=<?php echo intval($cat['category_id']); ?>" class="btn btn-sm rounded-pill me-2 mb-3 <?php echo $isActive; ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
+                                        <a href="events.php?category_id=<?php echo intval($cat['category_id']); ?>" class="btn btn-sm rounded-pill px-3 py-1.5 me-2 mb-2 fw-semibold <?php echo $isActive; ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
+
+                        <!-- Event Grid Cards -->
                         <div class="row g-4">
                             <?php foreach ($section['events'] as $index => $ev): ?>
-                                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
-                                    <div class="card h-100 shadow-sm border-0 position-relative event-card" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
+                                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<?php echo ($index % 3) * 100; ?>">
+                                    <div class="event-card h-100 d-flex flex-column" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
                                         <?php if (!empty($ev['main_cover_image'])): ?>
-                                            <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="height:200px;object-fit:cover;">
+                                            <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="height:220px;object-fit:cover;">
                                         <?php else: ?>
-                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:200px;">
+                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:220px;">
                                                 <i class="bi bi-calendar-event display-4 text-muted"></i>
                                             </div>
                                         <?php endif; ?>
-                                        <div class="card-body d-flex flex-column">
-                                            <div class="mb-2 text-muted small">
+
+                                        <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                                            <div class="mb-2 text-black fw-bold small">
                                                 <?php if (!empty($ev['event_date'])): ?>
-                                                    <i class="bi bi-calendar3 me-1"></i><?php echo date('M d, Y', strtotime($ev['event_date'])); ?>
+                                                    <i class="bi bi-calendar3 me-1 text-primary"></i><span class="text-black fw-bold"><?php echo date('M d, Y', strtotime($ev['event_date'])); ?></span>
                                                 <?php endif; ?>
                                                 <?php if (!empty($ev['event_time'])): ?>
-                                                    <span class="ms-3"><i class="bi bi-clock me-1"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
+                                                    <span class="ms-3 text-black fw-bold"><i class="bi bi-clock me-1 text-primary"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
                                                 <?php endif; ?>
                                             </div>
-                                            <h5 class="card-title mb-2 text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
-                                            <p class="card-text text-muted flex-grow-1 text-clamp-3"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
+
+                                            <h5 class="card-title text-black fw-bold mb-2 text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
+                                            <p class="card-text text-secondary flex-grow-1 mb-3 text-clamp-3"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
+                                            
                                             <?php if (!empty($ev['location'])): ?>
-                                                <div class="text-muted small mb-3"><i class="bi bi-geo-alt me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
+                                                <div class="text-black fw-semibold small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
                                             <?php endif; ?>
+
+                                            <div class="mt-auto pt-2">
+                                                <span class="btn btn-outline-dark btn-sm rounded-pill w-100 py-2 font-semibold">View Details <i class="bi bi-arrow-right ms-1"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
+
                             <?php if ($section['hasMore']):
                                 $nextPage = ($selectedStatus ? ($page + 1) : 2);
                             ?>
                             <div class="text-center mt-4" data-aos="fade-up">
-                                <button class="btn btn-outline-primary btn-sm load-more-events" data-status="<?php echo htmlspecialchars($statusKey); ?>" data-next-page="<?php echo intval($nextPage); ?>" data-total="<?php echo intval($section['total']); ?>">View More</button>
+                                <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold load-more-events" data-status="<?php echo htmlspecialchars($statusKey); ?>" data-next-page="<?php echo intval($nextPage); ?>" data-total="<?php echo intval($section['total']); ?>">View More Events</button>
                             </div>
                             <?php endif; ?>
                         </div>
@@ -544,42 +500,81 @@ function getSocialIconClass($platform) {
         </div>
     </section>
 
-    <!-- Newsletter Section -->
-    <section class="cta-section newsletter-section" data-aos="fade-up">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8 col-12 mx-auto text-center">
-                    <h2 class="display-5 fw-bold text-white mb-4">Subscribe to Our Newsletter</h2>
-                    <p class="lead text-white-50 mb-5">Get the latest events, updates, and exclusive offers delivered directly to your inbox.</p>
-                    <form class="row justify-content-center">
-                        <div class="col-md-8 col-12">
-                            <div class="input-group input-group-lg flex-column flex-md-row">
-                                <input type="email" class="form-control" placeholder="Enter your email">
-                                <button class="btn btn-subscribe" type="submit">
-                                    Subscribe <i class="bi bi-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+    <!-- Floating Plan Tilted Cards CTA Section (Full-Width Edge-to-Edge) -->
+    <section class="cta-plan-section py-0 my-0 w-100 position-relative overflow-hidden" data-aos="fade-up">
+        <div class="cta-plan-banner position-relative text-center w-100 rounded-0 border-0">
+            
+            <svg class="cta-wavy-track track-left d-none d-lg-block" viewBox="0 0 220 130" fill="none" stroke="#7e858d" stroke-width="3" stroke-dasharray="6 6">
+                <path d="M10,110 C70,20 140,120 210,20" />
+            </svg>
+            <svg class="cta-wavy-track track-right d-none d-lg-block" viewBox="0 0 220 130" fill="none" stroke="#7e858d" stroke-width="3" stroke-dasharray="6 6">
+                <path d="M10,20 C80,120 150,20 210,110" />
+            </svg>
+
+            <div class="plan-card plan-card-left text-start d-none d-lg-block">
+                <div class="plan-header mb-2">
+                    <h6 class="plan-title fw-bold mb-1"><i class="bi bi-calendar-event-fill text-primary me-2"></i> Student Pass</h6>
+                    <p class="plan-subtext text-muted small mb-0">Essential event access.</p>
+                </div>
+                <div class="plan-price mb-2">
+                    <span class="price-num fw-bold fs-5 text-primary">Skill Focused</span>
+                </div>
+                <ul class="plan-features list-unstyled small mb-3" style="font-size: 0.82rem;">
+                    <li class="mb-1.5"><i class="bi bi-check2 me-1.5 text-dark fw-bold"></i> Live Webinars &amp; Talks</li>
+                    <li class="mb-1.5"><i class="bi bi-check2 me-1.5 text-dark fw-bold"></i> Practical Hackathons</li>
+                    <li class="mb-1.5"><i class="bi bi-check2 me-1.5 text-dark fw-bold"></i> Participation Badges</li>
+                </ul>
+                <a href="contact.php" class="btn btn-plan-dark w-100 text-center text-decoration-none">Contact Us</a>
+            </div>
+
+            <div class="cta-center-content mx-auto text-center px-3">
+                <h2 class="cta-banner-heading fw-bold mb-3">
+                    Stay connected with GD Edu Tech events.
+                </h2>
+                <p class="cta-banner-subtext text-muted mb-4">
+                    Empowering students and working professionals through interactive workshops, expert webinars, and networking meetups.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center align-items-center">
+                    <a href="./studentPanel/signup.php" class="btn btn-cta-main-pill text-decoration-none">
+                        <span>Get Started</span>
+                        <i class="bi bi-arrow-right ms-2 fs-5"></i>
+                    </a>
+                    <a href="contact.php" class="btn btn-cta-secondary-outline text-decoration-none">
+                        <span>Contact Us</span>
+                        <i class="bi bi-envelope-fill ms-2"></i>
+                    </a>
                 </div>
             </div>
+
+            <div class="plan-card plan-card-right text-start d-none d-lg-block">
+                <div class="plan-header mb-2">
+                    <h6 class="plan-title fw-bold mb-1"><i class="bi bi-stars text-warning me-2"></i> Career Track</h6>
+                    <p class="plan-subtext text-muted small mb-0">Mentorship for growth.</p>
+                </div>
+                <div class="plan-price mb-2">
+                    <span class="price-num fw-bold fs-5 text-warning" style="color: #d97706 !important;">Job Ready</span>
+                </div>
+                <ul class="plan-features list-unstyled small mb-3" style="font-size: 0.82rem;">
+                    <li class="mb-1.5"><i class="bi bi-diamond-fill me-1.5 text-dark small"></i> Industry Keynotes</li>
+                    <li class="mb-1.5"><i class="bi bi-diamond-fill me-1.5 text-dark small"></i> 1-on-1 Q&amp;A Sessions</li>
+                    <li class="mb-1.5"><i class="bi bi-diamond-fill me-1.5 text-dark small"></i> Placement Support</li>
+                </ul>
+                <a href="contact.php" class="btn btn-plan-dark w-100 text-center text-decoration-none">Contact Us</a>
+            </div>
+
         </div>
     </section>
 
-    <!-- Include footer -->
+    <!-- Footer -->
     <?php include 'footer.php'; ?>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS Animation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <!-- Back to Top Button -->
-    <script src="js/back-to-top.js"></script>
+    <script src="https://cdnjs.cloudflare.com/aos/2.3.4/aos.js"></script>
     <script>
     (function(){
-        const container = document.querySelector('section.py-5 .container');
+        const container = document.querySelector('section.bg-white .container');
         if (!container) return;
         container.addEventListener('click', async function(e){
             const btn = e.target.closest('.load-more-events');
@@ -588,10 +583,9 @@ function getSocialIconClass($platform) {
             const status = btn.getAttribute('data-status');
             let nextPage = parseInt(btn.getAttribute('data-next-page') || '2', 10);
             const total = parseInt(btn.getAttribute('data-total') || '0', 10);
-            const sectionRow = btn.closest('section.py-5').querySelectorAll('.row.g-4');
-            // Find the nearest events grid above the button
+            
             let grid = btn.closest('.text-center').previousElementSibling;
-            while (grid && !grid.classList.contains('row') ) {
+            while (grid && !grid.classList.contains('row')) {
                 grid = grid.previousElementSibling;
             }
             if (!status || !grid) return;
@@ -609,7 +603,6 @@ function getSocialIconClass($platform) {
                 while (temp.firstChild) { grid.appendChild(temp.firstChild); }
                 if (window.AOS) { AOS.refreshHard(); }
                 nextPage += 1; btn.setAttribute('data-next-page', String(nextPage));
-                // Hide button when we've shown all items in this section
                 const shown = grid.querySelectorAll('.col-lg-4.col-md-6').length;
                 if (total && shown >= total) { btn.remove(); }
                 btn.disabled = false; btn.textContent = original;

@@ -560,418 +560,443 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
      <?php include './navbar.php'; ?>
 
 
-    <!-- Hero Section -->
+<!-- Hero Section -->
 <section class="hero-section" id="home">
-    <div id="herosection"></div>
-    <div class="hero-bg-glow"></div>
-    
-    <div class="container text-center">
-        <div class="hero-wrapper">
-            <div class="bg-stroke-text">Gdedutech</div>
-
-            <div class="hero-main-layout">
-                <div class="hero-left" data-aos="fade-right">
-                    <h1 class="hero-title">Discover a <br> World of Learning <br> for Your Future</span></h1>
-                   <div class="hero-flex">
-                        <div class="hero-actions">
-                        <a href="courses.php" class="btn-get-started">Explore Courses <i class="bi bi-arrow-right"></i></a>
-                        
-                    </div>
-                    <div class="hero-actions">
-                        <a href="scholarship.php" class="btn-get-started">Apply Scholarship <i class="bi bi-arrow-right"></i></a>
-                        
-                    </div>
-                   </div>
-                  <div class="nebula-shroud">
-  <div class="frost-obelisk">
-    <h2>10+</h2>
-    <p>Expert Instructors</p>
-  </div>
-
-  <div class="frost-obelisk">
-    <h2>6+</h2>
-    <p>Quality Courses</p>
-  </div>
-
-  <div class="frost-obelisk">
-    <h2>5K+</h2>
-    <p>Active Students</p>
-  </div>
-</div>
-                    
+    <div class="hero-cont">
+        <!-- Main Rounded Banner Card -->
+        <div class="hero-banner-card" data-aos="fade-up">
+            <!-- Background Decorative Vector Patterns -->
+            <div class="banner-bg-accents">
+                <div class="accents-dots"></div>
+                <div class="accents-arcs">
+                    <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="200" cy="200" r="80" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+                        <circle cx="200" cy="200" r="130" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+                        <circle cx="200" cy="200" r="180" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+                    </svg>
                 </div>
-                <div class="stats-container">
+            </div>
+
+            <!-- Left Slider Arrow
+            <button class="banner-arrow banner-arrow-prev" aria-label="Previous Slide">
+                <i class="bi bi-chevron-left"></i>
+            </button> -->
+
+            <!-- Banner Grid Layout -->
+            <div class="hero-banner-grid">
+                <!-- Left Promo Content -->
+                <div class="hero-promo-content">
+                    <div class="promo-badge">
+                        <i class="bi bi-fire text-warning me-1"></i> LIMITED TIME OFFER
+                    </div>
                     
-
-
-                <div class="hero-center" data-aos="fade-up">
-                    <img src="./assets/images/middlegirl.png" alt="Consultant" class="main-person">
+                  <h1 class="hero-promo-title">
+    Get <span class="highlight-gold">₹8,000 Off</span> on <br>Selected Courses!
+</h1>
+                    
+                    <p class="hero-promo-sub">
+                        Upgrade your skills with industry-focused programs and advance your career.
+                    </p>
+                    
+                    <div class="offer-date-info">
+                        <i class="bi bi-calendar-event me-2"></i> Offer Valid Till <strong>05th September, 2026</strong>
+                    </div>
+                    
+                    <div class="hero-promo-actions">
+                        <a href="courses.php" class="btn-explore-offer">
+                            Explore Offer <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Carousel Pagination Dots
+                    <div class="banner-pagination-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div> -->
                 </div>
 
-               <div class="hero-right" data-aos="fade-left">
-    <div class="experience-badge-v2">
-        <div class="exp-circle-v2">
-      <div class="certificate-badge">
-    <div class="badge-seal">
-        <i class="bi bi-patch-check-fill"></i> 
-    </div>
-    <div class="badge-ribbon"></div>
-</div>
+                <!-- Center Person Image -->
+                <div class="hero-person-wrapper">
+                    <img src="./assets/images/hi3.png" alt="Student" class="hero-person-img">
+                </div>
+
+                <!-- Right Certified White Card -->
+                <div class="hero-certified-wrapper">
+                    <div class="hero-certified-card">
+                        <!-- Top-Right Ribbon Accent -->
+                        <div class="card-corner-ribbon"></div>
+
+                        <div class="certified-card-header">
+                            <div class="certified-badge-icon">
+                                <i class="bi bi-patch-check-fill"></i>
+                            </div>
+                            <div class="certified-header-text">
+                                <h3>Get Certified</h3>
+                                <span>Industry Recognized</span>
+                            </div>
+                        </div>
+                        
+                        <hr class="certified-divider">
+                        
+                        <p class="certified-card-desc">
+                            Join thousands of students in our world-class online programs and develop the skills needed for in-demand careers.
+                        </p>
+                        
+                        <div class="certified-card-badges">
+                            <div class="cert-badge-box">
+                                <img src="./Images/Others/badge.png" alt="ISO Certified" class="cert-badge-img">
+                            </div>
+                            <div class="cert-badge-box">
+                                <img src="./Images/Others/badge1.png" alt="Industry Approved" class="cert-badge-img">
+                            </div>
+                        </div>
+
+                        <!-- Bottom Ribbon Accent -->
+                        <div class="card-bottom-ribbon"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Slider Arrow
+            <button class="banner-arrow banner-arrow-next" aria-label="Next Slide">
+                <i class="bi bi-chevron-right"></i>
+            </button> -->
         </div>
-        <div class="exp-content-v2">
-            <h3>Get Certified</h3>
-            <p>Industry Recognized</p>
-        </div>
-        <span class="boomerang-path"></span>
-    </div>
 
-    <div class="description-box">
-        <p class="hero-description">
-            Join thousands of students in our world-class online programs and develop the skills needed for in-demand careers.
-        </p>
-      <div class="certification-badges">
+        <!-- Bottom Stats Row -->
+        <div class="hero-stats-row" data-aos="fade-up" data-aos-delay="150">
+            <div class="stat-card-white">
+                <div class="stat-icon-circle icon-blue">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="stat-content">
+                    <h2>10+</h2>
+                    <p>Expert Instructors</p>
+                </div>
+            </div>
 
-    <div class="cert-badge-item">
-        <img
-            src="./Images/Others/badge.png"
-            alt="ISO Certified"
-            class="cert-badge-image"
-        >
-    </div>
+            <div class="stat-card-white">
+                <div class="stat-icon-circle icon-pink">
+                    <i class="bi bi-book-half"></i>
+                </div>
+                <div class="stat-content">
+                    <h2>8+</h2>
+                    <p>Quality Courses</p>
+                </div>
+            </div>
 
-    <div class="cert-badge-item">
-        <img
-            src="./Images/Others/badge1.png"
-            alt="Industry Approved"
-            class="cert-badge-image"
-        >
-    </div>
-
-</div>
-
-    </div>
-</div>
+            <div class="stat-card-white">
+                <div class="stat-icon-circle icon-green">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+                <div class="stat-content">
+                    <h2>5K+</h2>
+                    <p>Active Students</p>
+                </div>
+            </div>
+            <div class="stat-card-noborder">
+                <!-- Two Action Buttons Row Wise -->
+                <div class="hero-actions-row" data-aos="fade-up" data-aos-delay="200">
+                    <a href="courses.php" class="btn-action-primary">
+                        Explore Courses <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                    <a href="scholarship.php" class="btn-action-secondary">
+                        Apply Scholarship <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
             </div>
         </div>
+
+       
     </div>
 </section>
 
     <!-- Features Section -->
     <section class="features-section" id="features">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="sub-heading text-accent-gradient">Why Choose Us</span>
-                <h2 class="heading">Features That <span class="text-gradient">Set Us Apart</span></h2>
-                <p class="lead">Discover the features that make our learning platform unique and effective</p>
+        <div class="container hero-container">
+            <!-- Section Header -->
+            <div class="section-header text-center mb-5" data-aos="fade-up">
+                <div class="promo-badge mb-3">
+                    <i class="bi bi-shield-check text-warning me-1"></i> WHY CHOOSE US
+                </div>
+                <h2 class="section-title-hero">
+                    Features That <span class="highlight-gold">Set Us Apart</span>
+                </h2>
+                <p class="section-lead-hero">
+                    Discover the features that make our learning platform unique, effective, and career-focused.
+                </p>
             </div>
             
-            <div class="features-grid">
+            <!-- Features Grid Layout -->
+            <div class="features-grid-v2">
                 <!-- Feature 1 -->
-                <div class="feature-card-wrapper" data-aos="fade-up" data-aos-delay="100">
-                    <div class="premium-feature-card">
-                        <div class="feature-content">
-                            <div class="card-icon">
-                                <i class="bi bi-laptop-fill"></i>
-                            </div>
-                            <h3>Online Learning</h3>
-                            <p>Access our courses anytime, anywhere with our flexible online learning platform. Learn at your own pace with 24/7 access to course materials.</p>
-                        </div>
+                <div class="feature-card-v2" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-step-number">01</div>
+                    <div class="feature-icon-box icon-bg-blue">
+                        <i class="bi bi-laptop-fill"></i>
                     </div>
+                    <h3>Online Learning</h3>
+                    <p>Access our courses anytime, anywhere with our flexible online learning platform. Learn at your own pace with 24/7 access to materials.</p>
+                    <div class="card-hover-border"></div>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="feature-card-wrapper" data-aos="fade-up" data-aos-delay="200">
-                    <div class="premium-feature-card">
-                        <div class="feature-content">
-                            <div class="card-icon">
-                                <i class="bi bi-person-video3"></i>
-                            </div>
-                            <h3>Expert Instructors</h3>
-                            <p>Learn from industry professionals with years of practical experience. Get personalized guidance and support throughout your learning journey.</p>
-                        </div>
+                <div class="feature-card-v2" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-step-number">02</div>
+                    <div class="feature-icon-box icon-bg-pink">
+                        <i class="bi bi-person-video3"></i>
                     </div>
+                    <h3>Expert Instructors</h3>
+                    <p>Learn from industry professionals with years of practical experience. Get personalized guidance throughout your learning journey.</p>
+                    <div class="card-hover-border"></div>
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="feature-card-wrapper" data-aos="fade-up" data-aos-delay="300">
-                    <div class="premium-feature-card">
-                        <div class="feature-content">
-                            <div class="card-icon">
-                                <i class="bi bi-award-fill"></i>
-                            </div>
-                            <h3>Certifications</h3>
-                            <p>Earn industry-recognized certifications upon course completion. Boost your resume with credentials that matter to employers.</p>
-                        </div>
+                <div class="feature-card-v2" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-step-number">03</div>
+                    <div class="feature-icon-box icon-bg-green">
+                        <i class="bi bi-award-fill"></i>
                     </div>
+                    <h3>Certifications</h3>
+                    <p>Earn industry-recognized certifications upon course completion. Boost your resume with credentials that matter to top employers.</p>
+                    <div class="card-hover-border"></div>
                 </div>
-                       <div class="feature-card-wrapper" data-aos="fade-up" data-aos-delay="100">
-    <div class="premium-feature-card">
-        <div class="feature-content">
-            <div class="card-icon">
-                <i class="bi bi-briefcase-fill"></i>
-            </div>
-            <h3>Internship Programs</h3>
-            <p>Gain real-world experience with our curated internship opportunities. Bridge the gap between academic theory and professional practice with hands-on projects.</p>
-        </div>
-    </div>
-</div>
 
-<div class="feature-card-wrapper" data-aos="fade-up" data-aos-delay="200">
-    <div class="premium-feature-card">
-        <div class="feature-content">
-            <div class="card-icon">
-                <i class="bi bi-compass-fill"></i>
-            </div>
-            <h3>Career Guidance</h3>
-            <p>Receive personalized mentorship and roadmap planning from industry experts. We help you identify your strengths and navigate your unique professional journey.</p>
-        </div>
-    </div>
-</div>
+                <!-- Feature 4 -->
+                <div class="feature-card-v2" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-step-number">04</div>
+                    <div class="feature-icon-box icon-bg-amber">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                    <h3>Internship Programs</h3>
+                    <p>Gain real-world experience with curated internship opportunities. Bridge the gap between academic theory and professional practice.</p>
+                    <div class="card-hover-border"></div>
+                </div>
 
-<div class="feature-card-wrapper" data-aos="fade-up" data-aos-delay="300">
-    <div class="premium-feature-card">
-        <div class="feature-content">
-            <div class="card-icon">
-                <i class="bi bi-person-check-fill"></i>
-            </div>
-            <h3>Placement Assistance</h3>
-            <p>Get priority access to our partner network. From resume building to mock interviews, we provide the tools you need to land your dream job.</p>
-        </div>
-    </div>
-</div>
+                <!-- Feature 5 -->
+                <div class="feature-card-v2" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-step-number">05</div>
+                    <div class="feature-icon-box icon-bg-purple">
+                        <i class="bi bi-compass-fill"></i>
+                    </div>
+                    <h3>Career Guidance</h3>
+                    <p>Receive personalized mentorship and roadmap planning from experts. We help you navigate your unique professional journey.</p>
+                    <div class="card-hover-border"></div>
+                </div>
 
+                <!-- Feature 6 -->
+                <div class="feature-card-v2" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-step-number">06</div>
+                    <div class="feature-icon-box icon-bg-cyan">
+                        <i class="bi bi-person-check-fill"></i>
+                    </div>
+                    <h3>Placement Assistance</h3>
+                    <p>Get priority access to our hiring partner network. From resume building to mock interviews, we help you land your dream job.</p>
+                    <div class="card-hover-border"></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Popular Courses -->
-  <section class="py-5 bg-light">
-    <div class="container">
+    <!-- Offline Courses Section (Proper Swiper Slider inside Rounded Banner Card) -->
+    <section class="offline-courses-section" id="offline-courses">
+        <div class="container hero-container">
+            <div class="offline-banner-card">
+                <!-- Section Header -->
+                <div class="section-header text-center mb-5" data-aos="fade-up">
+                    <div class="promo-badge mb-3">
+                        <i class="bi bi-mortarboard-fill text-warning me-1"></i> CLASSROOM TRAINING
+                    </div>
+                    <h2 class="section-title-hero">
+                        Offline <span class="highlight-gold">Courses</span>
+                    </h2>
+                    <p class="section-lead-hero">
+                        Join our top-rated in-person classroom training programs with expert hands-on mentorship.
+                    </p>
+                </div>
 
-        <div class="row mb-4">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="section-title">Offline Courses</h2>
-                <p class="text-muted">
-                    Join our in-person classroom training programs
-                </p>
+                <!-- Swiper Slider Container -->
+                <div class="swiper offline-courses-swiper" data-aos="fade-up" data-aos-delay="100">
+                    <div class="swiper-wrapper">
+
+                        <!-- Course 1 -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/web.jpg" alt="Full Stack Development" class="thumb-img">
+                                        <span class="category-pill-badge">Full Stack</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Full Stack Development</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Course 2 -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/architecture.jpg" alt="Architectural Design Course" class="thumb-img">
+                                        <span class="category-pill-badge">Architecture</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Architectural Design Course</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Course 3 -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/int.jpg" alt="Interior Design Course" class="thumb-img">
+                                        <span class="category-pill-badge">Interior Design</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Interior Design Course</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Course 4 -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/market.jpg" alt="Digital Marketing" class="thumb-img">
+                                        <span class="category-pill-badge">Digital Marketing</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Digital Marketing</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Course 5 -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/designer.jpg" alt="Graphic Design & Video Editing" class="thumb-img">
+                                        <span class="category-pill-badge">Graphic Design</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Graphic Design & Video Editing</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Course 6 -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/designer1.jpeg" onerror="this.src='./Images/Others/designer.jpg'" alt="Photography & Camera Handling" class="thumb-img">
+                                        <span class="category-pill-badge">Photography</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Photography & Camera Handling</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Swiper Navigation & Pagination -->
+                    <div class="swiper-pagination offline-swiper-pagination"></div>
+                    <div class="swiper-button-prev offline-swiper-prev"></div>
+                    <div class="swiper-button-next offline-swiper-next"></div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="row g-4">
-
-            <!-- Course 1 -->
-            <div class="col-lg-4 col-md-6">
-
-                <a href="courses.php" class="text-decoration-none text-dark">
-
-                    <div class="premium-card h-100 course-card">
-
-                        <div class="position-relative">
-                            <img
-                                src="./Images/Others/web.jpg"
-                                class="card-img-top"
-                                style="height:200px; object-fit:cover;"
-                            >
-
-                            <span class="badge position-absolute top-0 end-0 m-3">
-                                Full Stack Development
-                            </span>
-                        </div>
-
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">
-                                Full Stack Development
-                            </h5>
-
-                            <p class="text-muted">
-                               View Details
-                            </p>
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-            <!-- Course 2 -->
-            <div class="col-lg-4 col-md-6">
-
-                <a href="courses.php" class="text-decoration-none text-dark">
-
-                    <div class="premium-card h-100 course-card">
-
-                        <div class="position-relative">
-                            <img
-                                src="./Images/Others/architecture.jpg"
-                                class="card-img-top"
-                                style="height:200px; object-fit:cover;"
-                            >
-
-                            <span class="badge position-absolute top-0 end-0 m-3">
-                                Architecture
-                            </span>
-                        </div>
-
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">
-                                Architectural Design Course
-                            </h5>
-
-                            <p class="text-muted">
-                               View Details
-                            </p>
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-            <!-- Course 3 -->
-            <div class="col-lg-4 col-md-6">
-
-                <a href="courses.php" class="text-decoration-none text-dark">
-
-                    <div class="premium-card h-100 course-card">
-
-                        <div class="position-relative">
-                            <img
-                                src="./Images/Others/int.jpg"
-                                class="card-img-top"
-                                style="height:200px; object-fit:cover;"
-                            >
-
-                            <span class="badge position-absolute top-0 end-0 m-3">
-                                Interior Design
-                            </span>
-                        </div>
-
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">
-                                Interior Design Course
-                            </h5>
-
-                            <p class="text-muted">
-                               View Details
-                            </p>
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-            <!-- Course 4 -->
-            <div class="col-lg-4 col-md-6">
-
-                <a href="courses.php" class="text-decoration-none text-dark">
-
-                    <div class="premium-card h-100 course-card">
-
-                        <div class="position-relative">
-                            <img
-                                src="./Images/Others/market.jpg"
-                                class="card-img-top"
-                                style="height:200px; object-fit:cover;"
-                            >
-
-                            <span class="badge position-absolute top-0 end-0 m-3">
-                                Digital Marketing
-                            </span>
-                        </div>
-
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">
-                                Digital Marketing
-                            </h5>
-
-                            <p class="text-muted">
-                               View Details
-                            </p>
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-            <!-- Course 5 -->
-            <div class="col-lg-4 col-md-6">
-
-                <a href="courses.php" class="text-decoration-none text-dark">
-
-                    <div class="premium-card h-100 course-card">
-
-                        <div class="position-relative">
-                            <img
-                                src="./Images/Others/designer.jpg"
-                                class="card-img-top"
-                                style="height:200px; object-fit:cover;"
-                            >
-
-                            <span class="badge position-absolute top-0 end-0 m-3">
-                                Graphic Design
-                            </span>
-                        </div>
-
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">
-                                Graphic Design & Video Editing
-                            </h5>
-
-                            <p class="text-muted">
-                               View Details
-                            </p>
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-                     <!-- Course 6 -->
-            <div class="col-lg-4 col-md-6">
-
-                <a href="courses.php" class="text-decoration-none text-dark">
-
-                    <div class="premium-card h-100 course-card">
-
-                        <div class="position-relative">
-                            <img
-                                src="./Images/Others/designer.jpeg"
-                                class="card-img-top"
-                                style="height:200px; object-fit:cover;"
-                            >
-
-                            <span class="badge position-absolute top-0 end-0 m-3">
-                                Photography & Camera Handling
-                            </span>
-                        </div>
-
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">
-                                   Photography & Camera Handling
-                            </h5>
-
-                            <p class="text-muted">
-                               View Details
-                            </p>
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-</section>
+    <!-- Swiper Initialization Script (4 Grid Layout) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof Swiper !== 'undefined') {
+            var offlineSwiper = new Swiper('.offline-courses-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
+                pagination: {
+                    el: '.offline-swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.offline-swiper-next',
+                    prevEl: '.offline-swiper-prev',
+                },
+                breakpoints: {
+                    576: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    992: {
+                        slidesPerView: 3,
+                        spaceBetween: 22,
+                    },
+                    1200: {
+                        slidesPerView: 4,
+                        spaceBetween: 24,
+                    }
+                }
+            });
+        }
+    });
+    </script>
 
 <!-- Modal -->
 <div class="modal fade" id="courseModal" tabindex="-1">
@@ -1003,101 +1028,88 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
-    <!-- Categories Section -->
-    <section class="categories-section" id="categories">
-        <div class="container">
-            <div class="section-header text-center" data-aos="fade-up">
-                <span class="sub-heading text-accent-gradient">Learning Paths</span>
-                <h2 class="heading">Explore Our <span class="text-gradient">Categories</span></h2>
-                <p class="lead">Discover specialized learning paths tailored to your interests</p>
-            </div>
-            
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <?php foreach ($categories as $index => $category): ?>
-                <div class="col" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
-                    <div class="category-card h-100">
-                        <div class="category-icon">
-                            <div class="icon-bg"></div>
-                            <i class="<?php echo !empty($category['icon']) ? $category['icon'] : 'bi bi-book'; ?>"></i>
-                        </div>
-                        <div class="category-content">
-                            <h3><?php echo $category['name']; ?></h3>
-                            <p><?php echo !empty($category['description']) ? substr($category['description'], 0, 80) . '...' : 'Explore courses in this category'; ?></p>
-                            <!-- <div class="category-meta">
-                                <span><i class="bi bi-collection"></i> <?php echo $category['course_count']; ?> Courses</span>
-                            </div> -->
-                            <a href="courses.php?category=<?php echo $category['category_id']; ?>" class="category-link">
-                                View Courses <i class="bi bi-arrow-right"></i>
-                            </a>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
 
    
 
 
-    <!-- Gallery Section -->
-    <section class="py-5 bg-light" id="gallery" data-aos="fade-up" data-aos-delay="500">
-        <div class="container py-5">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="section-heading text-center section-title" data-aos="fade-up">Our Learning Journey</h2>
-                    <p class="lead text-muted" data-aos="fade-up" data-aos-delay="200">Take a glimpse at our vibrant learning community in action</p>
+    <!-- 3D Auto-Sliding Floating Cards Gallery Section -->
+    <section class="gallery-hero-section position-relative py-5 overflow-hidden" id="gallery">
+        <div class="container text-center position-relative z-4">
+            <div class="promo-badge mb-3 d-inline-flex align-items-center px-3 py-1 rounded-pill mobgall">
+                <i class="bi bi-camera-fill text-warning me-2"></i> OUR COMMUNITY IN ACTION
+            </div>
+            
+            <h2 class="small-team section-title-hero display-4 fw-bold text-center" id="smallTeam">
+                <span class="word"><span>Vibrant</span></span>&nbsp;<span class="word"><span>Learning</span></span>&nbsp;<span class="word"><span><span class="highlight-gold">Journey</span></span></span>
+            </h2>
+
+            <div class="big-results-wrap">
+                <div class="big-results" id="bigResults">
+                    <span class="letter">g</span><span class="letter">a</span><span class="letter">l</span><span class="letter">l</span><span class="letter">e</span><span class="letter">r</span><span class="letter">y</span>
                 </div>
             </div>
-            <div class="row g-4" data-aos="fade-up" data-aos-delay="400">
-                <div class="col-12">
-                    <div class="swiper gallerySwiper">
-                        <div class="swiper-wrapper">
-                            <?php
-                            $images = glob('./Images/gallery/*.{jpg,jpeg,png,gif}', GLOB_BRACE);
-                            foreach ($images as $image): ?>
-                                <div class="swiper-slide">
-                                    <div class="premium-card overflow-hidden">
-                                        <img src="<?php echo $image; ?>" 
-                                            class="img-fluid w-100" 
-                                            alt="Gallery Image" 
-                                            style="height: 400px; object-fit: cover;">
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                </div>
-                        <div class="swiper-pagination mt-4"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                    </div>
+
+            <!-- Floating 3D Cards Track (Auto Sliding) -->
+            <div class="cards-row-wrapper overflow-hidden position-relative w-100 ">
+                <div class="cards-row d-flex align-items-center gap-4" id="cardsRow">
+                    <?php
+                    $images = glob('./Images/gallery/*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+                    $rotations = [-7, 5, -4, 6, -3, 7, -5, 4];
+                    $depths = [12, 8, 14, 10, 6, 11, 9, 13];
+                    if (!empty($images)):
+                        // Render images twice for seamless infinite auto sliding loop
+                        $all_images = array_merge($images, $images);
+                        foreach ($all_images as $index => $image): 
+                            $rot = $rotations[$index % count($rotations)];
+                            $depth = $depths[$index % count($depths)];
+                            $cardNum = ($index % count($images)) + 1;
+                            ?>
+                            <div class="card card-item" data-rot="<?php echo $rot; ?>" data-depth="<?php echo $depth; ?>">
+                                <img src="<?php echo $image; ?>" alt="Gallery Image <?php echo $cardNum; ?>" />
+                            </div>
+                        <?php endforeach; 
+                    endif; ?>
                 </div>
             </div>
-        </div>
+
+        
     </section>
-     <!-- Testimonial Section -->
-    <section class="testimonial-section" id="testimonials">
-        <div>
+    <!-- Redesigned Full-Width CTA Section (Edge-to-Edge Sharp Fit) -->
+    <section class="cta-section py-0 my-0 w-100" id="testimonials" data-aos="fade-up">
+        <div class="cta-banner position-relative overflow-hidden p-4 p-md-5 rounded-0 shadow-none w-100">
+            <!-- Background Decorative Glow & Pattern -->
+            <div class="cta-glow cta-glow-1"></div>
+            <div class="cta-glow cta-glow-2"></div>
+            <div class="cta-pattern"></div>
 
-  
-
-            <!-- Call to Action -->
-            <div class="testimonial-cta" data-aos="fade-up" data-aos-delay="400" style="text-align: center;display: flex;justify-content: center;align-items: center;margin-top: 40px;">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 mb-4 mb-lg-0">
-                        <div class="cta-content">
-                            <h3 class="text-white mb-2 ">Ready to Start Your Learning Journey?</h3>
-                            <p class="text-white-50 mb-0">Join thousands of successful students who have transformed their careers with us.</p>
+            <div class="container position-relative z-2 py-3">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8 text-center text-lg-start">
+                        <div class="cta-badge d-inline-flex align-items-center px-3 py-1 rounded-pill mb-3">
+                            <i class="bi bi-stars me-2 text-warning"></i>
+                            <span>Unlock Your Potential</span>
+                        </div>
+                        <h2 class="cta-heading text-white fw-bold display-6 mb-3">
+                            Ready to Start Your <span class="cta-highlight">Learning Journey?</span>
+                        </h2>
+                        <p class="cta-subtext text-white-50 lead mb-0">
+                            Join thousands of successful students who have transformed their careers with our expert-led courses and hands-on projects.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-center text-lg-end">
+                        <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-end gap-3 align-items-center">
+                            <a href="./studentPanel/signup.php" class="btn btn-cta-primary btn-lg rounded-pill px-4 py-3 fw-semibold">
+                                <span>Get Started Now</span>
+                                <i class="bi bi-arrow-right-circle-fill ms-2 fs-5"></i>
+                            </a>
+                        </div>
+                        <div class="cta-trust-badge mt-3 d-flex align-items-center justify-content-center justify-content-lg-end gap-2 text-white-50 small">
+                            <i class="bi bi-shield-check text-white fs-6"></i>
+                            <span>100% Satisfaction Guaranteed</span>
                         </div>
                     </div>
-                    <div class="col-lg-4 text-lg-end">
-                        <a href="./studentPanel/signup.php" class="btn btn-light btn-lg rounded-pill">
-                            Get Started Now
-                            <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
-
         </div>
     </section>
 <!-- Modern Student Feedback Section -->
@@ -1116,127 +1128,86 @@ $feedbacks = $conn->query($feedback_query);
 
 ?>
 
-<section class="modern-feedback-section py-5" id="student-feedback" data-aos="fade-up" data-aos-delay="100" >
-
-    <div class="container py-5">
-
+<section class="modern-feedback-section py-5 position-relative overflow-hidden" id="student-feedback" data-aos="fade-up" data-aos-delay="100">
+    <div class="container py-4 position-relative z-2">
         <!-- Heading -->
         <div class="row justify-content-center text-center mb-5">
-
             <div class="col-lg-7">
-
-                             <span class="sub-heading text-accent-gradient">Testimonials</span>
-
-
-                <h2 class="feedback-heading mt-3" data-aos-delay="400" data-aos="fade-up">
-                    What Our <span class="text-gradient">Students Say</span>
-                </h2>
-
-                <p class="feedback-description" data-aos-delay="500" data-aos="fade-up">
-                    Real experiences from students who transformed
-                    their careers with GD Edu Tech.
-                </p>
-
+                <div class="promo-badge mb-3 d-inline-flex align-items-center px-3 py-1 rounded-pill">
+                <i class="bi bi-mortarboard-fill text-warning me-2"></i> STUDENT FEEDBACK
             </div>
-
+                <h2 class="feedback-heading mt-2" data-aos="fade-up" data-aos-delay="200">
+                    What Our <span style="color:#0079a8;">Students Say</span>
+                </h2>
+                <p class="feedback-description lead text-muted mt-2" data-aos="fade-up" data-aos-delay="300">
+                    Real experiences and success stories from students who transformed their careers with GD Edu Tech.
+                </p>
+            </div>
         </div>
 
         <!-- Swiper -->
-        <div class="swiper modernFeedbackSwiper" data-aos-delay="600" data-aos="fade-up">
-
+        <div class="swiper modernFeedbackSwiper pb-5" data-aos="fade-up" data-aos-delay="400">
             <div class="swiper-wrapper">
-
                 <?php while($row = $feedbacks->fetch_assoc()): ?>
-
-                    <div class="swiper-slide">
-
-                        <div class="modern-feedback-card">
-
-                            <!-- Top -->
-                            <div class="feedback-top-area">
-
-                                <div class="feedback-profile">
-
-                                    <?php if(!empty($row['student_image'])): ?>
-
-                                        <img
-                                            src="./uploads/feedback/<?php echo $row['student_image']; ?>"
-                                            class="feedback-avatar"
-                                            alt="student"
-                                        >
-
-                                    <?php else: ?>
-
-                                        <img
-                                            src="./Images/default-user.png"
-                                            class="feedback-avatar"
-                                            alt="student"
-                                        >
-
-                                    <?php endif; ?>
-
-                                    <div>
-
-                                        <h5 class="student-name">
-                                            <?php echo htmlspecialchars($row['student_name']); ?>
-                                        </h5>
-
-                                        <p class="college-name">
-                                            <?php echo htmlspecialchars($row['college_name']); ?>
-                                        </p>
-
+                    <div class="swiper-slide h-auto">
+                        <div class="modern-feedback-card h-100 p-4 rounded-4 shadow-sm bg-white border d-flex flex-column justify-content-between position-relative overflow-hidden">
+                            <div class="card-glow-accent"></div>
+                            
+                            <div>
+                                <!-- Top Area -->
+                                <div class="feedback-top-area d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom border-light">
+                                    <div class="feedback-profile d-flex align-items-center gap-3">
+                                        <?php if(!empty($row['student_image'])): ?>
+                                            <img src="./uploads/feedback/<?php echo $row['student_image']; ?>" class="feedback-avatar rounded-circle shadow-sm" alt="student">
+                                        <?php else: ?>
+                                            <img src="./Images/default-user.png" class="feedback-avatar rounded-circle shadow-sm" alt="student">
+                                        <?php endif; ?>
+                                        <div>
+                                            <h5 class="student-name fw-bold mb-0 text-dark">
+                                                <?php echo htmlspecialchars($row['student_name']); ?>
+                                            </h5>
+                                            <p class="college-name text-muted small mb-0">
+                                                <i class="bi bi-mortarboard me-1 text-primary"></i>
+                                                <?php echo htmlspecialchars($row['college_name']); ?>
+                                            </p>
+                                        </div>
                                     </div>
-
+                                    <div class="quote-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-quote fs-4"></i>
+                                    </div>
                                 </div>
 
-                                <div class="quote-icon">
-                                    <i class="bi bi-quote"></i>
+                                <!-- Stars -->
+                                <div class="modern-stars text-warning mb-3 d-flex gap-1 fs-6">
+                                    <?php
+                                    for($i = 1; $i <= $row['rating']; $i++){
+                                        echo '<i class="bi bi-star-fill"></i>';
+                                    }
+                                    ?>
                                 </div>
 
+                                <!-- Feedback Text -->
+                                <p class="modern-feedback-text text-secondary mb-4 fs-6 fst-italic">
+                                    "<?php echo htmlspecialchars($row['feedback']); ?>"
+                                </p>
                             </div>
 
-                            <!-- Stars -->
-                            <div class="modern-stars">
-
-                                <?php
-                                for($i = 1; $i <= $row['rating']; $i++){
-                                    echo '<i class="bi bi-star-fill"></i>';
-                                }
-                                ?>
-
+                            <!-- Course Tag -->
+                            <div class="feedback-course-tag bg-light text-primary rounded-pill px-3 py-2 small fw-semibold d-inline-flex align-items-center gap-2 border">
+                                <i class="bi bi-book-half text-primary"></i>
+                                <span><?php echo htmlspecialchars($row['course_name']); ?></span>
                             </div>
-
-                            <!-- Feedback -->
-                            <p class="modern-feedback-text">
-
-                                <?php echo htmlspecialchars($row['feedback']); ?>
-
-                            </p>
-
-                            <!-- Course -->
-                            <div class="feedback-course-tag">
-
-                                <i class="bi bi-book"></i>
-
-                                <?php echo htmlspecialchars($row['course_name']); ?>
-
-                            </div>
-
                         </div>
-
                     </div>
-
                 <?php endwhile; ?>
-
             </div>
+            
+            <!-- Controls -->
+            <div class="swiper-pagination mt-4"></div>
             <!-- <div class="swiper-button-next"></div>
-<div class="swiper-button-prev"></div>
-<div class="swiper-pagination"></div> -->
-
+            <div class="swiper-button-prev"></div> -->
         </div>
-
     </div>
-
 </section>
     <?php include 'footer.php'; ?>
 <script>
@@ -1383,12 +1354,20 @@ $feedbacks = $conn->query($feedback_query);
             },
         });
         
-        // Initialize Swiper for Gallery
+        // Initialize Swiper for Gallery (3D Circular / Coverflow Slider)
         var gallerySwiper = new Swiper(".gallerySwiper", {
-            slidesPerView: 1,
-            spaceBetween: 10,
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
             loop: true,
-            autoHeight: true,
+            coverflowEffect: {
+                rotate: 35,
+                stretch: 0,
+                depth: 200,
+                modifier: 1,
+                slideShadows: false,
+            },
             navigation: {
                 nextEl: ".gallerySwiper .swiper-button-next",
                 prevEl: ".gallerySwiper .swiper-button-prev",
@@ -1396,23 +1375,10 @@ $feedbacks = $conn->query($feedback_query);
             pagination: {
                 el: ".gallerySwiper .swiper-pagination",
                 clickable: true,
-            },
-            breakpoints: {
-                480: {
-                    slidesPerView: 1,
-                    spaceBetween: 10,
-                },
-                576: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                },
+                dynamicBullets: true,
             },
             autoplay: {
-                delay: 4000,
+                delay: 3500,
                 disableOnInteraction: false,
             },
         });
@@ -1476,53 +1442,161 @@ $feedbacks = $conn->query($feedback_query);
                 navbar.classList.add('navbar-dark');
             }
         });
-       // Feedback Swiper
-var feedbackSwiper = new Swiper(".modernFeedbackSwiper", {
-
-    slidesPerView: 1,
-    spaceBetween: 25,
-
-    loop: true,
-    autoHeight: true,
-
-    navigation: {
-        nextEl: ".modernFeedbackSwiper .swiper-button-next",
-        prevEl: ".modernFeedbackSwiper .swiper-button-prev",
-    },
-
-    pagination: {
-        el: ".modernFeedbackSwiper .swiper-pagination",
-        clickable: true,
-    },
-
-    breakpoints: {
-
-        480: {
+        // Feedback Swiper Initialization
+        var feedbackSwiper = new Swiper(".modernFeedbackSwiper", {
             slidesPerView: 1,
-            spaceBetween: 10,
-        },
-
-        576: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-        },
-
-        992: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-        },
-
-    },
-
-    autoplay: {
-        delay: 2500,
-        disableOnInteraction: false,
-    },
-
-});
+            spaceBetween: 25,
+            loop: true,
+            grabCursor: true,
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".modernFeedbackSwiper .swiper-button-next",
+                prevEl: ".modernFeedbackSwiper .swiper-button-prev",
+            },
+            pagination: {
+                el: ".modernFeedbackSwiper .swiper-pagination",
+                clickable: true,
+                dynamicBullets: true,
+            },
+            breakpoints: {
+                576: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 25,
+                },
+                1100: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+            },
+        });
     </script>
 
-   
+    <!-- GSAP & ScrollTrigger Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof gsap === "undefined") return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Initial states
+        gsap.set(".small-team .word > span", { y: "105%" });
+        gsap.set(".big-results .letter", { y: 80, opacity: 0 });
+        gsap.set("#subline", { opacity: 0, y: 20 });
+
+        // Apply rest rotation
+        document.querySelectorAll(".cards-row .card").forEach((card) => {
+            const rot = parseFloat(card.dataset.rot) || 0;
+            card.dataset.restRot = rot;
+            gsap.set(card, { y: -600, rotation: rot + 25, opacity: 0, scale: 0.7 });
+        });
+
+        // Intro timeline
+        const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+        intro
+            .to(".small-team .word > span", { y: "0%", duration: 0.9, stagger: 0.08 }, 0.2)
+            .to(".big-results .letter", { y: 0, opacity: 1, duration: 0.9, stagger: 0.05, ease: "back.out(1.6)" }, 0.4)
+            .to(".cards-row .card", {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                rotation: (i, el) => parseFloat(el.dataset.restRot) || 0,
+                duration: 1.1,
+                stagger: { each: 0.08, from: "center" },
+                ease: "back.out(1.4)"
+            }, 0.6)
+            .to("#subline", { opacity: 1, y: 0, duration: 0.8 }, 1.3);
+
+        // Continuous 100% Infinite Auto Sliding Marquee Loop
+        const cardsRow = document.querySelector("#cardsRow");
+        if (cardsRow) {
+            const autoSlide = gsap.to(cardsRow, {
+                xPercent: -50,
+                duration: 25,
+                ease: "none",
+                repeat: -1
+            });
+
+            // Pause auto sliding on hover so user can tilt & inspect photos
+            cardsRow.addEventListener("mouseenter", () => autoSlide.pause());
+            cardsRow.addEventListener("mouseleave", () => autoSlide.play());
+        }
+
+        // Continuous floating animation
+        document.querySelectorAll(".cards-row .card").forEach((card, i) => {
+            const rot = parseFloat(card.dataset.restRot) || 0;
+            gsap.to(card, {
+                y: `+=${8 + (i % 3) * 5}`,
+                rotation: rot + (i % 2 === 0 ? 1.5 : -1.5),
+                duration: 3 + (i % 4) * 0.5,
+                delay: 1.5 + i * 0.1,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1
+            });
+        });
+
+        // Mouse Parallax Effect
+        const heroSec = document.querySelector(".gallery-hero-section");
+        if (heroSec) {
+            let mx = 0, my = 0, tx = 0, ty = 0;
+            heroSec.addEventListener("mousemove", (e) => {
+                const r = heroSec.getBoundingClientRect();
+                mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+                my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+            });
+            heroSec.addEventListener("mouseleave", () => { mx = 0; my = 0; });
+
+            function parallax() {
+                tx += (mx - tx) * 0.05;
+                ty += (my - ty) * 0.05;
+                document.querySelectorAll(".cards-row .card").forEach((card) => {
+                    const d = parseFloat(card.dataset.depth) || 8;
+                    card.style.transform = `translate3d(${tx * d}px, ${ty * d * 0.5}px, 0px)`;
+                });
+                requestAnimationFrame(parallax);
+            }
+            parallax();
+        }
+
+        // Card Hover 3D Tilt
+        document.querySelectorAll(".cards-row .card").forEach((card) => {
+            card.addEventListener("mousemove", (e) => {
+                const r = card.getBoundingClientRect();
+                const px = (e.clientX - r.left) / r.width - 0.5;
+                const py = (e.clientY - r.top) / r.height - 0.5;
+                gsap.to(card, {
+                    rotateX: -py * 16,
+                    rotateY: px * 16,
+                    scale: 1.15,
+                    zIndex: 20,
+                    duration: 0.4,
+                    ease: "power2.out",
+                    transformPerspective: 700,
+                    overwrite: "auto"
+                });
+            });
+            card.addEventListener("mouseleave", () => {
+                gsap.to(card, {
+                    rotateX: 0,
+                    rotateY: 0,
+                    scale: 1,
+                    zIndex: card.style.zIndex || "",
+                    duration: 0.8,
+                    ease: "elastic.out(1, 0.6)",
+                    overwrite: "auto"
+                });
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

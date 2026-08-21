@@ -1,4 +1,5 @@
 <style>
+@import url('./css/commonForAll.css');
 /* :root {
     --primary: #007bff; 
     --primary-dark: #0078a8;

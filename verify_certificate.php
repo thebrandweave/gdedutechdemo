@@ -39,7 +39,7 @@ if (isset($_GET['student_id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/style.css">
-    <!-- Google Fonts: Montserrat (labels/emblems), UnifrakturMaguntia (Gothic Blackletter), Great Vibes (Signature Script) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=UnifrakturMaguntia&family=Great+Vibes&display=swap" rel="stylesheet">
@@ -49,320 +49,238 @@ if (isset($_GET['student_id'])) {
 
     <style>
         body {
-            background: #f4f7fb;
+            background: #f8fafc;
             font-family: 'Montserrat', sans-serif;
-            color: #111827;
+            color: #0f172a;
         }
 
-        /* Hero styling */
-        .page-header {
-            background: linear-gradient(135deg, #0d7298 0%, #065d7d 100%);
-            padding: 80px 0 50px 0;
-            color: white;
-        }
-
-        /* Glassmorphism search card */
-        .search-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            padding: 35px;
-            margin-top: -40px;
-            z-index: 10;
+        /* Reference Layout Styling for Search Card & Wave Header */
+        .verification-hero-wave {
+            background: linear-gradient(90deg, rgba(224, 242, 254, 0.8) 0%, rgba(255, 255, 255, 1) 50%, rgba(252, 231, 243, 0.8) 100%);
+            padding: 20px 0 40px 0;
             position: relative;
         }
 
-        .search-btn {
-            background: linear-gradient(135deg, #c94a55 0%, #d4634e 100%);
-            color: white;
+        .verification-search-card {
+            background: #ffffff;
+            border-radius: 106px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 130px;
+
+            border: 1.5px solid #1e293b;
+            box-shadow: 0 15px 40px -10px rgba(15, 23, 42, 0.08);
+            padding: 35px 40px 35px 120px;
+            position: relative;
+            margin-top: -55px;
+            z-index: 5;
+
+            clip-path: polygon(100% 100% at 65% 50%);
+        }
+
+        .shield-icon-badge {
+            width: 48px;
+            height: 48px;
+            background: #e0f2fe;
+            border: 1.5px solid #0284c7;
+            color: #0284c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .search-key-box {
+            border: 1.5px solid #64748b;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-key-box:focus-within {
+            border-color: #0284c7;
+            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12);
+        }
+
+        .search-key-box .input-group-text {
+            background: #ffffff;
             border: none;
-            font-weight: 600;
-            padding: 12px 25px;
-            border-radius: 12px;
+            border-right: 1.5px solid #64748b !important;
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        .search-key-box .form-control {
+            border: none;
+            font-size: 0.95rem;
+            color: #0f172a;
+        }
+
+        .search-key-box .form-control:focus {
+            box-shadow: none;
+        }
+
+        .verify-status-btn {
+            background: #005b8e;
+            color: #ffffff;
+            border-radius: 30px;
+            border: none;
+            font-weight: 700;
+            padding: 12px 28px;
             transition: all 0.3s ease;
         }
 
-        .search-btn:hover {
+        .verify-status-btn:hover {
+            background: #02456c;
+            color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
-            color: white;
+            box-shadow: 0 8px 20px rgba(0, 91, 142, 0.3);
         }
 
-        /* Certificate verification card */
-        .verification-container {
-            margin-top: 40px;
-            margin-bottom: 80px;
+        @media (max-width: 991px) {
+            .verification-search-card {
+                padding: 30px 25px;
+                border-radius: 28px;
+            }
         }
 
-        .cert-card {
-            background: white;
-            border-radius: 25px;
-            border: 12px double #e2e8f0;
-            padding: 65px 55px;
-            position: relative;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+        /* Student Profile Verification Card */
+        .student-profile-card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .cert-border-outer {
-            border: 2px solid #0d7298;
-            padding: 25px;
-            border-radius: 18px;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Corner Waves */
-        .corner-wave {
-            position: absolute;
-            width: 280px;
-            height: auto;
-            z-index: 1;
-        }
-        .wave-top-right {
-            top: 0;
-            right: 0;
-        }
-        .wave-bottom-left {
-            bottom: 0;
-            left: 0;
-        }
-
-        /* Title styling */
-        .cert-gothic-title {
-            font-family: 'UnifrakturMaguntia', cursive;
-            color: #065d7d;
-            font-size: 3.8rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Student name script */
-        .cert-student-name {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
-            color: #1e293b;
-            margin-top: 15px;
-        }
-
-        .cert-body-statement {
-            font-size: 1.25rem;
-            color: #475569;
-            line-height: 1.9;
-        }
-
-        .print-btn {
-            background: #0d7298;
+        .verified-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
+            padding: 16px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .verified-badge-icon {
+            font-size: 1.3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .profile-avatar-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .profile-avatar-initials {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            color: #0369a1;
+            font-size: 2.2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #f0f9ff;
+            box-shadow: 0 8px 20px rgba(3, 105, 161, 0.15);
+        }
+
+        .profile-image-actual {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #f0f9ff;
+            box-shadow: 0 8px 20px rgba(3, 105, 161, 0.15);
+        }
+
+        .student-profile-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .badge-student-id {
+            font-size: 0.9rem;
+            border-radius: 50px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+        }
+
+        .info-table-box {
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .info-table-row {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .info-table-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-table-label {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .info-table-value {
+            color: #0f172a;
             font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            transition: all 0.3s;
+            font-size: 0.95rem;
         }
 
-        .print-btn:hover {
-            background: #065d7d;
-            transform: translateY(-1px);
-        }
-
-        /* Error box styling */
+        /* Error Box Styling */
         .error-card {
             background: #fef2f2;
             border: 1px solid #fecaca;
             color: #991b1b;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
             text-align: center;
         }
 
-        @media (max-width: 768px) {
-            .cert-card {
-                padding: 30px 20px;
-                border-width: 6px;
-            }
-
-            .cert-border-outer {
-                padding: 15px 10px;
-            }
-
-            .cert-gothic-title {
-                font-size: 2.2rem;
-            }
-
-            .cert-student-name {
-                font-size: 2.2rem;
-            }
-
-            .cert-body-statement {
-                font-size: 1rem;
-            }
-
-            .corner-wave {
-                width: 150px;
-            }
-
-            .cert-footer-row {
-                flex-direction: column;
-                align-items: center;
-                gap: 30px;
-                text-align: center;
-            }
-            .cert-footer-row .col-3,
-            .cert-footer-row .col-6 {
-                width: 100%;
-                text-align: center !important;
-            }
-            .cert-footer-row .col-3 div {
-                align-items: center !important;
-            }
-        }
-
-        /* Print styles */
         @media print {
             body * {
                 visibility: hidden;
             }
-            .cert-card, .cert-card * {
+            .student-profile-card, .student-profile-card * {
                 visibility: visible;
             }
-            .cert-card {
+            .student-profile-card {
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
                 border: none;
                 box-shadow: none;
-                padding: 0;
-            }
-            .print-action-section {
-                display: none;
             }
         }
 
-        /* Student Profile Card Styling */
-        .student-profile-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        .student-profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
-        }
-        .verified-header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .verified-badge-icon {
-            font-size: 1.1rem;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-        .profile-avatar-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        .profile-avatar-initials {
-            width: 100px;
-            height: 75px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-            color: #0369a1;
-            font-size: 1.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #f0f9ff;
-            box-shadow: 0 5px 15px rgba(3, 105, 161, 0.1);
-        }
-        .student-profile-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 5px;
-        }
-        .badge-student-id {
-            font-size: 0.85rem;
-            border-radius: 8px;
-        }
-        .info-list {
-            text-align: left;
-            margin-top: 20px;
-        }
-        .info-item {
-            /* margin-bottom: 16px; */
-            border-bottom: 1px dashed #f1f5f9;
-            padding-bottom: 12px;
-        }
-        .info-item:last-child {
-            margin-bottom: 0;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-        .info-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-        }
-        .info-value {
-            font-size: 0.95rem;
-            color: #334155;
-            font-weight: 500;
-        }
-        .info-value a {
-            color: #0284c7;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .info-value a:hover {
-            color: #0369a1;
-            text-decoration: underline;
-        }
-        .skill-badge {
-            display: inline-block;
-            background: #f1f5f9;
-            color: #475569;
-            font-size: 0.78rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 6px;
-            margin-right: 6px;
-            margin-top: 6px;
-            border: 1px solid #e2e8f0;
-        }
-        .profile-image-actual {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #f0f9ff;
-            box-shadow: 0 5px 15px rgba(3, 105, 161, 0.1);
+        .hero-award-img:hover {
+            transform: translateY(-8px) scale(1.03);
         }
     </style>
 </head>
@@ -371,229 +289,261 @@ if (isset($_GET['student_id'])) {
     <!-- Navbar -->
     <?php include 'navbar.php'; ?>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container py-4">
-            <div class="row">
-                <div class="col-lg-8">
+    <!-- Redesigned Executive Hero Header -->
+    <section class="about-page-header position-relative overflow-hidden w-100 my-0">
+        <div class="about-header-glow-1"></div>
+        <div class="about-header-glow-3"></div>
+        <div class="about-header-pattern"></div>
+
+        <div class="container position-relative z-2 py-4">
+            <div class="row align-items-center text-start g-4">
+                <div class="col-lg-7" data-aos="fade-right">
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-2">
-                            <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Home</a></li>
-                            <li class="breadcrumb-item active text-white" aria-current="page">Verification</li>
+                        <ol class="breadcrumb about-breadcrumb px-3 py-1.5 rounded-pill mb-3 d-inline-flex">
+                            <li class="breadcrumb-item"><a href="index.php" class="text-black text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
+                            <li class="breadcrumb-item active text-black" aria-current="page">Verification</li>
                         </ol>
                     </nav>
-                    <h1 class="display-6 fw-bold mb-2">Certificate Verification</h1>
-                    <p class="text-white-50 lead mb-0">Validate credentials, course admission status, and skills instantly.</p>
+
+                    <h1 class="display-4 fw-bold text-black mb-3">
+                        Certificate <span class="cta-gold-text">Verification</span>
+                    </h1>
+
+                    <p class="lead text-black-50 mb-4" style="max-width: 650px;">
+                        Validate credentials, course admission status, training duration, and skill accreditation instantly through our verified database.
+                    </p>
+                </div>
+
+                <!-- Right Column: Award Image -->
+                <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
+                    <div class="position-relative d-inline-block">
+                        <div class="position-absolute top-50 start-50 translate-middle rounded-circle  bg-opacity-20 blur-2xl" style="width: 140px; height: 140px; filter: blur(40px); z-index: 1;"></div>
+                        <img src="./Images/Others/award2.png" alt="Award &amp; Accreditation" class="img-fluid position-relative z-2 hero-award-img" style="max-height: 150px;transition: transform 0.4s ease;">
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="page-header-shape position-absolute bottom-0 start-0 w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none" style="height: 40px; display: block; width: 100%;">
+                <path fill="#f8fafc" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,58.7C672,43,768,21,864,21.3C960,21,1056,43,1152,53.3C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
     </section>
 
-    <!-- Main Content Container -->
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-11">
-                <!-- Search Card -->
-                <div class="search-card">
-                    <h4 class="mb-3 fw-bold"><i class="bi bi-search text-primary me-2"></i>Verify Student Credentials</h4>
-                    <form action="verify_certificate.php" method="GET" class="row g-3">
-                        <div class="col-md-9">
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-lock text-muted"></i></span>
-                                <input type="text" class="form-control bg-light border-start-0 ps-0" id="student_id" name="student_id" 
-                                       placeholder="Enter Student ID " value="<?php echo htmlspecialchars($student_id); ?>" required>
+    <!-- Main Content Container with Wave Ribbon -->
+    <div class="verification-hero-wave mb-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 position-relative">
+
+                    <!-- Magnifying Glass Overlay Image on Left Edge -->
+                    <div class="position-absolute start-0 top-50 translate-middle-y d-none d-lg-block pointer-events-none" style="left: -111px !important; top:113px !important; z-index: 10;" data-aos="fade-right" data-aos-duration="1000">
+                        <img src="./Images/Others/magnify.png" alt="Magnifying Glass" class="img-fluid" style="max-height: 342px; filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.15));">
+                    </div>
+
+                    <!-- Verification Search Card Box -->
+                    <div class="verification-search-card" data-aos="fade-right" data-aos-duration="1200" data-aos-delay="200">
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <div class="shield-icon-badge">
+                                <i class="bi bi-shield-check fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-1 fw-bold" style="color: #0f172a; font-size: 1.35rem;">Verify Student Credentials</h4>
+                                <p class="text-muted small mb-0" style="font-size: 0.88rem; color: #64748b;">Enter the Student Identification Number to inspect valid records.</p>
                             </div>
                         </div>
-                        <div class="col-md-3 d-grid">
-                            <button type="submit" class="search-btn">Verify Status</button>
-                        </div>
-                    </form>
+
+                        <form action="verify_certificate.php" method="GET" class="row g-3 align-items-center">
+                            <div class="col-lg-8 col-md-7">
+                                <div class="input-group search-key-box">
+                                    <span class="input-group-text"><i class="bi bi-person-fill text-primary fs-5"></i></span>
+                                    <input type="text" class="form-control px-3 py-2.5 fw-semibold" id="student_id" name="student_id" 
+                                           placeholder="Enter Student ID (e.g., GDEDU1001)" value="<?php echo htmlspecialchars($student_id); ?>" required style="color: #0f172a !important;">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-5 d-grid">
+                                <button type="submit" class="verify-status-btn d-flex align-items-center justify-content-center gap-2">
+                                    <span>Verify Status</span>
+                                    <i class="bi bi-arrow-right fs-5"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container for Results -->
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
 
                 <!-- Error Section -->
                 <?php if (!empty($error_message)): ?>
                     <div class="error-card shadow-sm" data-aos="fade-up">
                         <i class="bi bi-exclamation-triangle-fill fs-1 text-danger mb-3 d-block"></i>
-                        <h5 class="fw-bold">Verification Failed</h5>
-                        <p class="mb-0"><?php echo $error_message; ?></p>
+                        <h4 class="fw-bold">Verification Failed</h4>
+                        <p class="mb-0 text-muted fs-5"><?php echo $error_message; ?></p>
                     </div>
                 <?php endif; ?>
 
                 <!-- Verification Result Section -->
-               <?php if ($admission): ?>
-    <div class="verification-container animate__animated animate__fadeIn" data-aos="fade-up">
-        <div class="row">
-            <!-- Left: Student Info Card -->
-            <div class="col-12 mb-4 print-action-section">
-                <div class="student-profile-card">
-                    <div class="verified-header py-3 fs-5">
-                        <i class="bi bi-patch-check-fill verified-badge-icon me-2"></i>
-                        <span class="fw-bold tracking-wider">RECORD VERIFIED</span>
-                    </div>
-                    <div class="card-body p-4 p-md-5">
-                        <div class="row align-items-center">
-                            
-                            <!-- Left Column: Avatar, Name, ID, Actions -->
-                            <div class="col-md-4 text-center border-end-md pb-4 pb-md-0">
-                                <!-- Avatar/Initials -->
-                            <div class="profile-avatar-container mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2rem;">
-                                    <?php if (!empty($admission['profile_image'])): ?>
-                                        <img src="./uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" class="profile-image-actual">
-                                    <?php else: ?>
-                                        <div class="profile-avatar-initials d-flex align-items-center justify-content-center h-100 fw-bold w-100">
-                                            <?php
-                                            $words = explode(" ", $admission['student_name']);
-                                            $initials = "";
-                                            foreach ($words as $w) {
-                                                $initials .= strtoupper(substr($w, 0, 1));
-                                            }
-                                            echo htmlspecialchars(substr($initials, 0, 2));
-                                            ?>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                <h3 class="student-profile-name fw-bold mb-3"><?php echo htmlspecialchars($admission['student_name']); ?></h3>
-                                
-                                <div class="mb-4">
-                                    <span class="badge badge-student-id bg-light text-secondary border px-4 py-2 fs-6">
-                                        ID: <span class="fw-bold text-primary" id="copy-student-id"><?php echo htmlspecialchars($admission['student_id']); ?></span>
-                                        <button class="btn btn-link p-0 ms-2 border-0 align-baseline fs-5" onclick="copyStudentId()" title="Copy Student ID">
-                                            <i class="bi bi-clipboard text-muted" id="copy-icon"></i>
-                                        </button>
-                                    </span>
-                                </div>
-
-                                <!-- <div class="d-flex gap-3 justify-content-center mt-3"> -->
-                                    <!-- <a href="adminPanel/Admissions/download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-outline-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
-                                        <i class="bi bi-download me-2"></i>Download QR
-                                    </a> -->
-                                    <!-- <button onclick="window.print();" class="btn btn-primary btn-lg rounded-pill px-4 fs-6 fw-semibold">
-                                        <i class="bi bi-printer me-2"></i>Print Page
-                                    </button> -->
-                                <!-- </div> -->
+                <?php if ($admission): ?>
+                    <div class="my-5" data-aos="fade-up">
+                        <div class="student-profile-card">
+                            <div class="verified-header">
+                                <i class="bi bi-patch-check-fill verified-badge-icon"></i>
+                                <span>OFFICIAL RECORD VERIFIED &amp; VALIDATED</span>
                             </div>
+                            
+                            <div class="card-body p-4 p-md-5">
+                                <div class="row align-items-center g-4">
+                                    
+                                    <!-- Left Column: Student Avatar, Name, ID & Print -->
+                                    <div class="col-lg-4 text-center border-end-lg pb-4 pb-lg-0">
+                                        <div class="profile-avatar-container">
+                                            <?php if (!empty($admission['profile_image'])): ?>
+                                                <img src="./uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" class="profile-image-actual">
+                                            <?php else: ?>
+                                                <div class="profile-avatar-initials">
+                                                    <?php
+                                                    $words = explode(" ", $admission['student_name']);
+                                                    $initials = "";
+                                                    foreach ($words as $w) {
+                                                        $initials .= strtoupper(substr($w, 0, 1));
+                                                    }
+                                                    echo htmlspecialchars(substr($initials, 0, 2));
+                                                    ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
 
-                            <!-- Right Column: Info Details arranged 2 in a line (Bigger Font) -->
-                   <div class="col-md-8">
-    <div class="border rounded-3 overflow-hidden bg-white">
+                                        <h3 class="student-profile-name mb-2"><?php echo htmlspecialchars($admission['student_name']); ?></h3>
+                                        
+                                        <div class="mb-4">
+                                            <span class="badge badge-student-id text-secondary px-4 py-2 fs-6">
+                                                ID: <span class="fw-bold text-primary" id="copy-student-id"><?php echo htmlspecialchars($admission['student_id']); ?></span>
+                                                <button class="btn btn-link p-0 ms-2 border-0 align-baseline fs-5 text-decoration-none" onclick="copyStudentId()" title="Copy Student ID">
+                                                    <i class="bi bi-clipboard text-muted" id="copy-icon"></i>
+                                                </button>
+                                            </span>
+                                        </div>
 
-        <?php if (!empty(trim($admission['college']))): ?>
-        <div class="row g-0 border-bottom">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-building text-primary me-2"></i>
-                     Institution
-                </strong>
-            </div>
-            <div class="col-md-8 p-3 fw-bold">
-                <?php echo htmlspecialchars($admission['college']); ?>
-            </div>
-        </div>
-        <?php endif; ?>
+                                        <button onclick="window.print();" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
+                                            <i class="bi bi-printer-fill"></i>
+                                            <span>Print Record</span>
+                                        </button>
+                                    </div>
 
-        <div class="row g-0 border-bottom">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-journal-bookmark text-primary me-2"></i>
-                    Course Enrolled
-                </strong>
-            </div>
-            <div class="col-md-8 p-3 fw-bold text-primary">
-                <?php echo htmlspecialchars($admission['course_applied']); ?>
-            </div>
-        </div>
+                                    <!-- Right Column: Structured Table Details -->
+                                    <div class="col-lg-8">
+                                        <div class="info-table-box">
 
-        <div class="row g-0 border-bottom">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-envelope text-primary me-2"></i>
-                    Email Address
-                </strong>
-            </div>
-            <div class="col-md-8 p-3 text-break">
-                <a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>" class="text-decoration-none">
-                    <?php echo htmlspecialchars($admission['email_id']); ?>
-                </a>
-            </div>
-        </div>
+                                            <?php if (!empty(trim($admission['college']))): ?>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-building-fill text-primary me-2 fs-5"></i>
+                                                    <span>Institution</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value">
+                                                    <?php echo htmlspecialchars($admission['college']); ?>
+                                                </div>
+                                            </div>
+                                            <?php endif; ?>
 
-        <div class="row g-0 border-bottom">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-telephone text-primary me-2"></i>
-                    Phone Number
-                </strong>
-            </div>
-            <div class="col-md-8 p-3">
-                <?php echo htmlspecialchars($admission['phone_number']); ?>
-            </div>
-        </div>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-journal-bookmark-fill text-primary me-2 fs-5"></i>
+                                                    <span>Course Enrolled</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value text-primary fw-bold">
+                                                    <?php echo htmlspecialchars($admission['course_applied']); ?>
+                                                </div>
+                                            </div>
 
-        <div class="row g-0 border-bottom">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-calendar3 text-primary me-2"></i>
-                    Training Duration
-                </strong>
-            </div>
-            <div class="col-md-8 p-3">
-                <?php echo date('d M Y', strtotime($admission['start_date'])); ?>
-                <strong class="mx-2">to</strong>
-                <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
-            </div>
-        </div>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-envelope-fill text-primary me-2 fs-5"></i>
+                                                    <span>Email Address</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value text-break">
+                                                    <a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>" class="text-decoration-none text-primary">
+                                                        <?php echo htmlspecialchars($admission['email_id']); ?>
+                                                    </a>
+                                                </div>
+                                            </div>
 
-        <?php if (!empty(trim($admission['internship']))): ?>
-        <div class="row g-0 border-bottom">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-briefcase text-primary me-2"></i>
-                    Internship
-                </strong>
-            </div>
-            <div class="col-md-8 p-3">
-                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
-                    <?php echo htmlspecialchars($admission['internship']); ?>
-                </span>
-            </div>
-        </div>
-        <?php endif; ?>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-telephone-fill text-primary me-2 fs-5"></i>
+                                                    <span>Phone Number</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value">
+                                                    <?php echo htmlspecialchars($admission['phone_number']); ?>
+                                                </div>
+                                            </div>
 
-        <div class="row g-0">
-            <div class="col-md-4 p-3 bg-light border-end d-flex align-items-center">
-                <strong class="text-secondary">
-                    <i class="bi bi-tags text-primary me-2"></i>
-                    Key Skills
-                </strong>
-            </div>
-            <div class="col-md-8 p-3">
-                <div class="d-flex flex-wrap gap-2">
-                    <?php
-                    $skills = explode(",", $admission['key_skills']);
-                    foreach ($skills as $skill) {
-                        $skill = trim($skill);
-                        if (!empty($skill)) {
-                            echo '<span class="badge bg-primary-subtle text-primary border px-3 py-2">'
-                                . htmlspecialchars($skill) .
-                                '</span>';
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
-        </div>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-calendar3 text-primary me-2 fs-5"></i>
+                                                    <span>Training Duration</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value">
+                                                    <?php echo date('d M Y', strtotime($admission['start_date'])); ?>
+                                                    <strong class="mx-2 text-muted">to</strong>
+                                                    <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
+                                                </div>
+                                            </div>
 
-    </div>
-</div>
+                                            <?php if (!empty(trim($admission['internship']))): ?>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-briefcase-fill text-primary me-2 fs-5"></i>
+                                                    <span>Internship</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value">
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">
+                                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                                        <?php echo htmlspecialchars($admission['internship']); ?>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <?php endif; ?>
 
-                        </div> <!-- /row -->
-                    </div> <!-- /card-body -->
-                </div> <!-- /student-profile-card -->
-            </div> <!-- /col-12 -->
-            
-        </div>
-    </div>
-<?php endif; ?>
+                                            <div class="row g-0 info-table-row">
+                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                    <i class="bi bi-tags-fill text-primary me-2 fs-5"></i>
+                                                    <span>Key Skills</span>
+                                                </div>
+                                                <div class="col-md-8 p-3 info-table-value">
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <?php
+                                                        $skills = explode(",", $admission['key_skills']);
+                                                        foreach ($skills as $skill) {
+                                                            $skill = trim($skill);
+                                                            if (!empty($skill)) {
+                                                                echo '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill">'
+                                                                    . htmlspecialchars($skill) .
+                                                                    '</span>';
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div> <!-- /row -->
+                            </div> <!-- /card-body -->
+                        </div> <!-- /student-profile-card -->
+                    </div>
+                <?php endif; ?>
+
             </div>
         </div>
     </div>
@@ -603,19 +553,27 @@ if (isset($_GET['student_id'])) {
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-    function copyStudentId() {
-        var studentIdText = document.getElementById("copy-student-id").innerText;
-        navigator.clipboard.writeText(studentIdText).then(function() {
-            var copyIcon = document.getElementById("copy-icon");
-            copyIcon.className = "bi bi-check-lg text-success";
-            setTimeout(function() {
-                copyIcon.className = "bi bi-clipboard text-muted";
-            }, 2000);
-        }).catch(function(err) {
-            console.error('Could not copy Student ID: ', err);
-        });
-    }
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 1000,
+                once: true
+            });
+        }
+        function copyStudentId() {
+            var studentIdText = document.getElementById("copy-student-id").innerText;
+            navigator.clipboard.writeText(studentIdText).then(function() {
+                var copyIcon = document.getElementById("copy-icon");
+                copyIcon.className = "bi bi-check-lg text-success";
+                setTimeout(function() {
+                    copyIcon.className = "bi bi-clipboard text-muted";
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy Student ID: ', err);
+            });
+        }
     </script>
 </body>
 
