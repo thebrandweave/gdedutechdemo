@@ -3,7 +3,7 @@ session_start();
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header('Location: admin_login.php');
+    header('Location: ../admin_login.php');
     exit();
 }
 
@@ -22,174 +22,61 @@ $result = mysqli_query($conn, $query);
 $application = mysqli_fetch_assoc($result);
 
 if (!$application) {
-    echo '<div class="alert alert-danger">Application not found.</div>';
+    echo '<div class="alert alert-danger mb-0">Application record not found.</div>';
     exit();
 }
+
+$resume_file = !empty($application['resume_path']) ? '../../uploads/resumes/' . basename($application['resume_path']) : '';
 ?>
 
-<div class="modal-header bg-primary text-white">
-    <h5 class="modal-title"><i class="bi bi-file-person me-2"></i>Application Details</h5>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-</div>
-<div class="modal-body">
-    <div class="row g-4">
-        <!-- Job Information -->
-        <div class="col-md-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-gradient bg-primary text-white">
-                    <h6 class="mb-0"><i class="bi bi-briefcase me-2"></i>Job Information</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-bookmark-star text-primary me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Job Title</small>
-                                    <strong><?php echo htmlspecialchars($application['job_title']); ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-building text-primary me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Company</small>
-                                    <strong><?php echo htmlspecialchars($application['company_name']); ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-geo-alt text-primary me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Location</small>
-                                    <strong><?php echo htmlspecialchars($application['location']); ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-clock text-primary me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Job Type</small>
-                                    <strong><?php echo htmlspecialchars($application['job_type']); ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- Job & Applicant Grid -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="p-3 bg-light rounded-3 border h-100">
+            <span class="text-muted small d-block mb-1"><i class="bi bi-briefcase-fill text-primary me-1"></i> Job Position</span>
+            <strong class="text-dark d-block fs-6"><?php echo htmlspecialchars($application['job_title']); ?></strong>
+            <span class="text-secondary small"><?php echo htmlspecialchars($application['company_name']); ?> (<?php echo htmlspecialchars($application['location']); ?> - <?php echo htmlspecialchars($application['job_type']); ?>)</span>
         </div>
-
-        <!-- Applicant Information -->
-        <div class="col-md-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-gradient bg-info text-white">
-                    <h6 class="mb-0"><i class="bi bi-person me-2"></i>Applicant Information</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="bi bi-person-badge text-info me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Full Name</small>
-                                    <strong><?php echo htmlspecialchars($application['first_name'] . ' ' . $application['last_name']); ?></strong>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="bi bi-envelope text-info me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Email</small>
-                                    <strong><?php echo htmlspecialchars($application['email']); ?></strong>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-telephone text-info me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Phone</small>
-                                    <strong><?php echo htmlspecialchars($application['phone']); ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="bi bi-calendar-event text-info me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Application Date</small>
-                                    <strong><?php echo date('M d, Y', strtotime($application['application_date'])); ?></strong>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="bi bi-briefcase text-info me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Current Position</small>
-                                    <strong><?php echo isset($application['current_position']) ? htmlspecialchars($application['current_position']) : 'Not specified'; ?></strong>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-star text-info me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Experience</small>
-                                    <strong><?php echo isset($application['years_of_experience']) ? htmlspecialchars($application['years_of_experience']) . ' years' : 'Not specified'; ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="p-3 bg-light rounded-3 border h-100">
+            <span class="text-muted small d-block mb-1"><i class="bi bi-person-fill text-info me-1"></i> Candidate Name</span>
+            <strong class="text-dark d-block fs-6"><?php echo htmlspecialchars($application['first_name'] . ' ' . $application['last_name']); ?></strong>
+            <span class="text-secondary small">Applied on <?php echo date('M d, Y', strtotime($application['application_date'])); ?></span>
         </div>
-
-        <!-- Cover Letter -->
-        <div class="col-md-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-gradient bg-secondary text-white">
-                    <h6 class="mb-0"><i class="bi bi-file-text me-2"></i>Cover Letter</h6>
-                </div>
-                <div class="card-body">
-                    <p class="mb-0 text-muted"><?php echo nl2br(htmlspecialchars($application['cover_letter'])); ?></p>
-                </div>
-            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="p-3 bg-light rounded-3 border h-100">
+            <span class="text-muted small d-block mb-1"><i class="bi bi-envelope-fill text-primary me-1"></i> Email Address</span>
+            <strong class="text-dark"><?php echo htmlspecialchars($application['email']); ?></strong>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="p-3 bg-light rounded-3 border h-100">
+            <span class="text-muted small d-block mb-1"><i class="bi bi-telephone-fill text-success me-1"></i> Phone Number</span>
+            <strong class="text-dark"><?php echo htmlspecialchars($application['phone']); ?></strong>
         </div>
     </div>
 </div>
-<div class="modal-footer">
-    <a href="<?php echo '../../uploads/resumes/' . basename($application['resume_path']); ?>" 
-       class="btn btn-primary" target="_blank">
-        <i class="bi bi-file-earmark-pdf me-2"></i>View Resume
-    </a>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-        <i class="bi bi-x-circle me-2"></i>Close
-    </button>
+
+<!-- Cover Letter Section -->
+<div class="mb-4">
+    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-file-text-fill text-secondary me-2"></i>Cover Letter / Notes</h6>
+    <div class="p-3 bg-white border rounded-3 text-dark" style="font-size: 0.9rem; line-height: 1.6; max-height: 200px; overflow-y: auto;">
+        <?php echo !empty($application['cover_letter']) ? nl2br(htmlspecialchars($application['cover_letter'])) : '<em class="text-muted">No cover letter submitted by candidate.</em>'; ?>
+    </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle view button clicks
-    document.querySelectorAll('a[href^="view_application.php"]').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const url = this.getAttribute('href');
-            
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('modalContent').innerHTML = html;
-                    const modal = new bootstrap.Modal(document.getElementById('applicationModal'));
-                    modal.show();
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    });
-});
-</script>
-
-<!-- Add modal container -->
-<div class="modal fade" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modalContent">
-            <!-- Content will be loaded here -->
-        </div>
+<!-- Resume & Action Footer -->
+<div class="d-flex justify-content-between align-items-center pt-3 border-top">
+    <div>
+        <?php if (!empty($resume_file)): ?>
+            <a href="<?php echo $resume_file; ?>" target="_blank" class="btn btn-success rounded-pill px-4 fw-semibold">
+                <i class="bi bi-file-earmark-pdf-fill me-1.5"></i> Open Resume PDF
+            </a>
+        <?php else: ?>
+            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill">No Resume Uploaded</span>
+        <?php endif; ?>
     </div>
-</div> 
+    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+</div>

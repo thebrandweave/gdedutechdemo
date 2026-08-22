@@ -23,7 +23,7 @@ $result = mysqli_query($conn, $query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Portal Management - GD Edu Tech Admin</title>
+    <title>Career Opportunities Management - GD Edu Tech Admin</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -45,7 +45,6 @@ $result = mysqli_query($conn, $query);
                     <img height="36" src="../../Images/Logos/GD_Only_logo.png" alt="GD Logo">
                     <div>
                         <div class="fw-bold text-white fs-6">GD Edu Tech</div>
-                      
                     </div>
                 </div>
 
@@ -56,8 +55,8 @@ $result = mysqli_query($conn, $query);
                     <li class="w-100"><a href="../Courses/" class="nav-link"><i class="bi bi-book me-2"></i> Courses</a></li>
                     <li class="w-100"><a href="../Applications/" class="nav-link"><i class="bi bi-journal-text me-2"></i> Scholarships</a></li>
                     <li class="w-100"><a href="../Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="./" class="nav-link active"><i class="bi bi-briefcase me-2"></i> Careers</a></li>
                     <li class="w-100"><a href="../social_links.php" class="nav-link"><i class="bi bi-link-45deg me-2"></i> Social Links</a></li>
-                    <li class="w-100"><a href="./" class="nav-link active"><i class="bi bi-briefcase me-2"></i> Career Portal</a></li>
                     <li class="w-100"><a href="../Schedule/index.php" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
                     <li class="w-100"><a href="../feedback/feedback.php" class="nav-link"><i class="bi bi-chat-square-heart me-2"></i> Feedback</a></li>
                     <li class="w-100"><a href="../Messages/index.php" class="nav-link"><i class="bi bi-chat-dots me-2"></i> Messages</a></li>
@@ -81,15 +80,15 @@ $result = mysqli_query($conn, $query);
                 <div class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
                     <div>
                         <h4 class="fw-bold text-dark mb-0">Career Portal Management</h4>
-                        <span class="text-muted small">Manage career opportunities, job listings, and review candidates</span>
+                        <span class="text-muted small">Manage job opportunities, create career listings, and review candidates</span>
                     </div>
 
                     <div class="d-flex gap-2">
-                        <a href="view_candidates.php" class="btn btn-outline-primary">
-                            <i class="bi bi-people me-1.5"></i> View Candidates
+                        <a href="view_candidates.php" class="btn btn-outline-primary rounded-pill">
+                            <i class="bi bi-people-fill me-1.5"></i> View Candidates
                         </a>
-                        <a href="Add_career.php" class="btn btn-primary">
-                            <i class="bi bi-plus-circle me-1.5"></i> Add New Job Opening
+                        <a href="Add_career.php" class="btn btn-primary rounded-pill">
+                            <i class="bi bi-plus-circle-fill me-1.5"></i> Add New Job Opening
                         </a>
                     </div>
                 </div>
@@ -118,13 +117,14 @@ $result = mysqli_query($conn, $query);
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem;">
                                 <thead>
                                     <tr>
                                         <th>Job Title</th>
-                                        <th>Department</th>
+                                        <th>Company</th>
                                         <th>Location</th>
                                         <th>Job Type</th>
+                                        <th>Salary Range</th>
                                         <th>Status</th>
                                         <th>Posted Date</th>
                                         <th class="text-center">Actions</th>
@@ -135,40 +135,43 @@ $result = mysqli_query($conn, $query);
                                         <?php while ($job = mysqli_fetch_assoc($result)): ?>
                                             <tr>
                                                 <td>
-                                                    <strong class="text-dark fs-6 d-block"><?php echo htmlspecialchars($job['job_title']); ?></strong>
-                                                    <span class="text-muted small">ID: #<?php echo $job['job_id']; ?></span>
+                                                    <strong class="text-dark d-block"><?php echo htmlspecialchars($job['job_title']); ?></strong>
+                                                    <span class="badge bg-light text-dark border px-2 py-0.5 font-monospace">#<?php echo $job['job_id']; ?></span>
                                                 </td>
                                                 <td>
-                                                    <span class="text-secondary"><?php echo htmlspecialchars($job['department'] ?? 'General'); ?></span>
+                                                    <span class="text-secondary fw-semibold"><?php echo htmlspecialchars($job['company_name'] ?? 'GD Edu Tech'); ?></span>
                                                 </td>
                                                 <td>
-                                                    <span class="text-dark small"><i class="bi bi-geo-alt me-1 text-danger"></i><?php echo htmlspecialchars($job['location'] ?? 'Remote'); ?></span>
+                                                    <span class="text-dark small"><i class="bi bi-geo-alt-fill me-1 text-danger"></i><?php echo htmlspecialchars($job['location'] ?? 'Remote'); ?></span>
                                                 </td>
                                                 <td>
-                                                    <span class="badge bg-light text-dark border px-2.5 py-1 rounded-pill">
+                                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill">
                                                         <?php echo htmlspecialchars($job['job_type'] ?? 'Full-time'); ?>
                                                     </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-dark small"><i class="bi bi-cash-stack me-1 text-success"></i><?php echo htmlspecialchars($job['salary_range'] ?? 'Negotiable'); ?></span>
                                                 </td>
                                                 <td>
                                                     <?php if (($job['status'] ?? 'Active') === 'Active'): ?>
                                                         <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2.5 py-1 rounded-pill">Active</span>
                                                     <?php else: ?>
-                                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill">Closed</span>
+                                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill"><?php echo htmlspecialchars($job['status'] ?? 'Closed'); ?></span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td class="text-muted small">
+                                                <td class="text-muted small text-nowrap">
                                                     <?php echo !empty($job['created_at']) ? date('M d, Y', strtotime($job['created_at'])) : '-'; ?>
                                                 </td>
                                                 <td class="text-center">
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="view_career.php?id=<?php echo $job['job_id']; ?>" class="action-icon" title="View Details">
-                                                            <i class="bi bi-eye-fill text-primary"></i>
+                                                    <div class="d-flex justify-content-center gap-1.5">
+                                                        <button type="button" class="action-icon btn border-0 p-0 text-info" onclick="viewCareer(<?php echo $job['job_id']; ?>)" title="View Job Details">
+                                                            <i class="bi bi-eye-fill fs-6"></i>
+                                                        </button>
+                                                        <a href="edit_career.php?id=<?php echo $job['job_id']; ?>" class="action-icon text-warning" title="Edit Listing">
+                                                            <i class="bi bi-pencil-fill fs-6"></i>
                                                         </a>
-                                                        <a href="edit_career.php?id=<?php echo $job['job_id']; ?>" class="action-icon" title="Edit Listing">
-                                                            <i class="bi bi-pencil-fill text-warning"></i>
-                                                        </a>
-                                                        <a href="delete_career.php?id=<?php echo $job['job_id']; ?>" class="action-icon text-danger" onclick="return confirm('Delete this job posting?');" title="Delete Listing">
-                                                            <i class="bi bi-trash-fill"></i>
+                                                        <a href="delete_career.php?id=<?php echo $job['job_id']; ?>" class="action-icon text-danger" onclick="return confirm('Are you sure you want to delete this job posting?');" title="Delete Listing">
+                                                            <i class="bi bi-trash-fill fs-6"></i>
                                                         </a>
                                                     </div>
                                                 </td>
@@ -176,7 +179,7 @@ $result = mysqli_query($conn, $query);
                                         <?php endwhile; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="7" class="text-center py-4 text-muted">No job openings added yet.</td>
+                                            <td colspan="8" class="text-center py-4 text-muted">No job openings added yet. Click "Add New Job Opening" above to create one.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -190,7 +193,51 @@ $result = mysqli_query($conn, $query);
         </div>
     </div>
 
+    <!-- View Career Details Modal -->
+    <div class="modal fade" id="viewCareerModal" tabindex="-1" aria-labelledby="viewCareerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header bg-dark text-white p-4">
+                    <h5 class="modal-title fw-bold" id="viewCareerModalLabel"><i class="bi bi-briefcase-fill text-info me-2"></i>Job Opening Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4" id="viewCareerModalBody">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function viewCareer(jobId) {
+        const modalBody = document.getElementById('viewCareerModalBody');
+        modalBody.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading job details...</span>
+                </div>
+                <p class="text-muted small mt-2">Fetching job specification...</p>
+            </div>
+        `;
+        const modal = new bootstrap.Modal(document.getElementById('viewCareerModal'));
+        modal.show();
+
+        fetch(`view_career.php?id=${jobId}`)
+            .then(response => response.text())
+            .then(data => {
+                modalBody.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                modalBody.innerHTML = '<div class="alert alert-danger mb-0">Error loading job details.</div>';
+            });
+    }
+    </script>
 </body>
 </html>

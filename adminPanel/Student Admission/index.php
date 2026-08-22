@@ -276,6 +276,7 @@ try {
                     <li class="w-100"><a href="../Courses/" class="nav-link"><i class="bi bi-book me-2"></i> Courses</a></li>
                     <li class="w-100"><a href="../Applications/" class="nav-link"><i class="bi bi-journal-text me-2"></i> Scholarships</a></li>
                     <li class="w-100"><a href="../Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="../Career/" class="nav-link"><i class="bi bi-briefcase me-2"></i> Careers</a></li>
                     <li class="w-100"><a href="../social_links.php" class="nav-link"><i class="bi bi-link-45deg me-2"></i> Social Links</a></li>
                     <li class="w-100"><a href="../Schedule/index.php" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
                     <li class="w-100"><a href="../feedback/feedback.php" class="nav-link"><i class="bi bi-chat-square-heart me-2"></i> Feedback</a></li>
@@ -426,7 +427,25 @@ try {
                                                 </td>
 
                                                 <td class="text-center">
-                                                    <div class="d-flex justify-content-center gap-1">
+                                                    <div class="d-flex justify-content-center gap-1.5">
+                                                        <a href="javascript:void(0)" class="action-icon view-btn text-info" 
+                                                           data-id="<?php echo $admission['id']; ?>"
+                                                           data-student-id="<?php echo htmlspecialchars($admission['student_id']); ?>"
+                                                           data-profile="<?php echo htmlspecialchars($admission['profile_image'] ?? ''); ?>"
+                                                           data-name="<?php echo htmlspecialchars($admission['student_name']); ?>"
+                                                           data-college="<?php echo htmlspecialchars($admission['college']); ?>"
+                                                           data-phone="<?php echo htmlspecialchars($admission['phone_number']); ?>"
+                                                           data-email="<?php echo htmlspecialchars($admission['email_id']); ?>"
+                                                           data-course="<?php echo htmlspecialchars($admission['course_applied']); ?>"
+                                                           data-internship="<?php echo htmlspecialchars($admission['internship']); ?>"
+                                                           data-start="<?php echo htmlspecialchars($admission['start_date']); ?>"
+                                                           data-end="<?php echo htmlspecialchars($admission['end_date']); ?>"
+                                                           data-skills="<?php echo htmlspecialchars($admission['key_skills']); ?>"
+                                                           data-certificate="<?php echo htmlspecialchars($admission['certificate_file'] ?? ''); ?>"
+                                                           data-verify-url="<?php echo htmlspecialchars($verify_url); ?>"
+                                                           title="View Student Details & Certificate">
+                                                            <i class="bi bi-eye-fill text-info fs-6"></i>
+                                                        </a>
                                                         <a href="javascript:void(0)" class="action-icon edit-btn" 
                                                            data-id="<?php echo $admission['id']; ?>"
                                                            data-student-id="<?php echo htmlspecialchars($admission['student_id']); ?>"
@@ -442,10 +461,10 @@ try {
                                                            data-skills="<?php echo htmlspecialchars($admission['key_skills']); ?>"
                                                            data-certificate="<?php echo htmlspecialchars($admission['certificate_file'] ?? ''); ?>"
                                                            title="Edit Student Admission">
-                                                            <i class="bi bi-pencil-fill text-warning"></i>
+                                                            <i class="bi bi-pencil-fill text-warning fs-6"></i>
                                                         </a>
                                                         <a href="index.php?delete=1&id=<?php echo $admission['id']; ?>" class="action-icon text-danger" onclick="return confirm('Are you sure you want to delete this admission record?')" title="Delete Record">
-                                                            <i class="bi bi-trash-fill"></i>
+                                                            <i class="bi bi-trash-fill fs-6"></i>
                                                         </a>
                                                     </div>
                                                 </td>
@@ -754,6 +773,98 @@ try {
         </div>
     </div>
 
+    <!-- View Admission Modal -->
+    <div class="modal fade" id="viewAdmissionModal" tabindex="-1" aria-labelledby="viewAdmissionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header bg-dark text-white p-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-eye-fill text-info fs-4"></i>
+                        <h5 class="modal-title fw-bold" id="viewAdmissionModalLabel">Student Admission Details</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Top Banner with Avatar, Name, ID & Public Link -->
+                    <div class="p-3 bg-light rounded-4 border mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div id="view_profile_avatar_wrapper">
+                                <!-- Populated by JS -->
+                            </div>
+                            <div>
+                                <h4 class="fw-bold text-dark mb-1" id="view_student_name">Student Name</h4>
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-1 rounded-pill font-monospace fw-bold fs-6" id="view_student_id">GDEDU1001</span>
+                            </div>
+                        </div>
+                        <a href="#" id="view_public_link" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill fw-semibold px-3">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Verification Page
+                        </a>
+                    </div>
+
+                    <!-- Structured Grid Details -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white border rounded-3 h-100">
+                                <span class="text-muted small d-block"><i class="bi bi-envelope-fill text-primary me-1"></i> Email Address</span>
+                                <strong class="text-dark" id="view_email">student@example.com</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white border rounded-3 h-100">
+                                <span class="text-muted small d-block"><i class="bi bi-telephone-fill text-success me-1"></i> Phone Number</span>
+                                <strong class="text-dark" id="view_phone">+91 9876543210</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white border rounded-3 h-100">
+                                <span class="text-muted small d-block"><i class="bi bi-journal-bookmark-fill text-primary me-1"></i> Course Applied</span>
+                                <strong class="text-primary" id="view_course">Full Stack Development</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white border rounded-3 h-100">
+                                <span class="text-muted small d-block"><i class="bi bi-building-fill text-secondary me-1"></i> College / Institution</span>
+                                <strong class="text-dark" id="view_college">Independent</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white border rounded-3 h-100">
+                                <span class="text-muted small d-block"><i class="bi bi-briefcase-fill text-success me-1"></i> Internship</span>
+                                <strong class="text-dark" id="view_internship">None</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white border rounded-3 h-100">
+                                <span class="text-muted small d-block"><i class="bi bi-calendar3 text-primary me-1"></i> Duration</span>
+                                <strong class="text-dark" id="view_duration">Jan 01, 2026 to Jun 30, 2026</strong>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 bg-white border rounded-3">
+                                <span class="text-muted small d-block mb-1.5"><i class="bi bi-tags-fill text-warning me-1"></i> Key Skills</span>
+                                <div id="view_skills_wrapper" class="d-flex flex-wrap gap-1">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 bg-white border rounded-3">
+                                <span class="text-muted small d-block mb-1.5"><i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i> Certificate Document</span>
+                                <div id="view_certificate_wrapper">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer bg-light p-3 border-top">
+                    <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -771,13 +882,76 @@ try {
 
     document.addEventListener('DOMContentLoaded', function() {
         const editButtons = document.querySelectorAll('.edit-btn');
+        const viewButtons = document.querySelectorAll('.view-btn');
         const editModal = new bootstrap.Modal(document.getElementById('editAdmissionModal'));
+        const viewModal = new bootstrap.Modal(document.getElementById('viewAdmissionModal'));
 
         document.getElementById('addAdmissionModal').addEventListener('show.bs.modal', function() {
             document.getElementById('has_college').checked = false;
             document.getElementById('has_internship').checked = false;
             toggleOptionalField('', 'college');
             toggleOptionalField('', 'internship');
+        });
+
+        // View Button Event Listener
+        viewButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const studentName = this.getAttribute('data-name') || '';
+                const studentId = this.getAttribute('data-student-id') || '';
+                const profileVal = (this.getAttribute('data-profile') || '').trim();
+
+                document.getElementById('view_student_name').textContent = studentName;
+                document.getElementById('view_student_id').textContent = studentId;
+                document.getElementById('view_public_link').href = this.getAttribute('data-verify-url');
+
+                const avatarWrapper = document.getElementById('view_profile_avatar_wrapper');
+                if (profileVal !== '') {
+                    avatarWrapper.innerHTML = '<img src="../../uploads/profiles/' + profileVal + '" alt="Profile" class="rounded-circle border object-fit-cover shadow-sm" style="width: 56px; height: 56px;">';
+                } else {
+                    const nameParts = studentName.trim().split(' ');
+                    let initials = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
+                    if (nameParts.length > 1) initials += nameParts[nameParts.length - 1].charAt(0).toUpperCase();
+                    avatarWrapper.innerHTML = '<div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm" style="width: 56px; height: 56px; background: linear-gradient(135deg, #0d7298, #0f172a); font-size: 18px;">' + (initials || 'GD') + '</div>';
+                }
+
+                document.getElementById('view_email').textContent = this.getAttribute('data-email') || '-';
+                document.getElementById('view_phone').textContent = this.getAttribute('data-phone') || '-';
+                document.getElementById('view_course').textContent = this.getAttribute('data-course') || '-';
+                document.getElementById('view_college').textContent = this.getAttribute('data-college') || 'Independent';
+                document.getElementById('view_internship').textContent = this.getAttribute('data-internship') || 'None';
+
+                const startDate = this.getAttribute('data-start') || '';
+                const endDate = this.getAttribute('data-end') || '';
+                document.getElementById('view_duration').textContent = (startDate || '-') + ' to ' + (endDate || '-');
+
+                const skillsVal = this.getAttribute('data-skills') || '';
+                const skillsWrapper = document.getElementById('view_skills_wrapper');
+                skillsWrapper.innerHTML = '';
+                if (skillsVal.trim() !== '') {
+                    skillsVal.split(',').forEach(s => {
+                        if (s.trim() !== '') {
+                            skillsWrapper.innerHTML += '<span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill me-1 mb-1">' + s.trim() + '</span>';
+                        }
+                    });
+                } else {
+                    skillsWrapper.innerHTML = '<span class="text-muted small">No key skills specified</span>';
+                }
+
+                const certVal = (this.getAttribute('data-certificate') || '').trim();
+                const certWrapper = document.getElementById('view_certificate_wrapper');
+                if (certVal !== '') {
+                    const certExt = certVal.split('.').pop().toLowerCase();
+                    const isPdf = certExt === 'pdf';
+                    const iconClass = isPdf ? 'bi-file-earmark-pdf-fill text-danger' : 'bi-file-earmark-image-fill text-success';
+                    const btnClass = isPdf ? 'btn-outline-danger' : 'btn-outline-success';
+                    const docType = isPdf ? 'PDF Certificate' : 'Image Certificate';
+                    certWrapper.innerHTML = '<a href="../../uploads/certificates/' + certVal + '" target="_blank" class="btn btn-sm ' + btnClass + ' rounded-pill px-3 py-1.5 fw-semibold"><i class="bi ' + iconClass + ' me-1.5"></i>Open / Download ' + docType + ' (' + certVal + ')</a>';
+                } else {
+                    certWrapper.innerHTML = '<span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill">No Certificate Document Uploaded</span>';
+                }
+
+                viewModal.show();
+            });
         });
 
         editButtons.forEach(btn => {
@@ -811,7 +985,11 @@ try {
                 const certVal = (this.getAttribute('data-certificate') || '').trim();
                 const certPreview = document.getElementById('edit_certificate_preview');
                 if (certVal !== '') {
-                    certPreview.innerHTML = '<span class="badge bg-success-subtle text-success border px-2.5 py-1 rounded-pill me-2"><i class="bi bi-check-circle me-1"></i>Current: ' + certVal + '</span> <a href="../../uploads/certificates/' + certVal + '" target="_blank" class="small text-primary text-decoration-none fw-bold"><i class="bi bi-eye-fill me-1"></i>View Current Certificate</a>';
+                    const certExt = certVal.split('.').pop().toLowerCase();
+                    const isPdf = certExt === 'pdf';
+                    const badgeClass = isPdf ? 'bg-danger-subtle text-danger border-danger-subtle' : 'bg-success-subtle text-success border-success-subtle';
+                    const iconClass = isPdf ? 'bi-file-earmark-pdf-fill' : 'bi-file-earmark-image-fill';
+                    certPreview.innerHTML = '<span class="badge ' + badgeClass + ' border px-2.5 py-1 rounded-pill me-2"><i class="bi ' + iconClass + ' me-1"></i>Current: ' + certVal + '</span> <a href="../../uploads/certificates/' + certVal + '" target="_blank" class="small text-primary text-decoration-none fw-bold"><i class="bi bi-eye-fill me-1"></i>View Current Certificate</a>';
                 } else {
                     certPreview.innerHTML = '<span class="text-muted small">No certificate document uploaded yet.</span>';
                 }

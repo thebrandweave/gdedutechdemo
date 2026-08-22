@@ -276,6 +276,7 @@ try {
                     <li class="w-100"><a href="../Courses/" class="nav-link"><i class="bi bi-book me-2"></i> Courses</a></li>
                     <li class="w-100"><a href="../Applications/" class="nav-link"><i class="bi bi-journal-text me-2"></i> Scholarships</a></li>
                     <li class="w-100"><a href="../Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="../Career/" class="nav-link"><i class="bi bi-briefcase me-2"></i> Careers</a></li>
                     <li class="w-100"><a href="../social_links.php" class="nav-link"><i class="bi bi-link-45deg me-2"></i> Social Links</a></li>
                     <li class="w-100"><a href="../Schedule/index.php" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
                     <li class="w-100"><a href="../feedback/feedback.php" class="nav-link"><i class="bi bi-chat-square-heart me-2"></i> Feedback</a></li>
@@ -939,7 +940,12 @@ try {
                 const certVal = (this.getAttribute('data-certificate') || '').trim();
                 const certWrapper = document.getElementById('view_certificate_wrapper');
                 if (certVal !== '') {
-                    certWrapper.innerHTML = '<a href="../../uploads/certificates/' + certVal + '" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-semibold"><i class="bi bi-file-earmark-pdf-fill me-1"></i>View / Download Certificate (' + certVal + ')</a>';
+                    const certExt = certVal.split('.').pop().toLowerCase();
+                    const isPdf = certExt === 'pdf';
+                    const iconClass = isPdf ? 'bi-file-earmark-pdf-fill text-danger' : 'bi-file-earmark-image-fill text-success';
+                    const btnClass = isPdf ? 'btn-outline-danger' : 'btn-outline-success';
+                    const docType = isPdf ? 'PDF Certificate' : 'Image Certificate';
+                    certWrapper.innerHTML = '<a href="../../uploads/certificates/' + certVal + '" target="_blank" class="btn btn-sm ' + btnClass + ' rounded-pill px-3 py-1.5 fw-semibold"><i class="bi ' + iconClass + ' me-1.5"></i>Open / Download ' + docType + ' (' + certVal + ')</a>';
                 } else {
                     certWrapper.innerHTML = '<span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill">No Certificate Document Uploaded</span>';
                 }
@@ -979,7 +985,11 @@ try {
                 const certVal = (this.getAttribute('data-certificate') || '').trim();
                 const certPreview = document.getElementById('edit_certificate_preview');
                 if (certVal !== '') {
-                    certPreview.innerHTML = '<span class="badge bg-success-subtle text-success border px-2.5 py-1 rounded-pill me-2"><i class="bi bi-check-circle me-1"></i>Current: ' + certVal + '</span> <a href="../../uploads/certificates/' + certVal + '" target="_blank" class="small text-primary text-decoration-none fw-bold"><i class="bi bi-eye-fill me-1"></i>View Current Certificate</a>';
+                    const certExt = certVal.split('.').pop().toLowerCase();
+                    const isPdf = certExt === 'pdf';
+                    const badgeClass = isPdf ? 'bg-danger-subtle text-danger border-danger-subtle' : 'bg-success-subtle text-success border-success-subtle';
+                    const iconClass = isPdf ? 'bi-file-earmark-pdf-fill' : 'bi-file-earmark-image-fill';
+                    certPreview.innerHTML = '<span class="badge ' + badgeClass + ' border px-2.5 py-1 rounded-pill me-2"><i class="bi ' + iconClass + ' me-1"></i>Current: ' + certVal + '</span> <a href="../../uploads/certificates/' + certVal + '" target="_blank" class="small text-primary text-decoration-none fw-bold"><i class="bi bi-eye-fill me-1"></i>View Current Certificate</a>';
                 } else {
                     certPreview.innerHTML = '<span class="text-muted small">No certificate document uploaded yet.</span>';
                 }

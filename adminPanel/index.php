@@ -452,6 +452,11 @@ try {
                         <span>Events</span>
                     </a>
 
+                    <a href="./Career/" class="nav-link">
+                        <i class="bi bi-briefcase"></i>
+                        <span>Careers</span>
+                    </a>
+
                     <div class="nav-menu-label">Engagement</div>
 
                     <a href="./social_links.php" class="nav-link">

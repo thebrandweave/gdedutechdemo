@@ -429,7 +429,7 @@ if ($result) {
                             <span class="text-warning fw-bold text-uppercase tracking-wider small d-block mb-1">Vibrant Community</span>
                             <h3 class="fw-bold text-dark mb-3">Team Building & Celebrations</h3>
                             <p class="text-secondary lead fs-6 mb-4" style="line-height: 1.7;">
-                                We believe work should be fun and fulfilling! From quarterly team off-site retreats and hackathons to festival celebrations and weekly Friday game nights, we celebrate every win together.
+                              We believe work should be exciting, meaningful, and rewarding. From team outings and festive celebrations to engaging team activities, we create an environment where everyone can connect, grow, and celebrate success together.
                             </p>
                             <div class="row g-3">
                                 <div class="col-sm-6">

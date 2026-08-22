@@ -104,7 +104,8 @@ function getPlatformIcon($p) {
                     <li class="w-100"><a href="Admissions/" class="nav-link"><i class="bi bi-person-plus me-2"></i> Student Admission</a></li>
                     <li class="w-100"><a href="Courses/" class="nav-link"><i class="bi bi-book me-2"></i> Courses</a></li>
                     <li class="w-100"><a href="Applications/" class="nav-link"><i class="bi bi-journal-text me-2"></i> Scholarships</a></li>
-                    <li class="w-100"><a href="Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="./Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="./Career/" class="nav-link"><i class="bi bi-briefcase me-2"></i> Careers</a></li>
                     <li class="w-100"><a href="social_links.php" class="nav-link active"><i class="bi bi-link-45deg me-2"></i> Social Links</a></li>
                     <li class="w-100"><a href="Schedule/index.php" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
                     <li class="w-100"><a href="feedback/feedback.php" class="nav-link"><i class="bi bi-chat-square-heart me-2"></i> Feedback</a></li>
