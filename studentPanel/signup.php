@@ -1,14 +1,15 @@
 <?php
+session_start();
 require_once '../Configurations/config.php';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-    $email = trim($_POST['email']);
-    $first_name = trim($_POST['first_name']);
-    $last_name = trim($_POST['last_name']);
-    $profile_image = $_FILES['profile_image'];
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $first_name = trim($_POST['first_name'] ?? '');
+    $last_name = trim($_POST['last_name'] ?? '');
+    $profile_image = $_FILES['profile_image'] ?? null;
     $registration_success = false;
 
     // Add error message array
@@ -28,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $checkStmt->execute();
         $result = $checkStmt->get_result();
 
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             $errors[] = "Username or Email already exists. Please try another.";
             $checkStmt->close();
         } else {
@@ -42,11 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $uploading_image_path = null;
             if ($profile_image && $profile_image['error'] == 0) {
                 // Validate file type and size
-                $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+                $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
                 if (in_array($profile_image['type'], $allowed_types) && $profile_image['size'] <= 2000000) { // 2MB limit
                     $profile_image_name = time() . '_' . basename($profile_image['name']);
                     $profile_image_path = "./Profile/student_profile/" . $profile_image_name;
                     $uploading_image_path = "student_profile/" . $profile_image_name;
+
+                    if (!is_dir("./Profile/student_profile/")) {
+                        mkdir("./Profile/student_profile/", 0777, true);
+                    }
 
                     // Move the uploaded file
                     if (!move_uploaded_file($profile_image['tmp_name'], $profile_image_path)) {
@@ -77,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (isset($registration_success) && $registration_success) {
                     echo "<script>
                         setTimeout(() => {
-                            window.location.href = './login.php';
-                        }, 2500);
+                            window.location.href = './login_page.php';
+                        }, 2000);
                     </script>";
                 }
 
@@ -108,6 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../Images/Logos/GD_Only_logo.png">
+    <!-- Google Identity Services JS -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <style>
         * {
@@ -253,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-size: 0.86rem;
         }
 
-        /* Input Styling matching Reference */
+        /* Input Styling */
         .custom-input-group {
             position: relative;
             margin-bottom: 12px;
@@ -286,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             box-shadow: 0 0 0 4px rgba(13, 114, 152, 0.1);
         }
 
-        /* Submit Button matching reference */
+        /* Submit Button */
         .btn-auth-action {
             width: 100%;
             padding: 11px;
@@ -299,13 +306,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             cursor: pointer;
             box-shadow: 0 8px 22px rgba(13, 114, 152, 0.28);
             transition: all 0.3s ease;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         .btn-auth-action:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(13, 114, 152, 0.38);
             color: #ffffff;
+        }
+
+        /* Google Button Style */
+        .btn-google-auth {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 16px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            margin-bottom: 14px;
+            text-decoration: none;
+        }
+
+        .btn-google-auth:hover {
+            background: #f8fafc;
+            border-color: #0d7298;
+            color: #0d7298;
+            box-shadow: 0 4px 12px rgba(13, 114, 152, 0.15);
         }
 
         /* Custom File Upload */
@@ -349,7 +384,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-align: center;
             color: #94a3b8;
             font-size: 0.78rem;
-            margin: 14px 0;
+            margin: 12px 0;
         }
 
         .auth-divider::before, .auth-divider::after {
@@ -402,7 +437,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="../index.php" class="btn-back-home">
                         <i class="bi bi-arrow-left me-1.5"></i> Back to Home
                     </a>
-                    <a href="login.php" class="btn-switch-pill">Sign In</a>
+                    <a href="login_page.php" class="btn-switch-pill">Sign In</a>
                 </div>
 
                 <!-- Form Header -->
@@ -413,6 +448,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h2 class="auth-title">Create Account</h2>
                     <p class="auth-subtitle mb-0">Enter your details to register as a student</p>
                 </div>
+
+                <div id="googleAlertContainer"></div>
 
                 <!-- Session Alert Messages -->
                 <?php if (isset($_SESSION['error_message'])): ?>
@@ -485,13 +522,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- Submit Button -->
                     <button type="submit" class="btn-auth-action">Create Account</button>
 
+                    <!-- OR Divider -->
                     <div class="auth-divider">
                         <span>or join with</span>
                     </div>
 
+                    <!-- Google Sign-In Button -->
+                    <div class="google-auth-wrapper text-center">
+                        <div id="g_id_onload"
+                             data-client_id="267890495884-euub370ds33tgn98rponciu9n8e59snl.apps.googleusercontent.com.apps.googleusercontent.com"
+                             data-context="signup"
+                             data-ux_mode="popup"
+                             data-callback="handleGoogleSignUp"
+                             data-auto_prompt="false">
+                        </div>
+
+                        <button type="button" class="btn-google-auth" onclick="triggerGoogleSignUpPrompt()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M23.54 12.28c0-.85-.07-1.7-.22-2.53H12v4.8h6.48c-.28 1.48-1.12 2.74-2.38 3.58v2.96h3.84c2.25-2.07 3.6-5.13 3.6-8.81z" fill="#4285F4"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.84-2.96c-1.08.72-2.45 1.16-4.09 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.06C3.26 21.3 7.31 24 12 24z" fill="#34A853"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.27 14.33c-.25-.74-.38-1.53-.38-2.33s.13-1.59.38-2.33V6.61H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.39l3.98-3.06z" fill="#FBBC05"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.61l3.98 3.06c.95-2.85 3.6-4.92 6.73-4.92z" fill="#EA4335"/>
+                            </svg>
+                            <span>Sign up with Google</span>
+                        </button>
+                    </div>
+
                     <div class="text-center">
                         <span class="text-muted small">Already have an account?</span>
-                        <a href="login.php" class="text-primary fw-bold text-decoration-none small ms-1">Sign In</a>
+                        <a href="login_page.php" class="text-primary fw-bold text-decoration-none small ms-1">Sign In</a>
                     </div>
                 </form>
 
@@ -530,6 +589,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 fileNameText.textContent = 'Upload Profile Image (Optional)';
             }
         });
+    }
+
+    // Google Sign-Up Callback Handler
+    function handleGoogleSignUp(response) {
+        if (!response || !response.credential) return;
+
+        fetch('google_auth.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credential: response.credential })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const alertBox = document.getElementById('googleAlertContainer');
+            if (data.status === 'success') {
+                alertBox.innerHTML = `
+                    <div class="alert alert-success rounded-4 py-2.5 px-3 mb-3 small" role="alert">
+                        <i class="bi bi-check-circle-fill me-1.5"></i> ${data.message}
+                    </div>
+                `;
+                setTimeout(() => {
+                    window.location.href = data.redirect || 'index.php';
+                }, 800);
+            } else {
+                alertBox.innerHTML = `
+                    <div class="alert alert-danger rounded-4 py-2.5 px-3 mb-3 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1.5"></i> ${data.message}
+                    </div>
+                `;
+            }
+        })
+        .catch(err => {
+            console.error('Google Sign-Up Error:', err);
+        });
+    }
+
+    function triggerGoogleSignUpPrompt() {
+        if (window.google && google.accounts && google.accounts.id) {
+            google.accounts.id.prompt();
+        } else {
+            alert("Google Sign-In is loading. Please try again in a moment.");
+        }
     }
 </script>
 </body>
