@@ -235,7 +235,7 @@ $paper_count = $papers_result ? mysqli_num_rows($papers_result) : 0;
                                                 <i class="bi bi-eye-fill me-1.5"></i>View Question Paper
                                             </a>
                                         <?php else: ?>
-                                            <a href="https://api.whatsapp.com/send?phone=8867575821&text=Request%20to%20access%20the%20paper%20entitled%20<?php echo urlencode($paper['title']); ?>"
+                                            <a href="https://api.whatsapp.com/send?phone=917204626299&text=Request%20to%20access%20the%20paper%20entitled%20<?php echo urlencode($paper['title']); ?>"
                                                class="btn btn-success w-100 rounded-pill fw-semibold py-2 mt-auto"
                                                target="_blank"
                                                onclick="event.preventDefault(); requestAccess(<?php echo $paper_id; ?>); window.open(this.href, '_blank');"

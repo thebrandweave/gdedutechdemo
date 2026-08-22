@@ -423,125 +423,146 @@ if (isset($_GET['student_id'])) {
 
                                         <h3 class="student-profile-name mb-2"><?php echo htmlspecialchars($admission['student_name']); ?></h3>
                                         
-                                        <div class="mb-4">
-                                            <span class="badge badge-student-id text-secondary px-4 py-2 fs-6">
-                                                ID: <span class="fw-bold text-primary" id="copy-student-id"><?php echo htmlspecialchars($admission['student_id']); ?></span>
-                                                <button class="btn btn-link p-0 ms-2 border-0 align-baseline fs-5 text-decoration-none" onclick="copyStudentId()" title="Copy Student ID">
-                                                    <i class="bi bi-clipboard text-muted" id="copy-icon"></i>
-                                                </button>
-                                            </span>
-                                        </div>
+                                         <div class="mb-3">
+                                             <span class="badge badge-student-id text-secondary px-4 py-2 fs-6">
+                                                 ID: <span class="fw-bold text-primary" id="copy-student-id"><?php echo htmlspecialchars($admission['student_id']); ?></span>
+                                                 <button class="btn btn-link p-0 ms-2 border-0 align-baseline fs-5 text-decoration-none" onclick="copyStudentId()" title="Copy Student ID">
+                                                     <i class="bi bi-clipboard text-muted" id="copy-icon"></i>
+                                                 </button>
+                                             </span>
+                                         </div>
 
-                                        <button onclick="window.print();" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
-                                            <i class="bi bi-printer-fill"></i>
-                                            <span>Print Record</span>
-                                        </button>
-                                    </div>
+                                         <?php if (!empty($admission['certificate_file'])): ?>
+                                             <div class="d-flex flex-column gap-2 mt-3">
+                                              
+                                                 <a href="./uploads/certificates/<?php echo htmlspecialchars($admission['certificate_file']); ?>" download class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center justify-content-center gap-2">
+                                                     <i class="bi bi-download"></i>
+                                                     <span>Download Certificate</span>
+                                                 </a>
+                                             </div>
+                                         <?php else: ?>
+                                             <button onclick="window.print();" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center justify-content-center gap-2 shadow-sm mt-3">
+                                                 <i class="bi bi-printer-fill fs-5"></i>
+                                                 <span>Print Certificate</span>
+                                             </button>
+                                         <?php endif; ?>
+                                     </div>
 
-                                    <!-- Right Column: Structured Table Details -->
-                                    <div class="col-lg-8">
-                                        <div class="info-table-box">
+                                     <!-- Right Column: Structured Table Details -->
+                                     <div class="col-lg-8">
+                                         <div class="info-table-box">
 
-                                            <?php if (!empty(trim($admission['college']))): ?>
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-building-fill text-primary me-2 fs-5"></i>
-                                                    <span>Institution</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value">
-                                                    <?php echo htmlspecialchars($admission['college']); ?>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
+                                             <?php if (!empty(trim($admission['college']))): ?>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-building-fill text-primary me-2 fs-5"></i>
+                                                     <span>Institution</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value">
+                                                     <?php echo htmlspecialchars($admission['college']); ?>
+                                                 </div>
+                                             </div>
+                                             <?php endif; ?>
 
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-journal-bookmark-fill text-primary me-2 fs-5"></i>
-                                                    <span>Course Enrolled</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value text-primary fw-bold">
-                                                    <?php echo htmlspecialchars($admission['course_applied']); ?>
-                                                </div>
-                                            </div>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-journal-bookmark-fill text-primary me-2 fs-5"></i>
+                                                     <span>Course Enrolled</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value text-primary fw-bold">
+                                                     <?php echo htmlspecialchars($admission['course_applied']); ?>
+                                                 </div>
+                                             </div>
 
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-envelope-fill text-primary me-2 fs-5"></i>
-                                                    <span>Email Address</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value text-break">
-                                                    <a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>" class="text-decoration-none text-primary">
-                                                        <?php echo htmlspecialchars($admission['email_id']); ?>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-envelope-fill text-primary me-2 fs-5"></i>
+                                                     <span>Email Address</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value text-break">
+                                                     <a href="mailto:<?php echo htmlspecialchars($admission['email_id']); ?>" class="text-decoration-none text-primary">
+                                                         <?php echo htmlspecialchars($admission['email_id']); ?>
+                                                     </a>
+                                                 </div>
+                                             </div>
 
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-telephone-fill text-primary me-2 fs-5"></i>
-                                                    <span>Phone Number</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value">
-                                                    <?php echo htmlspecialchars($admission['phone_number']); ?>
-                                                </div>
-                                            </div>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-telephone-fill text-primary me-2 fs-5"></i>
+                                                     <span>Phone Number</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value">
+                                                     <?php echo htmlspecialchars($admission['phone_number']); ?>
+                                                 </div>
+                                             </div>
 
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-calendar3 text-primary me-2 fs-5"></i>
-                                                    <span>Training Duration</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value">
-                                                    <?php echo date('d M Y', strtotime($admission['start_date'])); ?>
-                                                    <strong class="mx-2 text-muted">to</strong>
-                                                    <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
-                                                </div>
-                                            </div>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-calendar3 text-primary me-2 fs-5"></i>
+                                                     <span>Training Duration</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value">
+                                                     <?php echo date('d M Y', strtotime($admission['start_date'])); ?>
+                                                     <strong class="mx-2 text-muted">to</strong>
+                                                     <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
+                                                 </div>
+                                             </div>
 
-                                            <?php if (!empty(trim($admission['internship']))): ?>
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-briefcase-fill text-primary me-2 fs-5"></i>
-                                                    <span>Internship</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value">
-                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">
-                                                        <i class="bi bi-check-circle-fill me-1"></i>
-                                                        <?php echo htmlspecialchars($admission['internship']); ?>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
+                                             <?php if (!empty(trim($admission['internship']))): ?>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-briefcase-fill text-primary me-2 fs-5"></i>
+                                                     <span>Internship</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value">
+                                                     <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">
+                                                         <i class="bi bi-check-circle-fill me-1"></i>
+                                                         <?php echo htmlspecialchars($admission['internship']); ?>
+                                                     </span>
+                                                 </div>
+                                             </div>
+                                             <?php endif; ?>
 
-                                            <div class="row g-0 info-table-row">
-                                                <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
-                                                    <i class="bi bi-tags-fill text-primary me-2 fs-5"></i>
-                                                    <span>Key Skills</span>
-                                                </div>
-                                                <div class="col-md-8 p-3 info-table-value">
-                                                    <div class="d-flex flex-wrap gap-2">
-                                                        <?php
-                                                        $skills = explode(",", $admission['key_skills']);
-                                                        foreach ($skills as $skill) {
-                                                            $skill = trim($skill);
-                                                            if (!empty($skill)) {
-                                                                echo '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill">'
-                                                                    . htmlspecialchars($skill) .
-                                                                    '</span>';
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                             <div class="row g-0 info-table-row">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                     <i class="bi bi-tags-fill text-primary me-2 fs-5"></i>
+                                                     <span>Key Skills</span>
+                                                 </div>
+                                                 <div class="col-md-8 p-3 info-table-value">
+                                                     <div class="d-flex flex-wrap gap-2">
+                                                         <?php
+                                                         $skills = explode(",", $admission['key_skills']);
+                                                         foreach ($skills as $skill) {
+                                                             $skill = trim($skill);
+                                                             if (!empty($skill)) {
+                                                                 echo '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill">'
+                                                                     . htmlspecialchars($skill) .
+                                                                     '</span>';
+                                                             }
+                                                         }
+                                                         ?>
+                                                     </div>
+                                                 </div>
+                                             </div>
 
-                                        </div>
-                                    </div>
+                                         </div>
+                                     </div>
 
-                                </div> <!-- /row -->
-                            </div> <!-- /card-body -->
-                        </div> <!-- /student-profile-card -->
-                    </div>
+                                 </div> <!-- /row -->
+                             </div> <!-- /card-body -->
+                         </div> <!-- /student-profile-card -->
+
+                         <!-- Issued Certificate Document Preview Card -->
+                         <?php if (!empty($admission['certificate_file'])): 
+                             $certExt = strtolower(pathinfo($admission['certificate_file'], PATHINFO_EXTENSION));
+                             $certPath = "./uploads/certificates/" . htmlspecialchars($admission['certificate_file']);
+                         ?>
+                      
+                              
+                             </div>
+                         <?php endif; ?>
+
+                     </div>
                 <?php endif; ?>
 
             </div>
@@ -573,6 +594,20 @@ if (isset($_GET['student_id'])) {
             }).catch(function(err) {
                 console.error('Could not copy Student ID: ', err);
             });
+        }
+
+        function printCertificateFile(e, fileUrl) {
+            var isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+            if (isPdf) {
+                e.preventDefault();
+                var printWin = window.open(fileUrl, '_blank');
+                if (printWin) {
+                    printWin.focus();
+                    printWin.onload = function() {
+                        printWin.print();
+                    };
+                }
+            }
         }
     </script>
 </body>

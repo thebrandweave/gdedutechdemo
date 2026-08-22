@@ -58,22 +58,32 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
         $profile_image = NULL;
         if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
             $upload_dir = rtrim(__DIR__, '/\\') . '/../../uploads/profiles/';
-            
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0777, true);
             }
-            
             $file_ext = strtolower(pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION));
-            
             if(in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                 $new_filename = 'profile_' . time() . '_' . rand(1000, 9999) . '.' . $file_ext;
                 $destination = $upload_dir . $new_filename;
-                
                 if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $destination)) {
                     $profile_image = $new_filename;
-                } else {
-                    $_SESSION['message'] = "Upload Failed: Could not save to " . $destination;
-                    $_SESSION['message_type'] = "danger";
+                }
+            }
+        }
+
+        // Handle Certificate Upload using Absolute Path
+        $certificate_file = NULL;
+        if (isset($_FILES['certificate_file']) && $_FILES['certificate_file']['error'] === UPLOAD_ERR_OK) {
+            $cert_upload_dir = rtrim(__DIR__, '/\\') . '/../../uploads/certificates/';
+            if (!is_dir($cert_upload_dir)) {
+                mkdir($cert_upload_dir, 0777, true);
+            }
+            $cert_ext = strtolower(pathinfo($_FILES['certificate_file']['name'], PATHINFO_EXTENSION));
+            if(in_array($cert_ext, ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $new_cert_name = 'cert_' . time() . '_' . rand(1000, 9999) . '.' . $cert_ext;
+                $cert_destination = $cert_upload_dir . $new_cert_name;
+                if (move_uploaded_file($_FILES['certificate_file']['tmp_name'], $cert_destination)) {
+                    $certificate_file = $new_cert_name;
                 }
             }
         }
@@ -96,16 +106,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
         $student_id = "GDEDU" . str_pad($next_num, 4, "0", STR_PAD_LEFT);
         
         // Insert record
-        $insert_query = "INSERT INTO student_admissions (student_id, profile_image, student_name, college, phone_number, email_id, course_applied, internship, start_date, end_date, key_skills) 
-                         VALUES ('$student_id', " . ($profile_image ? "'$profile_image'" : "NULL") . ", '$student_name', '$college', '$phone_number', '$email_id', '$course_applied', '$internship', '$start_date', '$end_date', '$key_skills')";
+        $insert_query = "INSERT INTO student_admissions (student_id, profile_image, certificate_file, student_name, college, phone_number, email_id, course_applied, internship, start_date, end_date, key_skills) 
+                         VALUES ('$student_id', " . ($profile_image ? "'$profile_image'" : "NULL") . ", " . ($certificate_file ? "'$certificate_file'" : "NULL") . ", '$student_name', '$college', '$phone_number', '$email_id', '$course_applied', '$internship', '$start_date', '$end_date', '$key_skills')";
         
         if (mysqli_query($conn, $insert_query)) {
             mysqli_commit($conn);
-            if ($profile_image) {
-                $_SESSION['message'] = "Student admitted successfully with profile image! ID: " . $student_id;
-            } else {
-                $_SESSION['message'] = "Student admitted without image. Defaulting to initials. ID: " . $student_id;
-            }
+            $_SESSION['message'] = "Student admitted successfully! ID: " . $student_id;
             $_SESSION['message_type'] = "success";
         } else {
             mysqli_rollback($conn);
@@ -149,9 +155,25 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['edit_admissio
                 }
             }
         }
+
+        // Handle Certificate Upload for Edit
+        $cert_update_query = "";
+        if (isset($_FILES['certificate_file']) && $_FILES['certificate_file']['error'] === UPLOAD_ERR_OK) {
+            $cert_upload_dir = rtrim(__DIR__, '/\\') . '/../../uploads/certificates/';
+            if (!is_dir($cert_upload_dir)) mkdir($cert_upload_dir, 0777, true);
+            
+            $cert_ext = strtolower(pathinfo($_FILES['certificate_file']['name'], PATHINFO_EXTENSION));
+            if(in_array($cert_ext, ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $new_cert_filename = 'cert_' . time() . '_' . rand(1000, 9999) . '.' . $cert_ext;
+                if (move_uploaded_file($_FILES['certificate_file']['tmp_name'], $cert_upload_dir . $new_cert_filename)) {
+                    $cert_update_query = "certificate_file = '$new_cert_filename', ";
+                }
+            }
+        }
         
         $update_query = "UPDATE student_admissions SET 
                          $image_update_query
+                         $cert_update_query
                          student_name = '$student_name', 
                          college = '$college', 
                          phone_number = '$phone_number', 
@@ -221,6 +243,16 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../Images/Logos/GD_Only_logo.png">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100vw;
+        }
+        .main-content {
+            max-width: 100%;
+            overflow-x: hidden !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -302,20 +334,19 @@ try {
                             </span>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                        <div class="table-responsive" style="max-width: 100%; overflow-x: auto;">
+                            <table class="table table-hover align-middle mb-0" style="font-size: 0.86rem;">
                                 <thead>
                                     <tr>
                                         <th>Student ID</th>
                                         <th class="text-center">Verification QR</th>
-                                        <th class="text-center">Profile</th>
+                                        <th class="text-center">Certificate</th>
                                         <th>Student Info</th>
                                         <th>College / Campus</th>
                                         <th>Course Applied</th>
-                                        <th>Internship Status</th>
+                                        <th>Internship</th>
                                         <th>Duration</th>
                                         <th>Key Skills</th>
-                                        <th>Admitted On</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -324,7 +355,7 @@ try {
                                         <?php while ($admission = mysqli_fetch_assoc($result)): ?>
                                             <tr>
                                                 <td>
-                                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2.5 py-1.5 rounded-pill font-monospace fw-bold fs-6">
+                                                    <span class="badge bg-primary bg-opacity-10 text-black border border-primary-subtle px-2.5 py-1 rounded-pill font-monospace fw-bold fs-6">
                                                         <?php echo htmlspecialchars($admission['student_id']); ?>
                                                     </span>
                                                 </td>
@@ -339,54 +370,47 @@ try {
                                                     ?>
                                                     <div class="d-flex flex-column align-items-center gap-1">
                                                         <a href="<?php echo $verify_url; ?>" target="_blank" title="Verify Certificate (Opens live tab)">
-                                                            <img src="<?php echo $qr_api_url; ?>" alt="QR Code" class="rounded-2 border p-1 bg-white shadow-sm" style="width: 40px; height: 40px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">
+                                                            <img src="<?php echo $qr_api_url; ?>" alt="QR Code" class="rounded-2 border p-1 bg-white shadow-sm" style="width: 60px; height: 60px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">
                                                         </a>
-                                                        <a href="download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill mt-1" style="font-size: 0.65rem;" title="Download QR Image">
-                                                            <i class="bi bi-download me-0.5"></i> QR
+                                                        <a href="download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-outline-secondary py-1 px-4 rounded-pill" style="font-size: 0.62rem;" title="Download QR Image">
+                                                            <i class="bi bi-download "></i> QR
                                                         </a>
                                                     </div>
                                                 </td>
 
                                                 <td class="text-center">
-                                                    <?php if (!empty($admission['profile_image'])): ?>
-                                                        <img src="../../uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" class="rounded-circle border object-fit-cover shadow-sm" style="width: 44px; height: 44px;">
+                                                    <?php if (!empty($admission['certificate_file'])): ?>
+                                                        <a href="../../uploads/certificates/<?php echo htmlspecialchars($admission['certificate_file']); ?>" target="_blank" class="btn btn-sm btn-outline-success py-1 px-2.5 rounded-pill font-monospace fw-semibold shadow-sm" style="font-size: 0.72rem;" title="View Uploaded Certificate">
+                                                            <i class="bi bi-file-earmark-pdf-fill me-1"></i>Cert
+                                                        </a>
                                                     <?php else: ?>
-                                                        <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center mx-auto shadow-sm" style="width: 44px; height: 44px; background: linear-gradient(135deg, #0d7298, #0f172a); font-size: 14px;">
-                                                            <?php 
-                                                                $name_parts = explode(' ', trim($admission['student_name']));
-                                                                $initials = strtoupper(substr($name_parts[0], 0, 1));
-                                                                if (count($name_parts) > 1) {
-                                                                    $initials .= strtoupper(substr(end($name_parts), 0, 1));
-                                                                }
-                                                                echo htmlspecialchars($initials);
-                                                            ?>
-                                                        </div>
+                                                        <span class="badge bg-light text-muted border px-2 py-1 rounded-pill" style="font-size: 0.68rem;">None</span>
                                                     <?php endif; ?>
                                                 </td>
 
-                                                <td>
-                                                    <strong class="text-dark fs-6 d-block"><?php echo htmlspecialchars($admission['student_name']); ?></strong>
-                                                    <span class="text-muted small"><i class="bi bi-telephone-fill text-success me-1"></i><?php echo htmlspecialchars($admission['phone_number']); ?></span>
-                                                    <span class="text-muted small d-block"><i class="bi bi-envelope-fill text-primary me-1"></i><?php echo htmlspecialchars($admission['email_id']); ?></span>
+                                                <td style="max-width: 170px;">
+                                                    <strong class="text-dark d-block text-truncate"><?php echo htmlspecialchars($admission['student_name']); ?></strong>
+                                                    <span class="text-muted small d-block"><i class="bi bi-telephone-fill text-success me-1"></i><?php echo htmlspecialchars($admission['phone_number']); ?></span>
+                                                    <span class="text-muted small d-block text-truncate"><i class="bi bi-envelope-fill text-primary me-1"></i><?php echo htmlspecialchars($admission['email_id']); ?></span>
                                                 </td>
 
-                                                <td>
-                                                    <span class="badge bg-light text-dark border px-2.5 py-1 rounded-pill">
-                                                        <?php echo htmlspecialchars($admission['college'] ?: 'Independent Student'); ?>
+                                                <td style="max-width: 140px;">
+                                                    <span class="badge bg-light text-dark border px-2 py-1 rounded-pill text-wrap">
+                                                        <?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?>
                                                     </span>
                                                 </td>
 
-                                                <td>
-                                                    <span class="fw-semibold text-primary"><?php echo htmlspecialchars($admission['course_applied']); ?></span>
+                                                <td style="max-width: 150px;">
+                                                    <span class="fw-semibold text-primary d-block text-truncate" title="<?php echo htmlspecialchars($admission['course_applied']); ?>"><?php echo htmlspecialchars($admission['course_applied']); ?></span>
                                                 </td>
 
                                                 <td>
                                                     <?php if (!empty($admission['internship']) && strtolower($admission['internship']) !== 'none'): ?>
-                                                        <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2.5 py-1 rounded-pill">
+                                                        <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2 py-1 rounded-pill" style="font-size: 0.72rem;">
                                                             <i class="bi bi-briefcase me-1"></i><?php echo htmlspecialchars($admission['internship']); ?>
                                                         </span>
                                                     <?php else: ?>
-                                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill">None</span>
+                                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary-subtle px-2 py-1 rounded-pill" style="font-size: 0.72rem;">None</span>
                                                     <?php endif; ?>
                                                 </td>
 
@@ -395,23 +419,18 @@ try {
                                                     <span class="text-secondary">to <?php echo $admission['end_date'] ? date('M d, Y', strtotime($admission['end_date'])) : '-'; ?></span>
                                                 </td>
 
-                                                <td>
-                                                    <span class="text-secondary small" title="<?php echo htmlspecialchars($admission['key_skills']); ?>">
-                                                        <?php 
-                                                            $skills = htmlspecialchars($admission['key_skills'] ?? '-');
-                                                            echo (strlen($skills) > 25) ? substr($skills, 0, 25) . '...' : $skills;
-                                                        ?>
+                                                <td style="max-width: 130px;">
+                                                    <span class="text-secondary small d-block text-truncate" title="<?php echo htmlspecialchars($admission['key_skills']); ?>">
+                                                        <?php echo htmlspecialchars($admission['key_skills'] ?? '-'); ?>
                                                     </span>
-                                                </td>
-
-                                                <td class="text-muted small text-nowrap">
-                                                    <?php echo date('M d, Y', strtotime($admission['created_at'])); ?>
                                                 </td>
 
                                                 <td class="text-center">
                                                     <div class="d-flex justify-content-center gap-1">
                                                         <a href="javascript:void(0)" class="action-icon edit-btn" 
                                                            data-id="<?php echo $admission['id']; ?>"
+                                                           data-student-id="<?php echo htmlspecialchars($admission['student_id']); ?>"
+                                                           data-profile="<?php echo htmlspecialchars($admission['profile_image'] ?? ''); ?>"
                                                            data-name="<?php echo htmlspecialchars($admission['student_name']); ?>"
                                                            data-college="<?php echo htmlspecialchars($admission['college']); ?>"
                                                            data-phone="<?php echo htmlspecialchars($admission['phone_number']); ?>"
@@ -421,6 +440,7 @@ try {
                                                            data-start="<?php echo htmlspecialchars($admission['start_date']); ?>"
                                                            data-end="<?php echo htmlspecialchars($admission['end_date']); ?>"
                                                            data-skills="<?php echo htmlspecialchars($admission['key_skills']); ?>"
+                                                           data-certificate="<?php echo htmlspecialchars($admission['certificate_file'] ?? ''); ?>"
                                                            title="Edit Student Admission">
                                                             <i class="bi bi-pencil-fill text-warning"></i>
                                                         </a>
@@ -482,6 +502,12 @@ try {
                             <div class="col-12">
                                 <label for="profile_image" class="form-label font-weight-semibold">Profile Photo (Optional)</label>
                                 <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="certificate_file" class="form-label font-weight-semibold"><i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i>Certificate Document (PDF / Image - Optional)</label>
+                                <input type="file" class="form-control" id="certificate_file" name="certificate_file" accept=".pdf,image/*">
+                                <span class="text-muted small ms-1">Upload verified student certificate (PDF or Image file).</span>
                             </div>
 
                             <div class="col-md-6">
@@ -609,12 +635,29 @@ try {
 
                     <div class="modal-body p-4">
                         
+                        <!-- Student Profile Header Banner -->
+                        <div class="p-3 bg-light rounded-4 border mb-4 d-flex align-items-center gap-3">
+                            <div id="edit_profile_avatar_wrapper">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1" id="edit_profile_header_name">Student Name</h5>
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-1 rounded-pill font-monospace fw-bold" id="edit_profile_header_id">GDEDU1001</span>
+                            </div>
+                        </div>
+                        
                         <div class="row g-3">
                             
                             <div class="col-12">
-                                <label for="edit_profile_image" class="form-label font-weight-semibold">Update Profile Image (Optional)</label>
+                                <label for="edit_profile_image" class="form-label font-weight-semibold"><i class="bi bi-person-circle me-1 text-primary"></i>Update Profile Image (Optional)</label>
                                 <input type="file" class="form-control" id="edit_profile_image" name="profile_image" accept="image/*">
                                 <span class="text-muted small ms-1">Leave blank to keep existing profile photo.</span>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="edit_certificate_file" class="form-label font-weight-semibold"><i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i>Upload / Replace Certificate Document (PDF / Image)</label>
+                                <input type="file" class="form-control" id="edit_certificate_file" name="certificate_file" accept=".pdf,image/*">
+                                <div id="edit_certificate_preview" class="mt-1"></div>
                             </div>
 
                             <div class="col-md-6">
@@ -739,14 +782,39 @@ try {
 
         editButtons.forEach(btn => {
             btn.addEventListener('click', function() {
+                const studentName = this.getAttribute('data-name') || '';
+                const studentId = this.getAttribute('data-student-id') || '';
+                const profileVal = (this.getAttribute('data-profile') || '').trim();
+
+                document.getElementById('edit_profile_header_name').textContent = studentName;
+                document.getElementById('edit_profile_header_id').textContent = 'ID: ' + studentId;
+
+                const avatarWrapper = document.getElementById('edit_profile_avatar_wrapper');
+                if (profileVal !== '') {
+                    avatarWrapper.innerHTML = '<img src="../../uploads/profiles/' + profileVal + '" alt="Profile" class="rounded-circle border object-fit-cover shadow-sm" style="width: 56px; height: 56px;">';
+                } else {
+                    const nameParts = studentName.trim().split(' ');
+                    let initials = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
+                    if (nameParts.length > 1) initials += nameParts[nameParts.length - 1].charAt(0).toUpperCase();
+                    avatarWrapper.innerHTML = '<div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm" style="width: 56px; height: 56px; background: linear-gradient(135deg, #0d7298, #0f172a); font-size: 18px;">' + (initials || 'GD') + '</div>';
+                }
+
                 document.getElementById('edit_id').value = this.getAttribute('data-id');
-                document.getElementById('edit_student_name').value = this.getAttribute('data-name');
+                document.getElementById('edit_student_name').value = studentName;
                 document.getElementById('edit_phone_number').value = this.getAttribute('data-phone');
                 document.getElementById('edit_email_id').value = this.getAttribute('data-email');
                 document.getElementById('edit_course_applied').value = this.getAttribute('data-course');
                 document.getElementById('edit_start_date').value = this.getAttribute('data-start');
                 document.getElementById('edit_end_date').value = this.getAttribute('data-end');
                 document.getElementById('edit_key_skills').value = this.getAttribute('data-skills');
+
+                const certVal = (this.getAttribute('data-certificate') || '').trim();
+                const certPreview = document.getElementById('edit_certificate_preview');
+                if (certVal !== '') {
+                    certPreview.innerHTML = '<span class="badge bg-success-subtle text-success border px-2.5 py-1 rounded-pill me-2"><i class="bi bi-check-circle me-1"></i>Current: ' + certVal + '</span> <a href="../../uploads/certificates/' + certVal + '" target="_blank" class="small text-primary text-decoration-none fw-bold"><i class="bi bi-eye-fill me-1"></i>View Current Certificate</a>';
+                } else {
+                    certPreview.innerHTML = '<span class="text-muted small">No certificate document uploaded yet.</span>';
+                }
 
                 const collegeVal = this.getAttribute('data-college') || '';
                 document.getElementById('edit_college').value = collegeVal;

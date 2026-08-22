@@ -16,10 +16,10 @@ $current_year = date('Y');
                 </div>
                 <p class="tagline">Empowering minds through quality education and innovative learning solutions. Join us in shaping the future of education.</p>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com/gdedutechofficial/" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.linkedin.com/company/gd-edu-tech/" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://www.instagram.com/gd_edu__tech/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.youtube.com/@GDEDUTECH" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/gdedutechofficial/" target="_blank" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.linkedin.com/company/gd-edu-tech/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/gd_edu__tech/" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/917204626299?text=Hello%20GD%20Edu%20Tech%2C%20I%20would%20like%20to%20know%20more%20about%20your%20courses%20and%20training%20programs." target="_blank" rel="noopener" class="social-icon" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
 
                 <div class="ventures">

@@ -42,7 +42,7 @@
         .scholarship-hero-image {
             max-width: 100%;
             height: auto;
-            max-height: 468px;
+            /* max-height: 468px; */
             object-fit: contain;
             filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.18));
             transition: transform 0.4s ease;

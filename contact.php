@@ -87,17 +87,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         </body>
         </html>';
 
-        // Headers
+        // Headers for native mail()
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= "From: GD Edu Tech Contact <noreply@gdedutech.com>" . "\r\n";
         $headers .= "Reply-To: " . $name . " <" . $email . ">" . "\r\n";
         $headers .= "X-Mailer: PHP/" . phpversion();
 
-        // Send Email
-        @mail($to_email, $email_subject, $html_content, $headers);
+        $mailSent = false;
 
-        $message = 'Thank you! Your message has been submitted and sent to gdedutech24@gmail.com.';
+        // 1. Try PHPMailer if composer vendor/autoload.php exists
+        if (file_exists('./vendor/autoload.php')) {
+            require_once './vendor/autoload.php';
+            if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+                try {
+                    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+                    // Standard PHP Mailer dispatch
+                    $mail->isMail();
+                    $mail->setFrom('noreply@gdedutech.com', 'GD Edu Tech Contact');
+                    $mail->addAddress($to_email, 'GD Edu Tech Admin');
+                    $mail->addReplyTo($email, $name);
+                    $mail->isHTML(true);
+                    $mail->Subject = $email_subject;
+                    $mail->Body    = $html_content;
+                    $mail->AltBody = "Name: $name\nEmail: $email\nPhone: $phone\nSubject: $subject\nMessage: $message_text";
+                    $mailSent = $mail->send();
+                } catch (\Exception $e) {
+                    $mailSent = false;
+                }
+            }
+        }
+
+        // 2. Native PHP mail() fallback
+        if (!$mailSent) {
+            $mailSent = @mail($to_email, $email_subject, $html_content, $headers);
+        }
+
+        $message = 'Thank you! Your message has been submitted';
         $message_class = 'alert-success';
     }
 }
@@ -473,7 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                                     <li><a href="https://www.facebook.com/people/GD-EDU-TECH/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
                                     <li><a href="https://www.linkedin.com/company/gd-edu-tech/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
                                     <li><a href="https://www.instagram.com/gd_edu__tech/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                                    <li><a href="https://www.youtube.com/@GDEDUTECH" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+                                    <li><a href="https://wa.me/917204626299?text=Hello%20GD%20Edu%20Tech%2C%20I%20have%20an%20inquiry%20regarding%20course%20admissions." target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
                                 </ul>
                             </div>
                         </div>

@@ -734,10 +734,6 @@ try {
                                     <i class="bi bi-lightning-charge-fill text-warning"></i> Quick Management
                                 </h5>
 
-                                <a href="./Users/Messages" class="btn-action-gradient w-100">
-                                    <i class="bi bi-megaphone-fill"></i>
-                                    <span>Broadcast Announcement</span>
-                                </a>
 
                                 <a href="./Users/add_user.php" class="btn btn-outline-dark rounded-4 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2" style="border-radius: 12px !important;">
                                     <i class="bi bi-person-plus-fill text-primary"></i>

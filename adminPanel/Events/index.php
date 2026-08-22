@@ -149,12 +149,12 @@ $events_q = mysqli_query($conn, "SELECT e.*, u.username AS organizer_name FROM E
                                         <div class="card-body p-4 d-flex flex-column flex-grow-1">
                                             <h5 class="fw-bold text-dark mb-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
                                             
-                                            <div class="text-secondary small mb-2 d-flex align-items-center gap-1.5">
+                                            <div class="text-secondary small mb-2 d-flex align-items-center gap-2">
                                                 <i class="bi bi-geo-alt-fill text-danger"></i>
                                                 <span><?php echo htmlspecialchars($ev['location'] ?: 'GD Edu Tech Campus'); ?></span>
                                             </div>
 
-                                            <div class="text-secondary small mb-3 d-flex align-items-center gap-1.5">
+                                            <div class="text-secondary small mb-3 d-flex align-items-center gap-2">
                                                 <i class="bi bi-calendar-event-fill text-primary"></i>
                                                 <span><?php echo !empty($ev['event_date']) ? date('M d, Y', strtotime($ev['event_date'])) : 'TBD'; ?> · <?php echo htmlspecialchars(substr($ev['event_time'] ?? '', 0, 5)); ?></span>
                                             </div>
