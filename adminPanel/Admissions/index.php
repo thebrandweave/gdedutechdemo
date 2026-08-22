@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -20,7 +19,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 require_once '../../Configurations/config.php';
 
 // Get admin details from session
-$admin_name = $_SESSION['first_name'] ?? 'Admin';
+$admin_name = $_SESSION['username'] ?? 'Admin';
 
 // Handle deletion
 if (isset($_GET['delete']) && isset($_GET['id'])) {
@@ -58,8 +57,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
         // Handle Image Upload using Absolute Path
         $profile_image = NULL;
         if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
-            
-            // __DIR__ gets the exact current folder path to prevent relative path mapping errors
             $upload_dir = rtrim(__DIR__, '/\\') . '/../../uploads/profiles/';
             
             if (!is_dir($upload_dir)) {
@@ -75,7 +72,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['add_admission
                 if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $destination)) {
                     $profile_image = $new_filename;
                 } else {
-                    // If it still fails, it will tell you exactly where it tried to save it
                     $_SESSION['message'] = "Upload Failed: Could not save to " . $destination;
                     $_SESSION['message_type'] = "danger";
                 }
@@ -149,13 +145,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['edit_admissio
             if(in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                 $new_filename = 'profile_' . time() . '_' . rand(1000, 9999) . '.' . $file_ext;
                 if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $upload_dir . $new_filename)) {
-                    // This creates the SQL snippet for the image
                     $image_update_query = "profile_image = '$new_filename', ";
                 }
             }
         }
         
-        // ADDED $image_update_query right below SET
         $update_query = "UPDATE student_admissions SET 
                          $image_update_query
                          student_name = '$student_name', 
@@ -206,162 +200,92 @@ if (!$result) {
 try {
     $courses_query = mysqli_query($conn, "SELECT course_id, title FROM Courses ORDER BY title ASC");
 } catch (mysqli_sql_exception $e) {
-    // Fails silently, allowing the rest of the HTML table to load
     $courses_query = false; 
 }
-
 ?>
 
-
 <!DOCTYPE html>
-<!-- GDEDU ADMISSIONS VERSION 2 -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Admission - GD Edu Tech</title>
+    <title>Student Admissions & Certifications - GD Edu Tech Admin</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../Images/Logos/GD_Only_logo.png">
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .table-bordered th, .table-bordered td {
-            border: 1px solid #dee2e6 !important;
-        }
-        thead.table-light th {
-            background-color: #f1f5f9 !important;
-            border-bottom: 2px solid #cbd5e1 !important;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-          <!-- Sidebar -->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-                    <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-decoration-none text-black">
-                        <span class="fs-5 fw-bolder d-flex align-items-center">
-                            <img height="35px" src="../images/edutechLogo.png">
-                            &nbsp; GD Edu Tech
-                        </span>
+    <div class="container-fluid p-0">
+        <div class="row g-0 flex-nowrap">
+            
+            <!-- Executive Sidebar -->
+            <div class="col-auto col-md-3 col-xl-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar d-flex flex-column">
+                <div class="p-3 border-bottom border-white border-opacity-10 d-flex align-items-center gap-2">
+                    <img height="36" src="../../Images/Logos/GD_Only_logo.png" alt="GD Logo">
+                    <div>
+                        <div class="fw-bold text-white fs-6">GD Edu Tech</div>
+                        <span class="text-success small fw-semibold">● System Online</span>
+                    </div>
+                </div>
+
+                <ul class="nav nav-pills flex-column mb-auto p-2 w-100" id="menu">
+                    <li class="w-100"><a href="../" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                    <li class="w-100"><a href="../Categories/" class="nav-link"><i class="bi bi-grid me-2"></i> Categories</a></li>
+                    <li class="w-100"><a href="../Admissions/" class="nav-link active"><i class="bi bi-person-plus me-2"></i> Student Admission</a></li>
+                    <li class="w-100"><a href="../Courses/" class="nav-link"><i class="bi bi-book me-2"></i> Courses</a></li>
+                    <li class="w-100"><a href="../Applications/" class="nav-link"><i class="bi bi-journal-text me-2"></i> Scholarships</a></li>
+                    <li class="w-100"><a href="../Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="../social_links.php" class="nav-link"><i class="bi bi-link-45deg me-2"></i> Social Links</a></li>
+                    <li class="w-100"><a href="../Schedule/index.php" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
+                    <li class="w-100"><a href="../feedback/feedback.php" class="nav-link"><i class="bi bi-chat-square-heart me-2"></i> Feedback</a></li>
+                    <li class="w-100"><a href="../Messages/index.php" class="nav-link"><i class="bi bi-chat-dots me-2"></i> Messages</a></li>
+                    <li class="w-100"><a href="../FAQ/" class="nav-link"><i class="bi bi-question-circle me-2"></i> FAQ</a></li>
+                    <li class="w-100"><a href="../Users/" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>
+                    <li class="w-100"><a href="../manage_qr.php" class="nav-link"><i class="bi bi-qr-code me-2"></i> Payment QR</a></li>
+                    <li class="w-100"><a href="../pending_payments.php" class="nav-link"><i class="bi bi-credit-card me-2"></i> Pending Payments</a></li>
+                </ul>
+
+                <div class="p-3 border-top border-white border-opacity-10 mt-auto">
+                    <a href="../logout.php" class="nav-link text-danger justify-content-center m-0">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
                     </a>
-
-                    <ul class="nav nav-pills flex-column w-100">
-
-                        <li class="w-100">
-                            <a href="../" class="nav-link">
-                                <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                            </a>
-                        </li>
-
-                        <li class="w-100">
-                            <a href="../Categories/" class="nav-link">
-                                <i class="bi bi-grid me-2"></i> Categories
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Admissions/" class="nav-link active">
-                                <i class="bi bi-person-plus me-2"></i> Student Admission
-                            </a>
-                        </li>
-   <li class="w-100">
-                            <a href="../Courses/" class="nav-link">
-                                <i class="bi bi-book me-2"></i> Courses
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Applications/" class="nav-link">
-                                <i class="bi bi-journal-text me-2"></i> Scholarship Applications
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Events/" class="nav-link">
-                                <i class="bi bi-calendar2-event me-2"></i> Events
-                            </a>
-                        </li>
-                             <li class="w-100">
-                            <a href="../social_links.php" class="nav-link">
-                                <i class="bi bi-link-45deg me-2"></i> Social Links
-                            </a>
-                        </li>
-                     
-                        <li class="w-100 dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-lightbulb me-2"></i> Quick Links
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="quizDropdown">
-                                <li><a class="dropdown-item" href="../index.php">Career portal</a></li>
-                                <li><a class="dropdown-item" href="./Shop/shop.php">Shop</a></li>
-                            </ul>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Schedule/" class="nav-link">
-                                <i class="bi bi-calendar-event me-2"></i> Schedule
-                            </a>
-                        </li>
-                         <li class="w-100">
-                            <a href="../feedback/feedback.php" class="nav-link">
-                                <i class="bi bi-chat-square-heart"></i> Feedback
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Messages/" class="nav-link">
-                                <i class="bi bi-chat-dots me-2"></i> Messages
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../FAQ/" class="nav-link">
-                                <i class="bi bi-question-circle me-2"></i> FAQ
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../Users/" class="nav-link">
-                                <i class="bi bi-people me-2"></i> Users
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../manage_qr.php" class="nav-link">
-                                <i class="bi bi-qr-code me-2"></i> Payment QR
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="../pending_payments.php" class="nav-link">
-                                <i class="bi bi-credit-card me-2"></i> Pending Payments
-                            </a>
-                        </li>
-                        <li class="w-100 mt-auto">
-                            <a href="../logout.php" class="nav-link text-danger">
-                                <i class="bi bi-box-arrow-right me-2"></i> Logout
-                            </a>
-                        </li>
-
-                    </ul>
                 </div>
             </div>
 
-            <!-- Main Content -->
-            <div class="col py-3" style="min-width: 0;">
-                <div class="container-fluid">
-                    <!-- Header -->
-                    <div class="row mb-4">
-                        <div class="col">
-                            <h2>Student Admission</h2>
-                            <p class="text-muted">Manage student admissions and generate unique certification IDs</p>
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdmissionModal">
-                                <i class="bi bi-plus-circle me-2"></i>New Admission
-                            </button>
-                        </div>
-                    </div>  
+            <!-- Main Content Area -->
+            <div class="col main-content min-vh-100 d-flex flex-column" style="min-width: 0; overflow-x: hidden;">
+                
+                <!-- Top Header Bar -->
+                <div class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div>
+                        <h4 class="fw-bold text-dark mb-0">Student Admissions & Certification IDs</h4>
+                        <span class="text-muted small">Manage admitted students, issue verification QR codes, and generate certificates</span>
+                    </div>
 
+                    <button type="button" class="btn btn-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#addAdmissionModal">
+                        <i class="bi bi-person-plus-fill me-2"></i>New Student Admission
+                    </button>
+                </div>
+
+                <div class="p-4 flex-grow-1">
+                    
                     <!-- Alert Messages -->
                     <?php if (isset($_SESSION['message'])): ?>
-                        <div class="alert alert-<?php echo $_SESSION['message_type']; ?> alert-dismissible fade show" role="alert">
+                        <div class="alert alert-<?php echo $_SESSION['message_type']; ?> alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-info-circle-fill fs-5"></i>
+                                <span class="fw-semibold"><?php echo htmlspecialchars($_SESSION['message']); ?></span>
+                            </div>
                             <?php
-                            echo htmlspecialchars($_SESSION['message']);
                             unset($_SESSION['message']);
                             unset($_SESSION['message_type']);
                             ?>
@@ -369,89 +293,124 @@ try {
                         </div>
                     <?php endif; ?>
 
-                    <!-- Admissions Table -->
-                    <div class="card shadow-sm">
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover mb-0" style="font-size: 0.85rem;">
-                                    <thead class="table-light text-nowrap">
-                                        <tr>
-                                            <th class="py-2 px-2 fw-bold">Student ID</th>
-                                            <th class="py-2 px-2 fw-bold text-center">QR Code</th>
-                                            <th class="py-2 px-2 fw-bold text-center">Profile</th>
-                                            <th class="py-2 px-2 fw-bold">Name</th>
-                                            <th class="py-2 px-2 fw-bold">College</th>
-                                            <th class="py-2 px-2 fw-bold">Phone Number</th>
-                                            <th class="py-2 px-2 fw-bold">Email</th>
-                                            <th class="py-2 px-2 fw-bold">Course Applied</th>
-                                            <th class="py-2 px-2 fw-bold">Internship</th>
-                                            <th class="py-2 px-2 fw-bold">Start Date</th>
-                                            <th class="py-2 px-2 fw-bold">End Date</th>
-                                            <th class="py-2 px-2 fw-bold">Key Skills</th>
-                                            <th class="py-2 px-2 fw-bold">Date Admitted</th>
-                                            <th class="py-2 px-2 fw-bold text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if (mysqli_num_rows($result) > 0): ?>
-                                            <?php while ($admission = mysqli_fetch_assoc($result)): ?>
-                                                <tr class="align-middle">
-                                                    <td class="px-2 fw-bold text-primary"><?php echo htmlspecialchars($admission['student_id']); ?></td>
-                                                    <td class="px-2 text-center">
-                                                        <?php 
-                                                        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? '') == 443) ? "https://" : "http://";
-                                                        $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
-                                                        $path = (strpos($domain, 'gdedutech.com') !== false) ? "/verify_certificate.php" : "/gdedutechdemo/verify_certificate.php";
-                                                        $verify_url = $protocol . $domain . $path . "?student_id=" . $admission['student_id'];
-                                                        $qr_api_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($verify_url);
-                                                        ?>
-                                                        <div class="d-flex flex-column align-items-center gap-1">
-                                                            <a href="<?php echo $verify_url; ?>" target="_blank" title="Verify Certificate (Opens in new tab)">
-                                                                <img src="<?php echo $qr_api_url; ?>" alt="QR Code" style="width: 35px; height: 35px; border: 1px solid #dee2e6; border-radius: 4px; padding: 2px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">
-                                                            </a>
-                                                            <a href="download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-light py-0 px-1 border" style="font-size: 0.6rem;" title="Download QR Code">
-                                                                <i class="bi bi-download"></i> Download
-                                                            </a>
+                    <!-- Admissions Table Card -->
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                        <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom">
+                            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-patch-check-fill text-primary me-2"></i>Admitted Students Registry</h6>
+                            <span class="badge bg-primary bg-opacity-10 text-primary border px-3 py-1.5 rounded-pill fw-semibold">
+                                Total Admissions: <?php echo $total_records; ?>
+                            </span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th class="text-center">Verification QR</th>
+                                        <th class="text-center">Profile</th>
+                                        <th>Student Info</th>
+                                        <th>College / Campus</th>
+                                        <th>Course Applied</th>
+                                        <th>Internship Status</th>
+                                        <th>Duration</th>
+                                        <th>Key Skills</th>
+                                        <th>Admitted On</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (mysqli_num_rows($result) > 0): ?>
+                                        <?php while ($admission = mysqli_fetch_assoc($result)): ?>
+                                            <tr>
+                                                <td>
+                                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2.5 py-1.5 rounded-pill font-monospace fw-bold fs-6">
+                                                        <?php echo htmlspecialchars($admission['student_id']); ?>
+                                                    </span>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <?php 
+                                                    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? '') == 443) ? "https://" : "http://";
+                                                    $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
+                                                    $path = (strpos($domain, 'gdedutech.com') !== false) ? "/verify_certificate.php" : "/gdedutechdemo/verify_certificate.php";
+                                                    $verify_url = $protocol . $domain . $path . "?student_id=" . $admission['student_id'];
+                                                    $qr_api_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($verify_url);
+                                                    ?>
+                                                    <div class="d-flex flex-column align-items-center gap-1">
+                                                        <a href="<?php echo $verify_url; ?>" target="_blank" title="Verify Certificate (Opens live tab)">
+                                                            <img src="<?php echo $qr_api_url; ?>" alt="QR Code" class="rounded-2 border p-1 bg-white shadow-sm" style="width: 40px; height: 40px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">
+                                                        </a>
+                                                        <a href="download_qr.php?student_id=<?php echo urlencode($admission['student_id']); ?>" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill mt-1" style="font-size: 0.65rem;" title="Download QR Image">
+                                                            <i class="bi bi-download me-0.5"></i> QR
+                                                        </a>
+                                                    </div>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <?php if (!empty($admission['profile_image'])): ?>
+                                                        <img src="../../uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" class="rounded-circle border object-fit-cover shadow-sm" style="width: 44px; height: 44px;">
+                                                    <?php else: ?>
+                                                        <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center mx-auto shadow-sm" style="width: 44px; height: 44px; background: linear-gradient(135deg, #0d7298, #0f172a); font-size: 14px;">
+                                                            <?php 
+                                                                $name_parts = explode(' ', trim($admission['student_name']));
+                                                                $initials = strtoupper(substr($name_parts[0], 0, 1));
+                                                                if (count($name_parts) > 1) {
+                                                                    $initials .= strtoupper(substr(end($name_parts), 0, 1));
+                                                                }
+                                                                echo htmlspecialchars($initials);
+                                                            ?>
                                                         </div>
-                                                    </td>
-                                                    <td class="px-2 text-center align-middle">
-    <?php if (!empty($admission['profile_image'])): ?>
-        <img src="../../uploads/profiles/<?php echo htmlspecialchars($admission['profile_image']); ?>" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #dee2e6;">
-    <?php else: ?>
-        <div style="width: 40px; height: 40px; border-radius: 50%; background:linear-gradient(90deg, #0078a8, #d15b50) ;color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; margin: 0 auto;">
-            <?php 
-                $name_parts = explode(' ', trim($admission['student_name']));
-                // Get first letter of first name
-                $initials = strtoupper(substr($name_parts[0], 0, 1));
-                // Get first letter of last name if it exists
-                if (count($name_parts) > 1) {
-                    $initials .= strtoupper(substr(end($name_parts), 0, 1));
-                }
-                echo htmlspecialchars($initials);
-            ?>
-        </div>
-    <?php endif; ?>
-</td>
-                                                    <td class="px-2"><?php echo htmlspecialchars($admission['student_name']); ?></td>
-                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?>">
-                                                        <div class="text-truncate" style="max-width: 120px;"><?php echo htmlspecialchars($admission['college'] ?: 'Independent'); ?></div>
-                                                    </td>
-                                                    <td class="px-2 text-nowrap"><?php echo htmlspecialchars($admission['phone_number']); ?></td>
-                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['email_id']); ?>">
-                                                        <div class="text-truncate" style="max-width: 100px;"><?php echo htmlspecialchars($admission['email_id']); ?></div>
-                                                    </td>
-                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['course_applied']); ?>">
-                                                        <div class="text-truncate" style="max-width: 110px;"><?php echo htmlspecialchars($admission['course_applied']); ?></div>
-                                                    </td>
-                                                    <td class="px-2"><span class="badge bg-secondary" style="font-size: 0.75rem;"><?php echo htmlspecialchars($admission['internship'] ?: 'None'); ?></span></td>
-                                                    <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo $admission['start_date'] ? date('d M Y', strtotime($admission['start_date'])) : '-'; ?></td>
-                                                    <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo $admission['end_date'] ? date('d M Y', strtotime($admission['end_date'])) : '-'; ?></td>
-                                                    <td class="px-2" title="<?php echo htmlspecialchars($admission['key_skills']); ?>">
-                                                        <div class="text-truncate" style="max-width: 100px;"><?php echo htmlspecialchars($admission['key_skills'] ?? '-'); ?></div>
-                                                    </td>
-                                                    <td class="px-2 text-nowrap" style="font-size: 0.8rem;"><?php echo date('d M Y', strtotime($admission['created_at'])); ?></td>
-                                                    <td class="px-4 text-center text-nowrap">
-                                                        <a href="javascript:void(0)" class="text-primary action-icon me-2 edit-btn" 
+                                                    <?php endif; ?>
+                                                </td>
+
+                                                <td>
+                                                    <strong class="text-dark fs-6 d-block"><?php echo htmlspecialchars($admission['student_name']); ?></strong>
+                                                    <span class="text-muted small"><i class="bi bi-telephone-fill text-success me-1"></i><?php echo htmlspecialchars($admission['phone_number']); ?></span>
+                                                    <span class="text-muted small d-block"><i class="bi bi-envelope-fill text-primary me-1"></i><?php echo htmlspecialchars($admission['email_id']); ?></span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge bg-light text-dark border px-2.5 py-1 rounded-pill">
+                                                        <?php echo htmlspecialchars($admission['college'] ?: 'Independent Student'); ?>
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="fw-semibold text-primary"><?php echo htmlspecialchars($admission['course_applied']); ?></span>
+                                                </td>
+
+                                                <td>
+                                                    <?php if (!empty($admission['internship']) && strtolower($admission['internship']) !== 'none'): ?>
+                                                        <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2.5 py-1 rounded-pill">
+                                                            <i class="bi bi-briefcase me-1"></i><?php echo htmlspecialchars($admission['internship']); ?>
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill">None</span>
+                                                    <?php endif; ?>
+                                                </td>
+
+                                                <td class="text-muted small text-nowrap">
+                                                    <?php echo $admission['start_date'] ? date('M d, Y', strtotime($admission['start_date'])) : '-'; ?> <br>
+                                                    <span class="text-secondary">to <?php echo $admission['end_date'] ? date('M d, Y', strtotime($admission['end_date'])) : '-'; ?></span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="text-secondary small" title="<?php echo htmlspecialchars($admission['key_skills']); ?>">
+                                                        <?php 
+                                                            $skills = htmlspecialchars($admission['key_skills'] ?? '-');
+                                                            echo (strlen($skills) > 25) ? substr($skills, 0, 25) . '...' : $skills;
+                                                        ?>
+                                                    </span>
+                                                </td>
+
+                                                <td class="text-muted small text-nowrap">
+                                                    <?php echo date('M d, Y', strtotime($admission['created_at'])); ?>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="d-flex justify-content-center gap-1">
+                                                        <a href="javascript:void(0)" class="action-icon edit-btn" 
                                                            data-id="<?php echo $admission['id']; ?>"
                                                            data-name="<?php echo htmlspecialchars($admission['student_name']); ?>"
                                                            data-college="<?php echo htmlspecialchars($admission['college']); ?>"
@@ -461,258 +420,301 @@ try {
                                                            data-internship="<?php echo htmlspecialchars($admission['internship']); ?>"
                                                            data-start="<?php echo htmlspecialchars($admission['start_date']); ?>"
                                                            data-end="<?php echo htmlspecialchars($admission['end_date']); ?>"
-                                                           data-skills="<?php echo htmlspecialchars($admission['key_skills']); ?>">
-                                                            <i class="bi bi-pencil-square text-primary"></i>
+                                                           data-skills="<?php echo htmlspecialchars($admission['key_skills']); ?>"
+                                                           title="Edit Student Admission">
+                                                            <i class="bi bi-pencil-fill text-warning"></i>
                                                         </a>
-                                                        <a href="index.php?delete=1&id=<?php echo $admission['id']; ?>" class="text-danger action-icon" onclick="return confirm('Are you sure you want to delete this admission record?')">
-                                                            <i class="bi bi-trash text-danger"></i>
+                                                        <a href="index.php?delete=1&id=<?php echo $admission['id']; ?>" class="action-icon text-danger" onclick="return confirm('Are you sure you want to delete this admission record?')" title="Delete Record">
+                                                            <i class="bi bi-trash-fill"></i>
                                                         </a>
-                                                    </td>
-                                                </tr>
-                                            <?php endwhile; ?>
-                                        <?php else: ?>
-                                            <tr>
-                                                <td colspan="13" class="text-center py-4 text-muted">No admission records found.</td>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="11" class="text-center py-4 text-muted">No student admission records found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
-                        <nav class="mt-4">
+                        <nav aria-label="Page navigation" class="mt-4">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
-                                    <a class="page-link" href="index.php?page=<?php echo $page - 1; ?>">Previous</a>
-                                </li>
                                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                                    <li class="page-item <?php echo $page == $i ? 'active' : ''; ?>">
-                                        <a class="page-link" href="index.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                        <a class="page-link rounded-3 mx-1" href="?page=<?php echo $i; ?>">
+                                            <?php echo $i; ?>
+                                        </a>
                                     </li>
                                 <?php endfor; ?>
-                                <li class="page-item <?php echo $page >= $total_pages ? 'disabled' : ''; ?>">
-                                    <a class="page-link" href="index.php?page=<?php echo $page + 1; ?>">Next</a>
-                                </li>
                             </ul>
                         </nav>
                     <?php endif; ?>
 
                 </div>
             </div>
+
         </div>
     </div>
 
     <!-- Add Admission Modal -->
     <div class="modal fade" id="addAdmissionModal" tabindex="-1" aria-labelledby="addAdmissionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
                 <form action="index.php" method="POST" enctype="multipart/form-data">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="addAdmissionModalLabel">New Student Admission</h5>
+                    <div class="modal-header bg-dark text-white p-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-person-plus-fill text-primary fs-4"></i>
+                            <h5 class="modal-title fw-bold" id="addAdmissionModalLabel">New Student Admission</h5>
+                        </div>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-    <label for="profile_image" class="form-label">Profile Image (Optional)</label>
-    <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
-</div>
-                        <div class="mb-3">
-                            <label for="student_name" class="form-label">Student Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="student_name" name="student_name" required placeholder="Enter student full name">
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" role="switch" id="has_college" onchange="toggleOptionalField('', 'college')">
-                                <label class="form-check-label" for="has_college">Student is attending a College</label>
+
+                    <div class="modal-body p-4">
+                        
+                        <div class="row g-3">
+                            
+                            <div class="col-12">
+                                <label for="profile_image" class="form-label font-weight-semibold">Profile Photo (Optional)</label>
+                                <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
                             </div>
-                            <div id="college_wrapper" style="display: none;">
-                                <label for="college" class="form-label">College</label>
-                                <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name">
+
+                            <div class="col-md-6">
+                                <label for="student_name" class="form-label font-weight-semibold">Student Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="student_name" name="student_name" required placeholder="Full Student Name">
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
-                            <input type="tel" class="form-control" id="phone_number" name="phone_number" required placeholder="Enter phone number">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email_id" class="form-label">Email ID <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email_id" name="email_id" required placeholder="Enter email address">
-                        </div>
-                        <div class="mb-3">
-                            <label for="course_applied" class="form-label">Course Applied <span class="text-danger">*</span></label>
-                            <select class="form-select" id="course_applied" name="course_applied" required>
-                                <option value="" disabled selected>Select a course</option>
-                                <option value="Full Stack Development">Full Stack Development</option>
-                                <option value="Architectural Design ">Architectural Design</option>
-                                <option value="Interior Design ">Interior Design</option>
-                                <option value="Digital Marketing">Digital Marketing</option>
-                                <option value="Graphic Design & Video Editing">Graphic Design & Video Editing</option>
-                                <option value="Graphic Design ">Graphic Design </option>
-                                <option value="Visual Media Program">Visual Media Program</option>
-                                <option value="Tally & GST">Tally & GST</option>
-                                <option value="Advanced Excel">Advanced Excel</option>
-                                <?php 
-                                $listed_courses = [
-                                    "Full Stack Development",
-                                    "Architectural Design ",
-                                    "Interior Design ",
-                                    "Digital Marketing",
-                                    "Graphic Design & Video Editing",
-                                    "Graphic Design",
-                                    "Visual Media Program",
-                                    "Tally & GST",
-                                    "Advanced Excel"
-                                ];
-                                if ($courses_query && mysqli_num_rows($courses_query) > 0): 
-                                    mysqli_data_seek($courses_query, 0);
-                                    while ($course = mysqli_fetch_assoc($courses_query)): 
-                                        if (!in_array($course['title'], $listed_courses)):
-                                ?>
-                                            <option value="<?php echo htmlspecialchars($course['title']); ?>">
-                                                <?php echo htmlspecialchars($course['title']); ?>
-                                            </option>
-                                <?php 
-                                        endif;
-                                    endwhile; 
-                                endif; 
-                                ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" role="switch" id="has_internship" onchange="toggleOptionalField('', 'internship')">
-                                <label class="form-check-label" for="has_internship">Internship Included</label>
+
+                            <div class="col-md-6">
+                                <label for="phone_number" class="form-label font-weight-semibold">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" required placeholder="e.g. +91 9876543210">
                             </div>
-                            <div id="internship_wrapper" style="display: none;">
-                                <label for="internship" class="form-label">Internship Details</label>
-                                <input type="text" class="form-control" id="internship" name="internship" placeholder="e.g. Yes (3 Months), Completed">
+
+                            <div class="col-md-6">
+                                <label for="email_id" class="form-label font-weight-semibold">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email_id" name="email_id" required placeholder="student@example.com">
                             </div>
+
+                            <div class="col-md-6">
+                                <label for="course_applied" class="form-label font-weight-semibold">Course Applied <span class="text-danger">*</span></label>
+                                <select class="form-select" id="course_applied" name="course_applied" required>
+                                    <option value="" disabled selected>Select course...</option>
+                                    <option value="Full Stack Development">Full Stack Development</option>
+                                    <option value="Architectural Design">Architectural Design</option>
+                                    <option value="Interior Design">Interior Design</option>
+                                    <option value="Digital Marketing">Digital Marketing</option>
+                                    <option value="Graphic Design & Video Editing">Graphic Design & Video Editing</option>
+                                    <option value="Graphic Design">Graphic Design</option>
+                                    <option value="Visual Media Program">Visual Media Program</option>
+                                    <option value="Tally & GST">Tally & GST</option>
+                                    <option value="Advanced Excel">Advanced Excel</option>
+                                    <?php 
+                                    $listed_courses = [
+                                        "Full Stack Development",
+                                        "Architectural Design",
+                                        "Interior Design",
+                                        "Digital Marketing",
+                                        "Graphic Design & Video Editing",
+                                        "Graphic Design",
+                                        "Visual Media Program",
+                                        "Tally & GST",
+                                        "Advanced Excel"
+                                    ];
+                                    if ($courses_query && mysqli_num_rows($courses_query) > 0): 
+                                        mysqli_data_seek($courses_query, 0);
+                                        while ($course = mysqli_fetch_assoc($courses_query)): 
+                                            if (!in_array($course['title'], $listed_courses)):
+                                    ?>
+                                                <option value="<?php echo htmlspecialchars($course['title']); ?>">
+                                                    <?php echo htmlspecialchars($course['title']); ?>
+                                                </option>
+                                    <?php 
+                                            endif;
+                                        endwhile; 
+                                    endif; 
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="has_college" onchange="toggleOptionalField('', 'college')">
+                                        <label class="form-check-label font-weight-semibold" for="has_college">Attending College / University</label>
+                                    </div>
+                                    <div id="college_wrapper" class="mt-2" style="display: none;">
+                                        <input type="text" class="form-control" id="college" name="college" placeholder="Enter College / Institute Name">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="has_internship" onchange="toggleOptionalField('', 'internship')">
+                                        <label class="form-check-label font-weight-semibold" for="has_internship">Includes Practical Internship</label>
+                                    </div>
+                                    <div id="internship_wrapper" class="mt-2" style="display: none;">
+                                        <input type="text" class="form-control" id="internship" name="internship" placeholder="e.g. Yes (3 Months), Live Projects">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="start_date" class="form-label font-weight-semibold">Start Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="start_date" name="start_date" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="end_date" class="form-label font-weight-semibold">End Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="end_date" name="end_date" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="key_skills" class="form-label font-weight-semibold">Key Skills / Tools <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="key_skills" name="key_skills" required placeholder="e.g. HTML5, CSS3, React, Node.js, Figma">
+                            </div>
+
                         </div>
-                        <div class="mb-3">
-                            <label for="start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="start_date" name="start_date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="end_date" class="form-label">End Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="end_date" name="end_date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="key_skills" class="form-label">Key Software/Skills <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="key_skills" name="key_skills" required placeholder="e.g. HTML, CSS, JS, Photoshop, Figma">
-                        </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" name="add_admission" class="btn btn-primary">Submit & Admit</button>
+
+                    <div class="modal-footer bg-light p-3 border-top">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="add_admission" class="btn btn-primary px-4 fw-bold">Submit & Admit Student</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-<div class="modal fade" id="editAdmissionModal" tabindex="-1" aria-labelledby="editAdmissionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+    <!-- Edit Admission Modal -->
+    <div class="modal fade" id="editAdmissionModal" tabindex="-1" aria-labelledby="editAdmissionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
                 <form action="index.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="edit_id">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="editAdmissionModalLabel">Edit Student Admission</h5>
+
+                    <div class="modal-header bg-dark text-white p-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-pencil-square text-warning fs-4"></i>
+                            <h5 class="modal-title fw-bold" id="editAdmissionModalLabel">Edit Student Admission</h5>
+                        </div>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="edit_profile_image" class="form-label">Update Profile Image (Optional)</label>
-                            <input type="file" class="form-control" id="edit_profile_image" name="profile_image" accept="image/*">
-                            <small class="text-muted">Leave blank to keep the current image.</small>
-                        </div>
+
+                    <div class="modal-body p-4">
                         
-                        <div class="mb-3">
-                            <label for="edit_student_name" class="form-label">Student Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_student_name" name="student_name" required placeholder="Enter student full name">
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" role="switch" id="edit_has_college" onchange="toggleOptionalField('edit_', 'college')">
-                                <label class="form-check-label" for="edit_has_college">Student is attending a College</label>
+                        <div class="row g-3">
+                            
+                            <div class="col-12">
+                                <label for="edit_profile_image" class="form-label font-weight-semibold">Update Profile Image (Optional)</label>
+                                <input type="file" class="form-control" id="edit_profile_image" name="profile_image" accept="image/*">
+                                <span class="text-muted small ms-1">Leave blank to keep existing profile photo.</span>
                             </div>
-                            <div id="edit_college_wrapper" style="display: none;">
-                                <label for="edit_college" class="form-label">College</label>
-                                <input type="text" class="form-control" id="edit_college" name="college" placeholder="Enter college name">
+
+                            <div class="col-md-6">
+                                <label for="edit_student_name" class="form-label font-weight-semibold">Student Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="edit_student_name" name="student_name" required>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
-                            <input type="tel" class="form-control" id="edit_phone_number" name="phone_number" required placeholder="Enter phone number">
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_email_id" class="form-label">Email ID <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="edit_email_id" name="email_id" required placeholder="Enter email address">
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_course_applied" class="form-label">Course Applied <span class="text-danger">*</span></label>
-                            <select class="form-select" id="edit_course_applied" name="course_applied" required>
-                                <option value="" disabled selected>Select a course</option>
-                                <option value="Full Stack Development">Full Stack Development</option>
-                                <option value="Architectural Design course">Architectural Design course</option>
-                                <option value="Interior Design course">Interior Design course</option>
-                                <option value="Digital Marketing">Digital Marketing</option>
-                                <option value="Graphic Design & Video Editing">Graphic Design & Video Editing</option>
-                                <option value="Photography & Camera Handling">Photography & Camera Handling</option>
-                                <?php 
-                                if ($courses_query && mysqli_num_rows($courses_query) > 0): 
-                                    mysqli_data_seek($courses_query, 0);
-                                    while ($course = mysqli_fetch_assoc($courses_query)): 
-                                        if (!in_array($course['title'], $listed_courses)):
-                                ?>
-                                            <option value="<?php echo htmlspecialchars($course['title']); ?>">
-                                                <?php echo htmlspecialchars($course['title']); ?>
-                                            </option>
-                                <?php 
-                                        endif;
-                                    endwhile; 
-                                endif; 
-                                ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" role="switch" id="edit_has_internship" onchange="toggleOptionalField('edit_', 'internship')">
-                                <label class="form-check-label" for="edit_has_internship">Internship Included</label>
+
+                            <div class="col-md-6">
+                                <label for="edit_phone_number" class="form-label font-weight-semibold">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="edit_phone_number" name="phone_number" required>
                             </div>
-                            <div id="edit_internship_wrapper" style="display: none;">
-                                <label for="edit_internship" class="form-label">Internship Details</label>
-                                <input type="text" class="form-control" id="edit_internship" name="internship" placeholder="e.g. Yes (3 Months), Completed">
+
+                            <div class="col-md-6">
+                                <label for="edit_email_id" class="form-label font-weight-semibold">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="edit_email_id" name="email_id" required>
                             </div>
+
+                            <div class="col-md-6">
+                                <label for="edit_course_applied" class="form-label font-weight-semibold">Course Applied <span class="text-danger">*</span></label>
+                                <select class="form-select" id="edit_course_applied" name="course_applied" required>
+                                    <option value="" disabled selected>Select course...</option>
+                                    <option value="Full Stack Development">Full Stack Development</option>
+                                    <option value="Architectural Design">Architectural Design</option>
+                                    <option value="Interior Design">Interior Design</option>
+                                    <option value="Digital Marketing">Digital Marketing</option>
+                                    <option value="Graphic Design & Video Editing">Graphic Design & Video Editing</option>
+                                    <option value="Photography & Camera Handling">Photography & Camera Handling</option>
+                                    <?php 
+                                    if ($courses_query && mysqli_num_rows($courses_query) > 0): 
+                                        mysqli_data_seek($courses_query, 0);
+                                        while ($course = mysqli_fetch_assoc($courses_query)): 
+                                            if (!in_array($course['title'], $listed_courses)):
+                                    ?>
+                                                <option value="<?php echo htmlspecialchars($course['title']); ?>">
+                                                    <?php echo htmlspecialchars($course['title']); ?>
+                                                </option>
+                                    <?php 
+                                            endif;
+                                        endwhile; 
+                                    endif; 
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="edit_has_college" onchange="toggleOptionalField('edit_', 'college')">
+                                        <label class="form-check-label font-weight-semibold" for="edit_has_college">Attending College / University</label>
+                                    </div>
+                                    <div id="edit_college_wrapper" class="mt-2" style="display: none;">
+                                        <input type="text" class="form-control" id="edit_college" name="college">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="edit_has_internship" onchange="toggleOptionalField('edit_', 'internship')">
+                                        <label class="form-check-label font-weight-semibold" for="edit_has_internship">Includes Practical Internship</label>
+                                    </div>
+                                    <div id="edit_internship_wrapper" class="mt-2" style="display: none;">
+                                        <input type="text" class="form-control" id="edit_internship" name="internship">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="edit_start_date" class="form-label font-weight-semibold">Start Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="edit_start_date" name="start_date" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="edit_end_date" class="form-label font-weight-semibold">End Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="edit_end_date" name="end_date" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="edit_key_skills" class="form-label font-weight-semibold">Key Skills / Tools <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="edit_key_skills" name="key_skills" required>
+                            </div>
+
                         </div>
-                        <div class="mb-3">
-                            <label for="edit_start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="edit_start_date" name="start_date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_end_date" class="form-label">End Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="edit_end_date" name="end_date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_key_skills" class="form-label">Key Software/Skills <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_key_skills" name="key_skills" required placeholder="e.g. HTML, CSS, JS, Photoshop, Figma">
-                        </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" name="edit_admission" class="btn btn-primary">Save Changes</button>
+
+                    <div class="modal-footer bg-light p-3 border-top">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="edit_admission" class="btn btn-warning px-4 fw-bold text-dark">Save Changes</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-    // Shows/hides the College or Internship input based on its toggle switch.
-    // prefix is '' for the Add modal, 'edit_' for the Edit modal.
     function toggleOptionalField(prefix, field) {
         const checkbox = document.getElementById(prefix + 'has_' + field);
         const wrapper = document.getElementById(prefix + field + '_wrapper');
@@ -728,7 +730,6 @@ try {
         const editButtons = document.querySelectorAll('.edit-btn');
         const editModal = new bootstrap.Modal(document.getElementById('editAdmissionModal'));
 
-        // Reset the Add Admission modal's toggles every time it's opened
         document.getElementById('addAdmissionModal').addEventListener('show.bs.modal', function() {
             document.getElementById('has_college').checked = false;
             document.getElementById('has_internship').checked = false;
@@ -747,22 +748,20 @@ try {
                 document.getElementById('edit_end_date').value = this.getAttribute('data-end');
                 document.getElementById('edit_key_skills').value = this.getAttribute('data-skills');
 
-                // College toggle: only switch it on and show the field if a value already exists
                 const collegeVal = this.getAttribute('data-college') || '';
                 document.getElementById('edit_college').value = collegeVal;
                 document.getElementById('edit_has_college').checked = collegeVal.trim() !== '';
                 toggleOptionalField('edit_', 'college');
                 if (collegeVal.trim() !== '') {
-                    document.getElementById('edit_college').value = collegeVal; // restore after toggle clears it
+                    document.getElementById('edit_college').value = collegeVal;
                 }
 
-                // Internship toggle: only switch it on and show the field if a value already exists
                 const internshipVal = this.getAttribute('data-internship') || '';
                 document.getElementById('edit_internship').value = internshipVal;
                 document.getElementById('edit_has_internship').checked = internshipVal.trim() !== '';
                 toggleOptionalField('edit_', 'internship');
                 if (internshipVal.trim() !== '') {
-                    document.getElementById('edit_internship').value = internshipVal; // restore after toggle clears it
+                    document.getElementById('edit_internship').value = internshipVal;
                 }
 
                 editModal.show();
@@ -771,5 +770,4 @@ try {
     });
     </script>
 </body>
-
 </html>

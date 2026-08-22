@@ -11,257 +11,164 @@ require_once '../../Configurations/config.php';
 
 // Fetch applications
 $result = mysqli_query($conn, "SELECT * FROM applications ORDER BY id DESC");
-
-// Admin name
 $admin_name = $_SESSION['username'] ?? 'Admin';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Applications - Admin Panel</title>
-
-<!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-<!-- Your custom CSS -->
-<link rel="stylesheet" href="../css/style.css">
-
-<style>
-    .photo {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid #ddd;
-    }
-    .anyclass{
-        background-color:#b1e7fb;
-        padding: 8px;
-        border-radius: 4px;
-        text-decoration: none;
-        color:black;
-        font-weight: bold;
-    }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarship Applications - GD Edu Tech Admin</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../Images/Logos/GD_Only_logo.png">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
-
-<div class="container-fluid">
-        <div class="row flex-nowrap"> <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar"> 
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100">
-        <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-decoration-none text-black">
-            <span class="fs-5 fw-bolder d-flex align-items-center">
-                <img height="35px" src="../images/edutechLogo.png">
-                &nbsp; GD Edu Tech
-            </span>
-        </a>
-
-        <ul class="nav nav-pills flex-column w-100">
-
-            <li class="w-100">
-                <a href="../" class="nav-link">
-                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                </a>
-            </li>
-
-            <li class="w-100">
-                <a href="../Categories/" class="nav-link">
-                    <i class="bi bi-grid me-2"></i> Categories
-                </a>
-            </li>
-<li class="w-100">
-                <a href="../Admissions/" class="nav-link">
-                    <i class="bi bi-person-plus me-2"></i> Student Admission
-                </a>
-            </li>
-  <li class="w-100">
-                <a href="../Courses/" class="nav-link">
-                    <i class="bi bi-book me-2"></i> Courses
-                </a>
-            </li>
-            <li class="w-100">
-                <a href="../Applications/" class="nav-link active">
-                    <i class="bi bi-journal-text me-2"></i> Scholarship Applications
-                </a>
-            </li>
-             <li class="w-100">
-                <a href="../Events/" class="nav-link">
-                    <i class="bi bi-calendar2-event me-2"></i> Events
-                </a>
-            </li>
-               <li class="w-100">
-                            <a href="../social_links.php" class="nav-link">
-                                <i class="bi bi-link-45deg me-2"></i> Social Links
-                            </a>
-                        </li>
-            <li class="w-100 dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-lightbulb me-2"></i> Quick Links
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="quizDropdown">
-                                <li><a class="dropdown-item" href="../index.php">Career portal</a></li>
-                                <li><a class="dropdown-item" href="./Shop/shop.php">Shop</a></li>
-                            </ul>
-            </li>
-            <li class="w-100">
-                <a href="../Schedule/" class="nav-link">
-                    <i class="bi bi-calendar-event me-2"></i> Schedule
-                </a>
-            </li>
-             <li class="w-100">
-                            <a href="../feedback/feedback.php" class="nav-link">
-                                <i class="bi bi-chat-square-heart"></i> Feedback
-                            </a>
-                        </li>
-            <li class="w-100">
-                <a href="../Messages/" class="nav-link">
-                    <i class="bi bi-chat-dots me-2"></i> Messages
-                </a>
-            </li>
-            <li class="w-100">
-                <a href="../FAQ/" class="nav-link">
-                    <i class="bi bi-question-circle me-2"></i> FAQ
-                </a>
-            </li>
-            <li class="w-100">
-                <a href="../Users/" class="nav-link">
-                    <i class="bi bi-people me-2"></i> Users
-                </a>
-            </li>
-            <li class="w-100">
-                <a href="../manage_qr.php" class="nav-link">
-                    <i class="bi bi-qr-code me-2"></i> Payment QR
-                </a>
-            </li>
-            <li class="w-100">
-                <a href="../pending_payments.php" class="nav-link">
-                    <i class="bi bi-credit-card me-2"></i> Pending Payments
-                </a>
-            </li>
-            <li class="w-100 mt-auto">
-                <a href="../logout.php" class="nav-link text-danger">
-                    <i class="bi bi-box-arrow-right me-2"></i> Logout
-                </a>
-            </li>
-
-            <li class="w-100">
-                <a href="../logout.php" class="nav-link text-danger">
-                    <i class="bi bi-box-arrow-right me-2"></i> Logout
-                </a>
-            </li>
+    <div class="container-fluid p-0">
+        <div class="row g-0 flex-nowrap">
             
+            <!-- Executive Sidebar -->
+            <div class="col-auto col-md-3 col-xl-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar d-flex flex-column">
+                <div class="p-3 border-bottom border-white border-opacity-10 d-flex align-items-center gap-2">
+                    <img height="36" src="../../Images/Logos/GD_Only_logo.png" alt="GD Logo">
+                    <div>
+                        <div class="fw-bold text-white fs-6">GD Edu Tech</div>
+                        <span class="text-success small fw-semibold">● System Online</span>
+                    </div>
+                </div>
 
-        </ul>
+                <ul class="nav nav-pills flex-column mb-auto p-2 w-100" id="menu">
+                    <li class="w-100"><a href="../" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                    <li class="w-100"><a href="../Categories/" class="nav-link"><i class="bi bi-grid me-2"></i> Categories</a></li>
+                    <li class="w-100"><a href="../Admissions/" class="nav-link"><i class="bi bi-person-plus me-2"></i> Student Admission</a></li>
+                    <li class="w-100"><a href="../Courses/" class="nav-link"><i class="bi bi-book me-2"></i> Courses</a></li>
+                    <li class="w-100"><a href="../Applications/" class="nav-link active"><i class="bi bi-journal-text me-2"></i> Scholarships</a></li>
+                    <li class="w-100"><a href="../Events/" class="nav-link"><i class="bi bi-calendar2-event me-2"></i> Events</a></li>
+                    <li class="w-100"><a href="../social_links.php" class="nav-link"><i class="bi bi-link-45deg me-2"></i> Social Links</a></li>
+                    <li class="w-100"><a href="../Schedule/index.php" class="nav-link"><i class="bi bi-calendar-event me-2"></i> Schedule</a></li>
+                    <li class="w-100"><a href="../feedback/feedback.php" class="nav-link"><i class="bi bi-chat-square-heart me-2"></i> Feedback</a></li>
+                    <li class="w-100"><a href="../Messages/index.php" class="nav-link"><i class="bi bi-chat-dots me-2"></i> Messages</a></li>
+                    <li class="w-100"><a href="../FAQ/" class="nav-link"><i class="bi bi-question-circle me-2"></i> FAQ</a></li>
+                    <li class="w-100"><a href="../Users/" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>
+                    <li class="w-100"><a href="../manage_qr.php" class="nav-link"><i class="bi bi-qr-code me-2"></i> Payment QR</a></li>
+                    <li class="w-100"><a href="../pending_payments.php" class="nav-link"><i class="bi bi-credit-card me-2"></i> Pending Payments</a></li>
+                </ul>
+
+                <div class="p-3 border-top border-white border-opacity-10 mt-auto">
+                    <a href="../logout.php" class="nav-link text-danger justify-content-center m-0">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col min-vh-100 d-flex flex-column">
+                
+                <!-- Top Header -->
+                <div class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h4 class="fw-bold text-dark mb-0">Scholarship Applications</h4>
+                        <span class="text-muted small">Review submitted student scholarship application forms and attached documents</span>
+                    </div>
+                </div>
+
+                <div class="p-4 flex-grow-1">
+                    
+                    <!-- Applications Card -->
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                        <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom">
+                            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-journal-check text-primary me-2"></i>Application Submissions Queue</h6>
+                            <span class="badge bg-primary bg-opacity-10 text-primary border px-3 py-1.5 rounded-pill fw-semibold">
+                                <?php echo mysqli_num_rows($result); ?> Applications
+                            </span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Applicant Photo</th>
+                                        <th>Full Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Course Applied</th>
+                                        <th>Medium</th>
+                                        <th>Languages</th>
+                                        <th>School / College</th>
+                                        <th>Attachment Document</th>
+                                        <th>Applied Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if ($result && mysqli_num_rows($result) > 0): ?>
+                                        <?php while($row = mysqli_fetch_assoc($result)): ?>
+                                            <tr>
+                                                <td>
+                                                    <?php if (!empty($row['photo'])): ?>
+                                                        <a href="../../uploads/<?php echo htmlspecialchars($row['photo']); ?>" target="_blank">
+                                                            <img src="../../uploads/<?php echo htmlspecialchars($row['photo']); ?>" alt="Photo" class="rounded-3 border object-fit-cover" style="width: 44px; height: 44px;">
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold" style="width: 44px; height: 44px;">
+                                                            <i class="bi bi-person fs-5"></i>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <strong class="text-dark fs-6"><?php echo htmlspecialchars($row['first_name'] . " " . $row['last_name']); ?></strong>
+                                                </td>
+                                                <td>
+                                                    <span class="font-monospace text-dark"><?php echo htmlspecialchars($row['phone']); ?></span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill">
+                                                        <?php echo htmlspecialchars($row['course']); ?>
+                                                    </span>
+                                                </td>
+                                                <td><?php echo htmlspecialchars($row['medium'] ?? '-'); ?></td>
+                                                <td><?php echo htmlspecialchars($row['languages'] ?? '-'); ?></td>
+                                                <td>
+                                                    <span class="text-secondary small"><?php echo htmlspecialchars($row['school'] ?? '-'); ?></span>
+                                                </td>
+                                                <td>
+                                                    <?php if (!empty($row['document'])): ?>
+                                                        <a href="../../uploads/<?php echo htmlspecialchars($row['document']); ?>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 font-weight-semibold">
+                                                            <i class="bi bi-file-earmark-pdf me-1"></i> View Document
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <span class="text-muted small">No Document</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td class="text-muted small">
+                                                    <?php echo !empty($row['created_at']) ? date('M d, Y', strtotime($row['created_at'])) : '-'; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="9" class="text-center py-4 text-muted">No applications submitted yet.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 
-<!-- ✅ Main Content -->
-<div class="col py-3">
-<div class="container-fluid">
-
-<!-- Header -->
-<div class="row mb-4">
-    <div class="col">
-        <h2>Applications</h2>
-        <p class="text-muted">Manage student applications</p>
-    </div>
-</div>
-
-<!-- Table -->
-<div class="card shadow-sm">
-<div class="card-body p-0">
-<div class="table-responsive">
-
-<table class="table table-hover mb-0">
-<thead class="bg-primary text-white">
-<tr>
-    <th>Name</th>
-    <th>Phone</th>
-    <th>Course</th>
-    <th>Medium</th>
-    <th>Languages</th>
-    <th>School</th>
-    <th>Document</th>
-    <th>Date</th>
-    <th>Photo</th>
-</tr>
-</thead>
-
-<tbody>
-<?php while($row = mysqli_fetch_assoc($result)) { ?>
-<tr class="align-middle">
-
-<td>
-    <?php echo $row['first_name']." ".$row['last_name']; ?>
-</td>
-
-<td><?php echo $row['phone']; ?></td>
-<td><?php echo $row['course']; ?></td>
-<td><?php echo $row['medium']; ?></td>
-<td><?php echo $row['languages']; ?></td>
-<td><?php echo $row['school']; ?></td>
-
-<td>
-<?php if($row['document']) { ?>
-<a href="../../uploads/<?php echo $row['document']; ?>" target="_blank"
-   class="anyclass">
-   <i class="bi bi-file-earmark"></i> View
-</a>
-<?php } ?>
-
-</td>
-
-
-
-
-<td>
-<?php echo date('Y-m-d', strtotime($row['created_at'])); ?>
-</td>
-<td>
-<?php if($row['photo']) { ?>
-<a href="../../uploads/<?php echo $row['photo']; ?>" target="_blank" class="d-block mt-1">
-    <img src="../../uploads/<?php echo $row['photo']; ?>" 
-         alt="Profile Photo" 
-         class="photo">
-         
-    
-      
-    </a>
-<?php } else { ?>
-    <div class="photo" style="background: #eee; display: flex; align-items: center; justify-content: center;">
-        <i class="bi bi-person"></i>
-    </div>
-<?php } ?>
-</td>
-</tr>
-<?php } ?>
-</tbody>
-
-</table>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

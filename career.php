@@ -536,7 +536,7 @@ if ($result) {
                                     </div>
                                     <div class="job-salary-pill ms-2">
                                         <span class="text-primary fw-bold fs-6"><?php echo htmlspecialchars($job['salary_range']); ?></span>
-                                        <span class="text-muted small d-block">per annum</span>
+                                        <span class="text-muted small d-block">per month</span>
                                     </div>
                                 </div>
                                 
@@ -595,7 +595,7 @@ if ($result) {
                                 <?php endif; ?>
                                 <div class="d-flex flex-wrap align-items-center text-white-50 small gap-3">
                                     <span><i class="bi bi-geo-alt-fill text-warning me-1"></i><strong class="text-white">Location:</strong> <?php echo htmlspecialchars($job['location']); ?></span>
-                                    <span><i class="bi bi-cash-stack text-success me-1"></i><strong class="text-white">Salary:</strong> <?php echo htmlspecialchars($job['salary_range']); ?> per annum</span>
+                                    <span><i class="bi bi-cash-stack text-success me-1"></i><strong class="text-white">Salary:</strong> <?php echo htmlspecialchars($job['salary_range']); ?> per month</span>
                                 </div>
                             </div>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
