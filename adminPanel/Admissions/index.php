@@ -18,6 +18,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // Database connection
 require_once '../../Configurations/config.php';
 
+// Auto-migration: Ensure certificate_file column exists in student_admissions table
+try {
+    $col_check = mysqli_query($conn, "SHOW COLUMNS FROM student_admissions LIKE 'certificate_file'");
+    if ($col_check && mysqli_num_rows($col_check) === 0) {
+        @mysqli_query($conn, "ALTER TABLE student_admissions ADD COLUMN certificate_file VARCHAR(255) NULL AFTER profile_image");
+    }
+} catch (Throwable $e) {
+    // Fail silently if table alter fails
+}
+
 // Get admin details from session
 $admin_name = $_SESSION['username'] ?? 'Admin';
 

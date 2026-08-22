@@ -562,37 +562,8 @@ if (isset($_GET['student_id'])) {
                              $certExt = strtolower(pathinfo($admission['certificate_file'], PATHINFO_EXTENSION));
                              $certPath = "./uploads/certificates/" . htmlspecialchars($admission['certificate_file']);
                          ?>
-                             <div class="card shadow-sm border-0 rounded-4 overflow-hidden mt-4" data-aos="fade-up">
-                                 <div class="card-header bg-white py-3 px-4 d-flex align-items-center justify-content-between border-bottom flex-wrap gap-2">
-                                     <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
-                                         <?php if ($certExt === 'pdf'): ?>
-                                             <i class="bi bi-file-earmark-pdf-fill text-danger fs-5"></i> Official PDF Certificate Document
-                                         <?php else: ?>
-                                             <i class="bi bi-patch-check-fill text-primary fs-5"></i> Official Certificate Document
-                                         <?php endif; ?>
-                                     </h6>
-                                     <a href="<?php echo $certPath; ?>" download class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold">
-                                         <i class="bi bi-download me-1"></i> Download Certificate
-                                     </a>
-                                 </div>
-                                 <div class="card-body p-3 text-center bg-light">
-                                     <?php if ($certExt === 'pdf'): ?>
-                                         <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm" style="max-height: 600px; min-height: 450px;">
-                                             <object data="<?php echo $certPath; ?>" type="application/pdf" width="100%" height="100%">
-                                                 <iframe src="<?php echo $certPath; ?>" width="100%" height="100%">
-                                                     <p>Your browser does not support embedded PDFs. <a href="<?php echo $certPath; ?>" target="_blank">Click here to view PDF certificate.</a></p>
-                                                 </iframe>
-                                             </object>
-                                         </div>
-                                         <div class="mt-3">
-                                             <a href="<?php echo $certPath; ?>" target="_blank" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold">
-                                                 <i class="bi bi-box-arrow-up-right me-1.5"></i> Open PDF Certificate in Full View
-                                             </a>
-                                         </div>
-                                     <?php else: ?>
-                                         <img src="<?php echo $certPath; ?>" alt="Verified Certificate" class="img-fluid rounded-3 shadow-sm border" style="max-height: 650px;">
-                                     <?php endif; ?>
-                                 </div>
+                            
+                            
                              </div>
                          <?php endif; ?>
 
