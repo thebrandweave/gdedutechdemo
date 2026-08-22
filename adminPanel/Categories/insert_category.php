@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <img height="36" src="../../Images/Logos/GD_Only_logo.png" alt="GD Logo">
                     <div>
                         <div class="fw-bold text-white fs-6">GD Edu Tech</div>
-                        <span class="text-success small fw-semibold">● System Online</span>
+                      
                     </div>
                 </div>
 

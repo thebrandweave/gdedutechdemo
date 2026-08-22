@@ -741,7 +741,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                 <div class="offline-course-card"
                     onclick="openCourseModal(
                         'Photography & Camera Handling',
-                        './Images/Others/designer.jpeg',
+                        './Images/Others/designer1.jpeg',
                         'Learn professional photography, camera handling, studio lighting techniques, framing, and photo composition.',
                         ['Offline', '16 Weeks', 'Certification']
                     )"
@@ -782,10 +782,10 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
     <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden" style="background: #ffffff;">
       
       <!-- Modal Header -->
-      <div class="modal-header border-0 text-white p-4 position-relative" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;">
+      <div class="modal-header border-0 text-white p-4 position-relative" style="background: linear-gradient(112deg, #adc8e3 0%, #cadbec 38%, #dca3ab 80%, #dca3ab 100%) !important;">
         <div class="pe-4">
-          <span class="badge bg-primary bg-opacity-20 text-info border border-info border-opacity-25 rounded-pill px-3 py-1 mb-2 font-monospace small">GD Edu Tech Program</span>
-          <h4 class="modal-title fw-bold text-white mb-0" id="courseTitle">Course Overview</h4>
+          <span class="badge bg-primary bg-opacity-20 text-white border border-info border-opacity-25 rounded-pill px-3 py-1 mb-2 font-monospace small">GD Edu Tech Program</span>
+          <h4 class="modal-title fw-bold text-black mb-0" id="courseTitle">Course Overview</h4>
         </div>
         <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -796,7 +796,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
           
           <!-- Thumbnail Column -->
           <div class="col-12 col-md-5">
-            <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="min-height: 220px; background-color: #f8fafc;">
+            <div class="position-relative rounded-4 overflow-hidden " style="min-height: 220px; ">
               <img id="courseImage" src="" class="w-100 h-100 object-fit-cover rounded-4" style="max-height: 240px;" alt="Course Thumbnail" onerror="this.src='./Images/Logos/GD_Only_logo.png';">
             </div>
           </div>
@@ -841,11 +841,11 @@ function openCourseModal(title, image, description, badges) {
         badges.forEach(badge => {
             let badgeClass = "bg-white bg-opacity-10 text-secondary border";
             if (badge === "Offline") {
-                badgeClass = "bg-white bg-opacity-10 text-success border border-success-subtle";
+                badgeClass = "bg-white bg-opacity-10 text-black border border-success-subtle";
             } else if (badge === "16 Weeks" || badge.includes("Week") || badge.includes("Month")) {
                 badgeClass = "bg-white bg-opacity-20 text-dark border border-warning-subtle";
             } else if (badge === "Certification" || badge.includes("Certif")) {
-                badgeClass = "bg-info bg-opacity-10 text-info border border-info-subtle";
+                badgeClass = "bg-info bg-opacity-10 text-black border border-info-subtle";
             }
             badgesHTML += `<span class="badge ${badgeClass} rounded-pill px-2.5 py-1 small me-1 mb-1">${badge}</span>`;
         });

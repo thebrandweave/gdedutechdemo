@@ -206,7 +206,7 @@ function renderEventsGridHTML($sectionsData, $eventCategories, $selectedCategory
     ?>
         <div class="row g-4 my-2">
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 text-center py-5 px-3 bg-light">
+                <div class="card border-0  rounded-4 text-center py-5 px-3 ">
                     <div class="card-body">
                         <i class="bi bi-calendar-x display-3 text-secondary opacity-50 d-block mb-3"></i>
                         <h4 class="fw-bold text-black mb-2">No Events Found</h4>

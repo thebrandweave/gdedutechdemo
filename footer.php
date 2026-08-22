@@ -93,7 +93,7 @@ $current_year = date('Y');
                         <div class="contact-text">gdedutech24@gmail.com</div>
                     </li>
                     <li>
-                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
                         <div class="contact-text">+91 7204626299</div>
                     </li>
                 </ul>

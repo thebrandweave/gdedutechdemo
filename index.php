@@ -219,15 +219,15 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 /* --- Offline Courses Section Styling --- */
 
 .offline-courses-section {
-    padding: 60px 0;
+    /* padding: 60px 0; */
     background-color: #f8f9fa; /* Light background for the section */
 }
 
 .offline-banner-card {
-    background: #ffffff;
-    border-radius: 24px;
+    background: #f8f9fa;
+    /* border-radius: 24px; */
     padding: 50px 30px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+    /* box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04); */
 }
 
 .highlight-gold {
@@ -861,8 +861,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 </section>
 
     <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container hero-container">
+    <section class="features-section" id="features" style="padding-top: 60px; ">
+        <div class="container hero-container " ">
             <!-- Section Header -->
             <div class="section-header text-center mb-5" data-aos="fade-up">
                 <div class="promo-badge mb-3">
@@ -1094,6 +1094,132 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                             </div>
                         </div>
 
+                        <!-- Duplicate Course 1 for Infinite Swiper Loop -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/web.jpg" alt="Full Stack Development" class="thumb-img">
+                                        <span class="category-pill-badge">Full Stack</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Full Stack Development</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Course 2 for Infinite Swiper Loop -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/architecture.jpg" alt="Architectural Design Course" class="thumb-img">
+                                        <span class="category-pill-badge">Architecture</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Architectural Design Course</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Course 3 for Infinite Swiper Loop -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/int.jpg" alt="Interior Design Course" class="thumb-img">
+                                        <span class="category-pill-badge">Interior Design</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Interior Design Course</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Course 4 for Infinite Swiper Loop -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/market.jpg" alt="Digital Marketing" class="thumb-img">
+                                        <span class="category-pill-badge">Digital Marketing</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Digital Marketing</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Course 5 for Infinite Swiper Loop -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/designer.jpg" alt="Graphic Design & Video Editing" class="thumb-img">
+                                        <span class="category-pill-badge">Graphic Design</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Graphic Design & Video Editing</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Course 6 for Infinite Swiper Loop -->
+                        <div class="swiper-slide">
+                            <div class="course-grid-card">
+                                <a href="courses.php" class="course-card-link">
+                                    <div class="card-corner-ribbon"></div>
+                                    <div class="course-card-thumb">
+                                        <img src="./Images/Others/designer1.jpeg" onerror="this.src='./Images/Others/designer.jpg'" alt="Photography & Camera Handling" class="thumb-img">
+                                        <span class="category-pill-badge">Photography</span>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h3 class="course-card-title">Photography & Camera Handling</h3>
+                                        <div class="course-card-btn">
+                                            <span>View Details</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom-ribbon"></div>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- Swiper Navigation & Pagination -->
@@ -1105,7 +1231,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
         </div>
     </section>
 
-    <!-- Swiper Initialization Script (4 Grid Layout) -->
+    <!-- Swiper Initialization Script (4 Grid Layout with Endless Infinite Loop) -->
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         if (typeof Swiper !== 'undefined') {
@@ -1113,6 +1239,8 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                 slidesPerView: 1,
                 spaceBetween: 20,
                 loop: true,
+                grabCursor: true,
+                speed: 800,
                 autoplay: {
                     delay: 3000,
                     disableOnInteraction: false,
@@ -1203,7 +1331,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
 
     <!-- 3D Auto-Sliding Floating Cards Gallery Section -->
-    <section class="gallery-hero-section position-relative py-5 overflow-hidden" id="gallery">
+    <section class="gallery-hero-section position-relative py-2 overflow-hidden" id="gallery">
         <div class="container text-center position-relative z-4">
             <div class="promo-badge mb-3 d-inline-flex align-items-center px-3 py-1 rounded-pill mobgall">
                 <i class="bi bi-camera-fill text-warning me-2"></i> OUR COMMUNITY IN ACTION

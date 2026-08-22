@@ -414,15 +414,13 @@ try {
                     <img src="./images/edutechLogo.png" onerror="this.onerror=null; this.src='../Images/Logos/GD_Only_logo.png';" alt="GD Logo">
                     <div>
                         <div class="sidebar-brand-title">GD Edu Tech</div>
-                        <span class="text-white-50 small d-flex align-items-center gap-1.5" style="font-size: 0.72rem;">
-                            <span class="status-dot-online"></span> System Online
-                        </span>
+                      
                     </div>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="py-2 flex-grow-1">
-                    <div class="nav-menu-label">Main Navigation</div>
+                  
                     
                     <a href="./" class="nav-link active">
                         <i class="bi bi-speedometer2"></i>

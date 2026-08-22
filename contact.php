@@ -9,13 +9,13 @@ $message = '';
 $message_class = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $phone = trim($_POST['phone']);
-    $subject = trim($_POST['subject']);
-    $message_text = trim($_POST['message']); // Now optional
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $subject = trim($_POST['subject'] ?? '');
+    $message_text = trim($_POST['message'] ?? ''); // Optional
     
-    // 1. Check required fields (removed $message_text from here)
+    // 1. Check required fields
     if (empty($name) || empty($email) || empty($phone) || empty($subject)) {
         $message = 'Please fill out all required fields.';
         $message_class = 'alert-danger';
@@ -31,8 +31,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         $message_class = 'alert-danger';
     } 
     else {
-        // Logic to save to DB or send mail goes here
-        $message = 'Thank you! Your message has been sent successfully.';
+        // Target Admin Email ID
+        $to_email = "gdedutech24@gmail.com";
+        $email_subject = "New Inquiry: " . $subject . " - " . $name;
+        
+        // HTML Formatted Email Body
+        $html_content = '
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body { font-family: "Segoe UI", Arial, sans-serif; background-color: #f8fafc; color: #0f172a; margin: 0; padding: 20px; }
+                .card { background: #ffffff; padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+                .header { background: linear-gradient(135deg, #0d7298 0%, #065d7d 100%); color: #ffffff; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; }
+                .header h2 { margin: 0; font-size: 20px; font-weight: 700; }
+                .header p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
+                .field { margin-bottom: 16px; }
+                .label { font-weight: 700; color: #475569; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
+                .val { font-size: 15px; color: #0f172a; font-weight: 500; background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1; }
+                .val a { color: #0d7298; text-decoration: none; font-weight: 600; }
+                .footer { font-size: 12px; color: #94a3b8; margin-top: 25px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <div class="header">
+                    <h2>GD Edu Tech Website Inquiry</h2>
+                    <p>New Contact Form Submission</p>
+                </div>
+                <div class="field">
+                    <span class="label">Sender Name</span>
+                    <div class="val">' . htmlspecialchars($name) . '</div>
+                </div>
+                <div class="field">
+                    <span class="label">Email Address</span>
+                    <div class="val"><a href="mailto:' . htmlspecialchars($email) . '">' . htmlspecialchars($email) . '</a></div>
+                </div>
+                <div class="field">
+                    <span class="label">Phone Number</span>
+                    <div class="val"><a href="tel:' . htmlspecialchars($phone) . '">' . htmlspecialchars($phone) . '</a></div>
+                </div>
+                <div class="field">
+                    <span class="label">Subject</span>
+                    <div class="val">' . htmlspecialchars($subject) . '</div>
+                </div>
+                <div class="field">
+                    <span class="label">Message</span>
+                    <div class="val" style="white-space: pre-wrap;">' . htmlspecialchars($message_text ?: 'No message provided.') . '</div>
+                </div>
+                <div class="footer">
+                    Sent from GD Edu Tech Contact Form &bull; ' . date('d M Y, h:i A') . '
+                </div>
+            </div>
+        </body>
+        </html>';
+
+        // Headers
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: GD Edu Tech Contact <noreply@gdedutech.com>" . "\r\n";
+        $headers .= "Reply-To: " . $name . " <" . $email . ">" . "\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion();
+
+        // Send Email
+        @mail($to_email, $email_subject, $html_content, $headers);
+
+        $message = 'Thank you! Your message has been submitted and sent to gdedutech24@gmail.com.';
         $message_class = 'alert-success';
     }
 }
