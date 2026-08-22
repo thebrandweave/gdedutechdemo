@@ -98,12 +98,7 @@ $current_year = date('Y');
                     </li>
                 </ul>
                 
-                <h3 class="footer-heading">Newsletter</h3>
-                <p class="tagline">Subscribe to our newsletter for updates</p>
-                <form class="newsletter-form">
-                    <input type="email" class="newsletter-input" placeholder="Your email address">
-                    <button type="submit" class="newsletter-button"><i class="fas fa-paper-plane"></i></button>
-                </form>
+             
             </div>
         </div>
 

@@ -71,6 +71,17 @@ if (isset($_POST['submit_feedback'])) {
             margin: 0;
         }
 
+        .back-home-btn {
+            color: #94a3b8;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .back-home-btn:hover {
+            color: #ffffff;
+            transform: translateX(-3px);
+        }
+
         .feedback-card {
             background: #ffffff;
             border-radius: 24px;
@@ -85,6 +96,28 @@ if (isset($_POST['submit_feedback'])) {
             padding: 32px 30px;
             text-align: center;
             position: relative;
+        }
+
+        .btn-header-back {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-header-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            transform: scale(1.08);
         }
 
         .form-label {
@@ -172,10 +205,16 @@ if (isset($_POST['submit_feedback'])) {
 <body>
 
 <div class="container" style="max-width: 650px;">
+    
+  
+
     <div class="feedback-card">
         
         <!-- Header Banner -->
         <div class="feedback-header">
+            <a href="../index.php" class="btn-header-back" title="Back to Home">
+                <i class="bi bi-arrow-left fs-5"></i>
+            </a>
             <img src="../Images/Logos/GD_Only_logo.png" alt="GD Edu Tech" style="height: 46px;" class="mb-2">
             <h3 class="fw-bold mb-1">Student Feedback</h3>
             <p class="mb-0 text-white-50 small">Share your learning experience & boost your career profile</p>
@@ -188,7 +227,10 @@ if (isset($_POST['submit_feedback'])) {
                 <div class="alert alert-success rounded-4 border-0 shadow-sm p-3 mb-4 text-center">
                     <i class="bi bi-patch-check-fill fs-3 text-success d-block mb-1"></i>
                     <h6 class="fw-bold mb-1">Feedback Submitted Successfully!</h6>
-                    <span class="small text-muted">Thank you for sharing your experience. Your feedback is awaiting admin approval.</span>
+                    <span class="small text-muted d-block mb-3">Thank you for sharing your experience. Your feedback is awaiting admin approval.</span>
+                    <a href="../index.php" class="btn btn-outline-success btn-sm rounded-pill px-4 fw-semibold">
+                        <i class="bi bi-house-door-fill me-1"></i> Return to Homepage
+                    </a>
                 </div>
             <?php endif; ?>
 
@@ -253,10 +295,15 @@ if (isset($_POST['submit_feedback'])) {
                     </label>
                 </div>
 
-                <!-- Submit Button -->
-                <button type="submit" name="submit_feedback" class="btn btn-submit-feedback w-100">
-                    <i class="bi bi-send-fill me-1.5"></i> Submit Feedback
-                </button>
+                <!-- Submit & Back Buttons -->
+                <div class="d-flex gap-2">
+                    <a href="../index.php" class="btn btn-outline-secondary rounded-pill px-4 py-3 fw-semibold">
+                        <i class="bi bi-house-door me-1"></i> Home
+                    </a>
+                    <button type="submit" name="submit_feedback" class="btn btn-submit-feedback flex-grow-1">
+                        <i class="bi bi-send-fill me-1.5"></i> Submit Feedback
+                    </button>
+                </div>
 
             </form>
 

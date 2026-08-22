@@ -31,44 +31,66 @@ function resolveEventImageUrl($value) {
     return './uploads/events/' . ltrim($value, '/');
 }
 
-// Fetch events (default excludes cancelled) with optional category/status filters
-// Build sections data for Upcoming, Ongoing, Completed
-$statusLabels = [
-    'upcoming' => 'Upcoming Events',
-    'ongoing' => 'Ongoing Events',
-    'completed' => 'Completed Events'
-];
-$statusSubtitles = [
-    'upcoming' => "Don't miss out on these exciting learning opportunities",
-    'ongoing' => 'Happening now — join live sessions and activities',
-    'completed' => 'Catch up on past events and recorded sessions'
-];
-$statusesToShow = $selectedStatus ? [$selectedStatus] : array_keys($statusLabels);
-$sectionsData = [];
-foreach ($statusesToShow as $statusKey) {
-    $limitUse = $selectedStatus ? $limit : 6;
-    $offsetUse = $selectedStatus ? $offset : 0;
-    $whereParts = ["e.status = '" . $conn->real_escape_string($statusKey) . "'"];
-    if ($selectedCategoryId > 0) {
-        $whereParts[] = "e.category_id = " . intval($selectedCategoryId);
-    }
-    $where = ' WHERE ' . implode(' AND ', $whereParts);
-    $q = "SELECT e.* FROM Events e" . $where . " ORDER BY e.event_date IS NULL, e.event_date ASC, e.created_at DESC LIMIT " . intval($limitUse) . " OFFSET " . intval($offsetUse);
-    $c = "SELECT COUNT(*) as total FROM Events e" . $where;
-    $total = 0;
-    $countRes = $conn->query($c);
-    if ($countRes && $countRes->num_rows) { $total = intval(($countRes->fetch_assoc())['total']); }
-    $rows = [];
-    $res = $conn->query($q);
-    if ($res && $res->num_rows) { while ($r = $res->fetch_assoc()) { $rows[] = $r; } }
-    $sectionsData[$statusKey] = [
-        'label' => $statusLabels[$statusKey],
-        'subtitle' => $statusSubtitles[$statusKey] ?? '',
-        'events' => $rows,
-        'total' => $total,
-        'hasMore' => ($offsetUse + count($rows)) < $total,
+// Helper to derive icon class for a platform
+function getSocialIconClass($platform) {
+    $p = strtolower(trim((string)$platform));
+    $map = [
+        'facebook' => 'fa-brands fa-facebook',
+        'instagram' => 'fa-brands fa-instagram',
+        'twitter' => 'fa-brands fa-x-twitter',
+        'x' => 'fa-brands fa-x-twitter',
+        'linkedin' => 'fa-brands fa-linkedin',
+        'youtube' => 'fa-brands fa-youtube',
+        'github' => 'fa-brands fa-github',
+        'website' => 'fa-solid fa-globe',
+        'site' => 'fa-solid fa-globe',
+        'web' => 'fa-solid fa-globe'
     ];
+    return $map[$p] ?? 'fa-solid fa-link';
 }
+
+// Function to fetch sections data
+function fetchSectionsData($conn, $selectedStatus, $selectedCategoryId, $limit, $offset) {
+    $statusLabels = [
+        'upcoming' => 'Upcoming Events',
+        'ongoing' => 'Ongoing Events',
+        'completed' => 'Completed Events'
+    ];
+    $statusSubtitles = [
+        'upcoming' => "Don't miss out on these exciting learning opportunities",
+        'ongoing' => 'Happening now — join live sessions and activities',
+        'completed' => 'Catch up on past events and recorded sessions'
+    ];
+    $statusesToShow = $selectedStatus ? [$selectedStatus] : array_keys($statusLabels);
+    $sectionsData = [];
+    foreach ($statusesToShow as $statusKey) {
+        $limitUse = $selectedStatus ? $limit : 6;
+        $offsetUse = $selectedStatus ? $offset : 0;
+        $whereParts = ["e.status = '" . $conn->real_escape_string($statusKey) . "'"];
+        if ($selectedCategoryId > 0) {
+            $whereParts[] = "e.category_id = " . intval($selectedCategoryId);
+        }
+        $where = ' WHERE ' . implode(' AND ', $whereParts);
+        $q = "SELECT e.* FROM Events e" . $where . " ORDER BY e.event_date IS NULL, e.event_date ASC, e.created_at DESC LIMIT " . intval($limitUse) . " OFFSET " . intval($offsetUse);
+        $c = "SELECT COUNT(*) as total FROM Events e" . $where;
+        $total = 0;
+        $countRes = $conn->query($c);
+        if ($countRes && $countRes->num_rows) { $total = intval(($countRes->fetch_assoc())['total']); }
+        $rows = [];
+        $res = $conn->query($q);
+        if ($res && $res->num_rows) { while ($r = $res->fetch_assoc()) { $rows[] = $r; } }
+        $sectionsData[$statusKey] = [
+            'label' => $statusLabels[$statusKey],
+            'subtitle' => $statusSubtitles[$statusKey] ?? '',
+            'events' => $rows,
+            'total' => $total,
+            'hasMore' => ($offsetUse + count($rows)) < $total,
+        ];
+    }
+    return $sectionsData;
+}
+
+$sectionsData = fetchSectionsData($conn, $selectedStatus, $selectedCategoryId, $limit, $offset);
 
 // Build featured events carousel data (mix of upcoming + ongoing)
 $featuredEvents = [];
@@ -77,6 +99,39 @@ foreach (['upcoming','ongoing'] as $s) {
         foreach ($sectionsData[$s]['events'] as $ev) {
             $featuredEvents[] = $ev;
             if (count($featuredEvents) >= 6) { break 2; }
+        }
+    }
+}
+
+// Collect all event IDs currently loaded to fetch social links in one query
+$eventIdSet = [];
+foreach ($sectionsData as $sec) {
+    if (!empty($sec['events'])) {
+        foreach ($sec['events'] as $ev) {
+            if (isset($ev['event_id'])) { $eventIdSet[intval($ev['event_id'])] = true; }
+        }
+    }
+}
+if (!empty($featuredEvents)) {
+    foreach ($featuredEvents as $ev) {
+        if (isset($ev['event_id'])) { $eventIdSet[intval($ev['event_id'])] = true; }
+    }
+}
+
+$eventIdList = array_keys($eventIdSet);
+$eventIdToSocialLinks = [];
+if (!empty($eventIdList)) {
+    $idsList = implode(',', array_map('intval', $eventIdList));
+    $slq = "SELECT target_id, platform, url FROM social_links WHERE target_type = 'event' AND target_id IN ($idsList)";
+    $slres = $conn->query($slq);
+    if ($slres && $slres->num_rows) {
+        while ($row = $slres->fetch_assoc()) {
+            $tid = intval($row['target_id']);
+            if (!isset($eventIdToSocialLinks[$tid])) { $eventIdToSocialLinks[$tid] = []; }
+            $eventIdToSocialLinks[$tid][] = [
+                'platform' => strtolower(trim($row['platform'] ?? '')),
+                'url' => $row['url'] ?? ''
+            ];
         }
     }
 }
@@ -119,55 +174,126 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1' && $selectedStatus) {
     exit;
 }
 
-// Collect all event IDs currently loaded to fetch social links in one query
-$eventIdSet = [];
-foreach ($sectionsData as $sec) {
-    if (!empty($sec['events'])) {
-        foreach ($sec['events'] as $ev) {
-            if (isset($ev['event_id'])) { $eventIdSet[intval($ev['event_id'])] = true; }
+// Function to render the inner event grid and category chips
+function renderEventsGridHTML($sectionsData, $eventCategories, $selectedCategoryId, $selectedStatus, $page) {
+    ob_start();
+    ?>
+    <!-- Category Filter Chips -->
+    <div class="row mb-4">
+        <div class="col-12" data-aos="fade-up">
+            <?php if (!empty($eventCategories)): ?>
+                <?php $allActive = ($selectedCategoryId === 0) ? 'btn-dark text-white' : 'btn-outline-dark'; ?>
+                <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 me-2 mb-2 fw-semibold category-filter-btn <?php echo $allActive; ?>" data-category-id="0">All</button>
+                <?php foreach ($eventCategories as $cat): 
+                    $isActive = ($selectedCategoryId === intval($cat['category_id'])) ? 'btn-dark text-white' : 'btn-outline-dark';
+                ?>
+                    <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 me-2 mb-2 fw-semibold category-filter-btn <?php echo $isActive; ?>" data-category-id="<?php echo intval($cat['category_id']); ?>"><?php echo htmlspecialchars($cat['name']); ?></button>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <?php 
+    $hasAnyEvents = false;
+    foreach ($sectionsData as $statusKey => $section) {
+        if (!empty($section['events'])) {
+            $hasAnyEvents = true;
+            break;
         }
     }
-}
-if (!empty($featuredEvents)) {
-    foreach ($featuredEvents as $ev) {
-        if (isset($ev['event_id'])) { $eventIdSet[intval($ev['event_id'])] = true; }
-    }
+
+    if (!$hasAnyEvents): 
+    ?>
+        <div class="row g-4 my-2">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 text-center py-5 px-3 bg-light">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-x display-3 text-secondary opacity-50 d-block mb-3"></i>
+                        <h4 class="fw-bold text-black mb-2">No Events Found</h4>
+                        <p class="text-secondary mb-4" style="max-width: 500px; margin: 0 auto;">There are currently no events listed under this category filter.</p>
+                        <?php if ($selectedCategoryId > 0): ?>
+                            <button type="button" class="btn btn-dark rounded-pill px-4 py-2 fw-semibold category-filter-btn" data-category-id="0">
+                                <i class="bi bi-arrow-counterclockwise me-1.5"></i> Show All Events
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php else: ?>
+        <?php foreach ($sectionsData as $statusKey => $section): ?>
+            <?php if (!empty($section['events'])): ?>
+                <div class="row mb-4 align-items-end">
+                    <div class="col-lg-8">
+                        <h3 class="display-6 top-section-title mb-1" data-aos="fade-up"><?php echo htmlspecialchars($section['label']); ?></h3>
+                        <?php if (!empty($section['subtitle'])): ?>
+                            <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100"><?php echo htmlspecialchars($section['subtitle']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Event Grid Cards -->
+                <div class="row g-4">
+                    <?php foreach ($section['events'] as $index => $ev): ?>
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<?php echo ($index % 3) * 100; ?>">
+                            <div class="event-card h-100 d-flex flex-column" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
+                                <?php if (!empty($ev['main_cover_image'])): ?>
+                                    <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="height:220px;object-fit:cover;">
+                                <?php else: ?>
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:220px;">
+                                        <i class="bi bi-calendar-event display-4 text-muted"></i>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                                    <div class="mb-2 text-black fw-bold small">
+                                        <?php if (!empty($ev['event_date'])): ?>
+                                            <i class="bi bi-calendar3 me-1 text-primary"></i><span class="text-black fw-bold"><?php echo date('M d, Y', strtotime($ev['event_date'])); ?></span>
+                                        <?php endif; ?>
+                                        <?php if (!empty($ev['event_time'])): ?>
+                                            <span class="ms-3 text-black fw-bold"><i class="bi bi-clock me-1 text-primary"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <h5 class="card-title text-black fw-bold mb-2 text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
+                                    <p class="card-text text-secondary flex-grow-1 mb-3 text-clamp-3"><?php echo htmlspecialchars(strip_strip_tags_safe($ev['description'] ?? '')); ?></p>
+                                    
+                                    <?php if (!empty($ev['location'])): ?>
+                                        <div class="text-black fw-semibold small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
+                                    <?php endif; ?>
+
+                                    <div class="mt-auto pt-2">
+                                        <span class="btn btn-outline-dark btn-sm rounded-pill w-100 py-2 font-semibold">View Details <i class="bi bi-arrow-right ms-1"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <?php if ($section['hasMore']):
+                        $nextPage = ($selectedStatus ? ($page + 1) : 2);
+                    ?>
+                    <div class="text-center mt-4" data-aos="fade-up">
+                        <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold load-more-events" data-status="<?php echo htmlspecialchars($statusKey); ?>" data-next-page="<?php echo intval($nextPage); ?>" data-total="<?php echo intval($section['total']); ?>">View More Events</button>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <div class="my-5"></div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <?php
+    return ob_get_clean();
 }
 
-$eventIdList = array_keys($eventIdSet);
-$eventIdToSocialLinks = [];
-if (!empty($eventIdList)) {
-    $idsList = implode(',', array_map('intval', $eventIdList));
-    $slq = "SELECT target_id, platform, url FROM social_links WHERE target_type = 'event' AND target_id IN ($idsList)";
-    $slres = $conn->query($slq);
-    if ($slres && $slres->num_rows) {
-        while ($row = $slres->fetch_assoc()) {
-            $tid = intval($row['target_id']);
-            if (!isset($eventIdToSocialLinks[$tid])) { $eventIdToSocialLinks[$tid] = []; }
-            $eventIdToSocialLinks[$tid][] = [
-                'platform' => strtolower(trim($row['platform'] ?? '')),
-                'url' => $row['url'] ?? ''
-            ];
-        }
-    }
+function strip_strip_tags_safe($txt) {
+    return strip_tags((string)$txt);
 }
 
-// Helper to derive icon class for a platform
-function getSocialIconClass($platform) {
-    $p = strtolower(trim((string)$platform));
-    $map = [
-        'facebook' => 'fa-brands fa-facebook',
-        'instagram' => 'fa-brands fa-instagram',
-        'twitter' => 'fa-brands fa-x-twitter',
-        'x' => 'fa-brands fa-x-twitter',
-        'linkedin' => 'fa-brands fa-linkedin',
-        'youtube' => 'fa-brands fa-youtube',
-        'github' => 'fa-brands fa-github',
-        'website' => 'fa-solid fa-globe',
-        'site' => 'fa-solid fa-globe',
-        'web' => 'fa-solid fa-globe'
-    ];
-    return $map[$p] ?? 'fa-solid fa-link';
+// AJAX Category Filter endpoint
+if (isset($_GET['ajax_filter']) && $_GET['ajax_filter'] == '1') {
+    echo renderEventsGridHTML($sectionsData, $eventCategories, $selectedCategoryId, $selectedStatus, $page);
+    exit;
 }
 ?>
 
@@ -251,13 +377,17 @@ function getSocialIconClass($platform) {
         .hero-award-img:hover {
             transform: translateY(-8px) scale(1.03);
         }
+
+        #eventsGridContainer {
+            transition: opacity 0.25s ease-in-out;
+        }
     </style>
 </head>
 
 <body>
     <?php include 'navbar.php'; ?>
 
-    <!-- Redesigned Executive Hero Banner -->
+    <!-- Executive Hero Banner -->
     <section class="about-page-header position-relative overflow-hidden w-100 my-0">
         <div class="about-header-glow-1"></div>
         <div class="about-header-glow-2"></div>
@@ -285,7 +415,7 @@ function getSocialIconClass($platform) {
                 <!-- Right Column: Hero Event Image -->
                 <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
                     <div class="position-relative d-inline-block">
-                        <div class="position-absolute top-50 start-50 translate-middle rounded-circle  bg-opacity-20 blur-2xl" style="width: 320px; height: 320px; filter: blur(40px); z-index: 1;"></div>
+                        <div class="position-absolute top-50 start-50 translate-middle rounded-circle bg-opacity-20 blur-2xl" style="width: 320px; height: 320px; filter: blur(40px); z-index: 1;"></div>
                         <img src="./Images/Others/event.png" alt="Educational Events" class="img-fluid position-relative z-2 hero-award-img" style="max-height: 370px; transition: transform 0.4s ease;">
                     </div>
                 </div>
@@ -299,7 +429,7 @@ function getSocialIconClass($platform) {
         </div>
     </section>
 
-    <!-- Top Featured Section (Happening & Next Up) - High Contrast Black Text -->
+    <!-- Top Featured Section (Happening & Next Up) -->
     <?php if (!empty($featuredEvents)): ?>
     <section class="py-5">
         <div class="container py-2">
@@ -391,116 +521,14 @@ function getSocialIconClass($platform) {
     </section>
     <?php endif; ?>
 
-    <!-- Events Section Grid with Category Filters -->
+    <!-- Events Section Grid with Category Filters (AJAX Container) -->
     <section class="py-5 bg-white">
-        <div class="container py-2">
-            <?php 
-            $hasAnyEvents = false;
-            foreach ($sectionsData as $statusKey => $section) {
-                if (!empty($section['events'])) {
-                    $hasAnyEvents = true;
-                    break;
-                }
-            }
-            
-            if (!$hasAnyEvents): 
-            ?>
-                <div class="row mb-4">
-                    <div class="col-lg-8">
-                        <h3 class="display-6 top-section-title mb-2" data-aos="fade-up">Latest Events</h3>
-                        <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100">Stay updated with our upcoming events</p>
-                    </div>
-                </div>
-
-                <div class="row g-4">
-                    <div class="col-12">
-                        <div class="alert alert-info text-center py-4 rounded-4 border-0 shadow-sm" role="alert">
-                            <i class="bi bi-info-circle fs-3 me-2"></i>
-                            <span class="fs-5 fw-semibold">No event posts available at the moment. Please check back later.</span>
-                        </div>
-                    </div>
-                </div>
-            <?php else: ?>
-                <?php foreach ($sectionsData as $statusKey => $section): ?>
-                    <?php if (!empty($section['events'])): ?>
-                        <div class="row mb-4 align-items-end">
-                            <div class="col-lg-8">
-                                <h3 class="display-6 top-section-title mb-1" data-aos="fade-up"><?php echo htmlspecialchars($section['label']); ?></h3>
-                                <?php if (!empty($section['subtitle'])): ?>
-                                    <p class="lead top-section-subtitle mb-0" data-aos="fade-up" data-aos-delay="100"><?php echo htmlspecialchars($section['subtitle']); ?></p>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <!-- Category Filter Chips -->
-                        <div class="row mb-4">
-                            <div class="col-12" data-aos="fade-up">
-                                <?php if (!empty($eventCategories)): ?>
-                                    <?php $allActive = $selectedCategoryId === 0 ? 'btn-dark text-white' : 'btn-outline-dark'; ?>
-                                    <a href="events.php" class="btn btn-sm rounded-pill px-3 py-1.5 me-2 mb-2 fw-semibold <?php echo $allActive; ?>">All</a>
-                                    <?php foreach ($eventCategories as $cat): 
-                                        $isActive = ($selectedCategoryId === intval($cat['category_id'])) ? 'btn-dark text-white' : 'btn-outline-dark';
-                                    ?>
-                                        <a href="events.php?category_id=<?php echo intval($cat['category_id']); ?>" class="btn btn-sm rounded-pill px-3 py-1.5 me-2 mb-2 fw-semibold <?php echo $isActive; ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <!-- Event Grid Cards -->
-                        <div class="row g-4">
-                            <?php foreach ($section['events'] as $index => $ev): ?>
-                                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<?php echo ($index % 3) * 100; ?>">
-                                    <div class="event-card h-100 d-flex flex-column" style="cursor: pointer;" onclick="window.location.href='event-details.php?event_id=<?php echo intval($ev['event_id']); ?>'">
-                                        <?php if (!empty($ev['main_cover_image'])): ?>
-                                            <img src="<?php echo htmlspecialchars(resolveEventImageUrl($ev['main_cover_image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($ev['title']); ?>" style="height:220px;object-fit:cover;">
-                                        <?php else: ?>
-                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:220px;">
-                                                <i class="bi bi-calendar-event display-4 text-muted"></i>
-                                            </div>
-                                        <?php endif; ?>
-
-                                        <div class="card-body p-4 d-flex flex-column flex-grow-1">
-                                            <div class="mb-2 text-black fw-bold small">
-                                                <?php if (!empty($ev['event_date'])): ?>
-                                                    <i class="bi bi-calendar3 me-1 text-primary"></i><span class="text-black fw-bold"><?php echo date('M d, Y', strtotime($ev['event_date'])); ?></span>
-                                                <?php endif; ?>
-                                                <?php if (!empty($ev['event_time'])): ?>
-                                                    <span class="ms-3 text-black fw-bold"><i class="bi bi-clock me-1 text-primary"></i><?php echo htmlspecialchars(substr($ev['event_time'],0,5)); ?></span>
-                                                <?php endif; ?>
-                                            </div>
-
-                                            <h5 class="card-title text-black fw-bold mb-2 text-clamp-2"><?php echo htmlspecialchars($ev['title']); ?></h5>
-                                            <p class="card-text text-secondary flex-grow-1 mb-3 text-clamp-3"><?php echo htmlspecialchars(strip_tags($ev['description'] ?? '')); ?></p>
-                                            
-                                            <?php if (!empty($ev['location'])): ?>
-                                                <div class="text-black fw-semibold small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i><?php echo htmlspecialchars($ev['location']); ?></div>
-                                            <?php endif; ?>
-
-                                            <div class="mt-auto pt-2">
-                                                <span class="btn btn-outline-dark btn-sm rounded-pill w-100 py-2 font-semibold">View Details <i class="bi bi-arrow-right ms-1"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-
-                            <?php if ($section['hasMore']):
-                                $nextPage = ($selectedStatus ? ($page + 1) : 2);
-                            ?>
-                            <div class="text-center mt-4" data-aos="fade-up">
-                                <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold load-more-events" data-status="<?php echo htmlspecialchars($statusKey); ?>" data-next-page="<?php echo intval($nextPage); ?>" data-total="<?php echo intval($section['total']); ?>">View More Events</button>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="my-5"></div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
+        <div class="container py-2" id="eventsGridContainer">
+            <?php echo renderEventsGridHTML($sectionsData, $eventCategories, $selectedCategoryId, $selectedStatus, $page); ?>
         </div>
     </section>
 
-    <!-- Floating Plan Tilted Cards CTA Section (Full-Width Edge-to-Edge) -->
+    <!-- Floating Plan Tilted Cards CTA Section -->
     <section class="cta-plan-section py-0 my-0 w-100 position-relative overflow-hidden" data-aos="fade-up">
         <div class="cta-plan-banner position-relative text-center w-100 rounded-0 border-0">
             
@@ -573,10 +601,49 @@ function getSocialIconClass($platform) {
     <!-- AOS Animation -->
     <script src="https://cdnjs.cloudflare.com/aos/2.3.4/aos.js"></script>
     <script>
-    (function(){
-        const container = document.querySelector('section.bg-white .container');
-        if (!container) return;
-        container.addEventListener('click', async function(e){
+    document.addEventListener('DOMContentLoaded', function(){
+        const gridContainer = document.getElementById('eventsGridContainer');
+        if (!gridContainer) return;
+
+        // AJAX Category Filtering handler (No full page reload)
+        document.addEventListener('click', async function(e) {
+            const btn = e.target.closest('.category-filter-btn');
+            if (!btn) return;
+            e.preventDefault();
+
+            const categoryId = btn.getAttribute('data-category-id') || '0';
+            
+            // Visual fade feedback
+            gridContainer.style.opacity = '0.4';
+
+            // Smooth URL update without page reload
+            const newUrl = categoryId === '0' ? 'events.php' : 'events.php?category_id=' + categoryId;
+            history.pushState({ categoryId }, '', newUrl);
+
+            try {
+                const res = await fetch('events.php?category_id=' + categoryId + '&ajax_filter=1');
+                const html = await res.text();
+                gridContainer.innerHTML = html.trim();
+                gridContainer.style.opacity = '1';
+                if (window.AOS) { AOS.refreshHard(); }
+            } catch (err) {
+                console.error('Error fetching filtered events:', err);
+                gridContainer.style.opacity = '1';
+            }
+        });
+
+        // Handle Browser Back / Forward buttons (Popstate)
+        window.addEventListener('popstate', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryId = urlParams.get('category_id') || '0';
+            const targetBtn = document.querySelector(`.category-filter-btn[data-category-id="${categoryId}"]`);
+            if (targetBtn) {
+                targetBtn.click();
+            }
+        });
+
+        // Load More pagination click handler
+        gridContainer.addEventListener('click', async function(e){
             const btn = e.target.closest('.load-more-events');
             if (!btn) return;
             e.preventDefault();
@@ -611,7 +678,7 @@ function getSocialIconClass($platform) {
                 btn.disabled = false; btn.textContent = original;
             }
         });
-    })();
+    });
     </script>
 </body>
 

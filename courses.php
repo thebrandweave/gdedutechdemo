@@ -338,7 +338,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                 }
 
                 .badge {
-                    background:rgba(3, 4, 4, 0.7) !important;
+                    background:rgba(133, 134, 134, 0.7) !important;
                     border: 1px solid rgba(207, 210, 211, 0.36);
                     color: black;
                 }
@@ -486,7 +486,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                                         <img src="./uploads/course_uploads/thumbnails/<?php echo htmlspecialchars($course['thumbnail']); ?>"
                                             class="card-img-top" alt="<?php echo htmlspecialchars($course['title']); ?>"
                                             style="height: 200px; object-fit: cover;">
-                                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
+                                        <span class="badge bg-primary position-absolute top-0 text-white end-0 m-3">
                                             <?php echo htmlspecialchars($course['category_name']); ?>
                                         </span>
                                     </div>
@@ -776,26 +776,53 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
     </div>
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="courseModal" tabindex="-1">
+<!-- Redesigned Executive Course Details Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content shadow-lg">
-
-      <div class="modal-header border-0">
-        <h4 class="modal-title fw-bold" id="courseTitle"></h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden" style="background: #ffffff;">
+      
+      <!-- Modal Header -->
+      <div class="modal-header border-0 text-white p-4 position-relative" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;">
+        <div class="pe-4">
+          <span class="badge bg-primary bg-opacity-20 text-info border border-info border-opacity-25 rounded-pill px-3 py-1 mb-2 font-monospace small">GD Edu Tech Program</span>
+          <h4 class="modal-title fw-bold text-white mb-0" id="courseTitle">Course Overview</h4>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body text-center px-4 pb-4">
-        <img id="courseImage" class="img-fluid mb-3">
+      <!-- Modal Body -->
+      <div class="modal-body p-4">
+        <div class="row g-4 align-items-center">
+          
+          <!-- Thumbnail Column -->
+          <div class="col-12 col-md-5">
+            <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="min-height: 220px; background-color: #f8fafc;">
+              <img id="courseImage" src="" class="w-100 h-100 object-fit-cover rounded-4" style="max-height: 240px;" alt="Course Thumbnail" onerror="this.src='./Images/Logos/GD_Only_logo.png';">
+            </div>
+          </div>
 
-        <p id="courseDescription" class="text-muted" style="text-align:start"></p>
+          <!-- Info Column -->
+          <div class="col-12 col-md-7 d-flex flex-column justify-content-between">
+            <div>
+              <h6 class="fw-bold text-uppercase text-secondary small mb-2 tracking-wider"><i class="bi bi-info-circle text-primary me-1"></i> Course Overview</h6>
+              <p id="courseDescription" class="text-secondary small mb-3 leading-relaxed" style="text-align: left;"></p>
 
-        <div id="courseBadges" class="d-flex gap-2 flex-wrap mt-3"></div>
+              <div id="courseBadges" class="d-flex gap-2 flex-wrap mb-3"></div>
+            </div>
 
-        <a href="contact.php" class="btn btn-primary mt-4">
-             Enroll Now
-        </a>
+            <!-- Action Footer -->
+            <div class="pt-3 border-top d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <span class="text-muted small"><i class="bi bi-shield-check text-success me-1"></i> Industry Accredited</span>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                <a href="contact.php" class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold">
+                  <i class="bi bi-rocket-takeoff-fill me-1"></i> Enroll Now
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -805,64 +832,30 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 <!-- JS -->
 <script>
 function openCourseModal(title, image, description, badges) {
-
     document.getElementById("courseTitle").innerText = title;
     document.getElementById("courseImage").src = image;
     document.getElementById("courseDescription").innerText = description;
 
     let badgesHTML = "";
-
-    badges.forEach(badge => {
-
-        let badgeClass = "bg-secondary";
-
-        if (badge === "Offline") {
-            badgeClass = "bg-success";
-        } 
-        else if (badge === "16 Weeks") {
-            badgeClass = "bg-warning text-dark";
-        } 
-        else if (badge === "Certification") {
-            badgeClass = "bg-info text-dark";
-        }
-
-        badgesHTML += `
-            <span class="badge ${badgeClass} me-2">
-                ${badge}
-            </span>
-        `;
-    });
-
+    if (Array.isArray(badges)) {
+        badges.forEach(badge => {
+            let badgeClass = "bg-white bg-opacity-10 text-secondary border";
+            if (badge === "Offline") {
+                badgeClass = "bg-white bg-opacity-10 text-success border border-success-subtle";
+            } else if (badge === "16 Weeks" || badge.includes("Week") || badge.includes("Month")) {
+                badgeClass = "bg-white bg-opacity-20 text-dark border border-warning-subtle";
+            } else if (badge === "Certification" || badge.includes("Certif")) {
+                badgeClass = "bg-info bg-opacity-10 text-info border border-info-subtle";
+            }
+            badgesHTML += `<span class="badge ${badgeClass} rounded-pill px-2.5 py-1 small me-1 mb-1">${badge}</span>`;
+        });
+    }
     document.getElementById("courseBadges").innerHTML = badgesHTML;
 
     const modal = new bootstrap.Modal(document.getElementById('courseModal'));
     modal.show();
 }
 </script>
-
-<!-- Bootstrap JS (IMPORTANT) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-    <!-- Course Details Modal -->
-<div class="modal fade" id="courseModal" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title" id="courseTitle">Course Title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <img id="courseImage" src="" class="img-fluid mb-3" />
-        <p id="courseDescription"></p>
-      </div>
-
-    </div>
-  </div>
-</div>
 
     <!-- Footer -->
     <?php include 'footer.php'; ?>

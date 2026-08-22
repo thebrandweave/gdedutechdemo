@@ -1145,30 +1145,53 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
     });
     </script>
 
-<!-- Modal -->
-<div class="modal fade" id="courseModal" tabindex="-1">
+<!-- Redesigned Executive Course Details Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content shadow-lg">
-
-      <div class="modal-header border-0">
-        <h4 class="modal-title fw-bold" id="courseTitle"></h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden" style="background: #ffffff;">
+      
+      <!-- Modal Header -->
+      <div class="modal-header border-0 text-white p-4 position-relative" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;">
+        <div class="pe-4">
+          <span class="badge bg-primary bg-opacity-20 text-info border border-info border-opacity-25 rounded-pill px-3 py-1 mb-2 font-monospace small">GD Edu Tech Program</span>
+          <h4 class="modal-title fw-bold text-white mb-0" id="courseTitle">Course Overview</h4>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body text-center px-4 pb-4">
-        <img id="courseImage" class="img-fluid mb-3">
+      <!-- Modal Body -->
+      <div class="modal-body p-4">
+        <div class="row g-4 align-items-center">
+          
+          <!-- Thumbnail Column -->
+          <div class="col-12 col-md-5">
+            <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="min-height: 220px; background-color: #f8fafc;">
+              <img id="courseImage" src="" class="w-100 h-100 object-fit-cover rounded-4" style="max-height: 240px;" alt="Course Thumbnail" onerror="this.src='./Images/Logos/GD_Only_logo.png';">
+            </div>
+          </div>
 
-        <p id="courseDescription" class="text-muted" style="text-align:start"></p>
+          <!-- Info Column -->
+          <div class="col-12 col-md-7 d-flex flex-column justify-content-between">
+            <div>
+              <h6 class="fw-bold text-uppercase text-secondary small mb-2 tracking-wider"><i class="bi bi-info-circle text-primary me-1"></i> Course Overview</h6>
+              <p id="courseDescription" class="text-secondary small mb-3 leading-relaxed" style="text-align: left;"></p>
 
-        <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
-            <span class="badge bg-success">Offline</span>
-            <span class="badge bg-warning text-dark">16 Weeks</span>
-            <span class="badge bg-info text-dark">Certification</span>
+              <div id="courseBadges" class="d-flex gap-2 flex-wrap mb-3"></div>
+            </div>
+
+            <!-- Action Footer -->
+            <div class="pt-3 border-top d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <span class="text-muted small"><i class="bi bi-shield-check text-success me-1"></i> Industry Accredited</span>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                <a href="contact.php" class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold">
+                  <i class="bi bi-rocket-takeoff-fill me-1"></i> Enroll Now
+                </a>
+              </div>
+            </div>
+          </div>
+
         </div>
-
-        <a href="contact.php" class="btn btn-primary mt-4">
-             Enroll Now
-        </a>
       </div>
 
     </div>
