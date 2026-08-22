@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once  '../vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -16,7 +16,7 @@ $jwtSecretKey = "your_secret_key_here";
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
     // If no session, check for JWT token
     if (!isset($_COOKIE['auth_token'])) {
-        header("Location: login.php");
+        header("Location: login_page.php");
         exit();
     }
 
@@ -32,7 +32,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
         // Clear any invalid cookie
         setcookie('auth_token', '', time() - 3600, '/');
         session_destroy();
-        header("Location: login.php");
+        header("Location: login_page.php");
         exit();
     }
 }
@@ -44,7 +44,7 @@ $role = $_SESSION['role'];
 
 // Additional security check
 if ($role !== 'student') {
-    header("Location: login.php");
+    header("Location: login_page.php");
     exit();
 }
 
@@ -55,21 +55,19 @@ if (!isset($_SESSION['last_regeneration']) || (time() - $_SESSION['last_regenera
 }
 
 // Fetch student details from the users table
-$user_query = "SELECT email, first_name, last_name FROM Users WHERE user_id = ?";
+$user_query = "SELECT email, first_name, last_name, profile_image FROM Users WHERE user_id = ?";
 $user_stmt = $conn->prepare($user_query);
 $user_stmt->bind_param("i", $user_id);
 $user_stmt->execute();
 $user_result = $user_stmt->get_result();
 
+$profile_image = null;
 if ($user_result->num_rows > 0) {
     $user_data = $user_result->fetch_assoc();
-    // Store email, first name, and last name in session
     $_SESSION['email'] = $user_data['email'];
     $_SESSION['first_name'] = $user_data['first_name'];
     $_SESSION['last_name'] = $user_data['last_name'];
-} else {
-    // Handle case where user data is not found
-    // You might want to redirect to an error page or logout
+    $profile_image = $user_data['profile_image'];
 }
 
 // Fetch user statistics
@@ -124,12 +122,15 @@ $recommended_courses_query = "
     AND c.course_id NOT IN (
         SELECT course_id FROM Enrollments WHERE student_id = ?
     )
- 
 ";
 $recommended_courses_stmt = $conn->prepare($recommended_courses_query);
 $recommended_courses_stmt->bind_param("i", $user_id);
 $recommended_courses_stmt->execute();
 $recommended_courses_result = $recommended_courses_stmt->get_result();
+
+$first_name = $_SESSION['first_name'] ?? 'Student';
+$last_name = $_SESSION['last_name'] ?? '';
+$initial = strtoupper(substr($first_name, 0, 1));
 ?>
 
 <!DOCTYPE html>
@@ -139,411 +140,376 @@ $recommended_courses_result = $recommended_courses_stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - GD Edu Tech</title>
+    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../assets/css/student_dashboard.css">
-        
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../Images/Logos/GD_Only_logo.png">
-    <link rel="shortcut icon" href="../Images/Logos/GD_Only_logo.png">
+
     <style>
-        /* Custom styles for the sidebar */
+        :root {
+            --admin-primary: #0d7298;
+            --admin-primary-dark: #065d7d;
+            --admin-dark-bg: #0f172a;
+            --admin-dark-surface: #1e293b;
+            --admin-light-bg: #f8fafc;
+            --admin-border-color: #e2e8f0;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--admin-light-bg);
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
         .sidebar {
-            transition: all 0.3s;
-            position: fixed;
-            z-index: 1050;
-            /* Adjusted z-index for mobile */
-            height: 100vh;
-            left: -250px;
-            /* Hide sidebar off-screen */
-            background-color: #2c3e50;
-            /* Dark background for sidebar */
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+            min-height: 100vh;
+            color: #ffffff;
+            box-shadow: 4px 0 25px rgba(15, 23, 42, 0.15);
+            z-index: 1000;
         }
 
-        .sidebar.show {
-            left: 0;
-            /* Show sidebar */
-        }
-
-        .topbar {
-            position: fixed;
-            width: 100%;
-            z-index: 1001;
-            display: block;
-            background-color: #f8f9fa;
-            /* Light background for the top bar */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .container-fluid {
-            margin-top: 56px;
-            /* Adjust for the height of the top bar */
-            padding: 20px;
-            /* Add some padding for content */
-            transition: margin-left 0.3s ease;
-            /* Smooth transition for margin */
-        }
-
-        .container-fluid.shifted {
-            margin-left: 250px;
-            /* Shift content when sidebar is open */
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                /* Keep sidebar fixed */
-                top: 0;
-                /* Align to the top */
-                left: -250px;
-                /* Hide sidebar off-screen */
-                width: 250px;
-                /* Fixed width for sidebar */
-                height: 100vh;
-                /* Full height */
-                z-index: 1050;
-                /* Ensure it overlays content */
-                background-color: #343a40;
-                /* Dark background for sidebar */
-                transition: left 0.3s ease;
-                /* Smooth transition */
-            }
-
-            .sidebar.show {
-                left: 0;
-                /* Show sidebar */
-            }
-
-            .sidebar-overlay {
-                display: none;
-                /* Initially hidden */
-                position: fixed;
-                /* Fixed position for overlay */
-                top: 0;
-                /* Align to the top */
-                left: 0;
-                /* Align to the left */
-                width: 100%;
-                /* Full width */
-                height: 100%;
-                /* Full height */
-                background: rgba(0, 0, 0, 0.5);
-                /* Semi-transparent background */
-                z-index: 1040;
-                /* Ensure it overlays content */
-            }
-
-            .sidebar-overlay.show {
-                display: block;
-                /* Show overlay when sidebar is open */
-            }
-
-            .content {
-                margin-left: 0;
-                /* Reset margin for mobile */
-                transition: margin-left 0.3s ease;
-                /* Smooth transition for margin */
-            }
-        }
-
-        @media (min-width: 769px) {
-            .sidebar-toggle {
-                display: none;
-                /* Hide toggle button on desktop */
-            }
-
-            .sidebar {
-                position: static;
-                /* Keep sidebar in its original position on desktop */
-                z-index: auto;
-                /* Reset z-index */
-
-
-            }
-
-            .sideBarInner {
-                position: fixed !important;
-                bottom: 0 !important;
-                background-color: #2c3e50 !important;
-                width: 250px;
-                left: 0;
-            }
-        }
-
-        /* Flexbox layout for sidebar and content */
-        .layout {
+        .sidebar .nav-link {
+            color: #94a3b8 !important;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 12px 18px;
+            margin: 3px 10px;
+            border-radius: 12px;
             display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
+            text-decoration: none !important;
         }
 
-        .sidebar {
-            width: 250px;
-            /* Fixed width for sidebar */
+        .sidebar .nav-link i {
+            font-size: 1.15rem;
         }
 
-        .content {
-            flex-grow: 1;
-            /* Allow content to take remaining space */
+        .sidebar .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            transform: translateX(4px);
         }
 
-        .course-card .card-text {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-height: 4.5em;
-            /* Approximately 3 lines of text */
+        .sidebar .nav-link.active {
+            color: #ffffff !important;
+            background: linear-gradient(90deg, rgba(13, 114, 152, 0.9) 0%, rgba(6, 93, 125, 0.95) 100%) !important;
+            box-shadow: 0 8px 20px rgba(13, 114, 152, 0.35);
+            font-weight: 700 !important;
         }
 
+        .sidebar .nav-link.active i {
+            color: #38bdf8 !important;
+        }
+
+        .sidebar .nav-link.text-danger {
+            color: #f87171 !important;
+            background: rgba(239, 68, 68, 0.1) !important;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .sidebar .nav-link.text-danger:hover {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+        }
+
+        /* Layout bounds */
+        .row.flex-nowrap > .col,
+        .main-content {
+            min-width: 0 !important;
+            max-width: 100% !important;
+        }
+
+        /* Metric Cards */
+        .stats-card {
+            border: 1px solid var(--admin-border-color) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05) !important;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 35px -10px rgba(15, 23, 42, 0.1) !important;
+        }
+
+        .stats-icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Course Cards */
         .course-card {
+            border: 1px solid var(--admin-border-color) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05) !important;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            overflow: hidden;
             height: 100%;
-            transition: transform 0.2s;
         }
 
         .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 14px 35px -10px rgba(15, 23, 42, 0.12) !important;
         }
 
-        .course-card .card-img-top {
-            height: 200px;
+        .course-card-img {
+            height: 180px;
             object-fit: cover;
+            width: 100%;
         }
 
-        @media (min-width:800px) {
-            .topbar {
-                display: none !important;
-            }
-
-        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
 <body>
-    <div class="topbar d-flex justify-content-between align-items-center p-2">
-        <button class="btn btn-outline-secondary sidebar-toggle" id="sidebarToggle">
-            <i class="bi bi-list"></i>
-        </button>
-        <span class="fw-bold"></span>
-    </div>
+    <div class="container-fluid p-0">
+        <div class="row g-0 flex-nowrap">
 
-    <div class="layout">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar" id="sidebar">
-            <div class="sideBarInner bg-dark">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                        <a href="#" class="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none">
-                            <span class="fs-5 fw-bolder" style="display: flex;align-items:center;">
-                                <img height="35px" src="../Images/Logos/edutechLogo.png" alt="">&nbsp; GD Edu Tech
-                            </span>
-                        </a>
-
+            <!-- Executive Sidebar -->
+            <div class="col-auto col-md-3 col-xl-2 px-0 sidebar sticky-top vh-100 overflow-auto hide-scrollbar d-flex flex-column" id="studentSidebar">
+                <div class="p-3 border-bottom border-white border-opacity-10 d-flex align-items-center gap-2">
+                    <img height="36" src="../Images/Logos/GD_Only_logo.png" alt="GD Logo">
+                    <div>
+                        <div class="fw-bold text-white fs-6">GD Edu Tech</div>
+                        <span class="text-info small fw-semibold">● Student Portal</span>
                     </div>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100 sidebar-menu" id="menu">
-                        <li class="w-100">
-                            <a href="./" class="nav-link active">
-                                <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./MyCourses/" class="nav-link text-white">
-                                <i class="bi bi-book me-2"></i> My Courses
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./Categories/" class="nav-link text-white">
-                                <i class="bi bi-grid me-2"></i> Categories
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./Schedule" class="nav-link text-white">
-                                <i class="bi bi-calendar-event me-2"></i> Schedule
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./Messages" class="nav-link text-white">
-                                <i class="bi bi-chat-dots me-2"></i> Messages
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./Profile/" class="nav-link text-white">
-                                <i class="bi bi-person me-2"></i> Profile
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./Resources/" class="nav-link text-white">
-                                <i class="bi bi-file-earmark-text me-2"></i> Resources
-                            </a>
-                        </li>
-                        <li class="w-100">
-                            <a href="./shop.php" class="nav-link text-white">
-                                <i class="bi bi-shop me-2"></i> Shop
-                            </a>
-                        </li>
-                        
-                        <li class="w-100 mt-auto">
-                            <a href="../logout.php" class="nav-link text-danger">
-                                <i class="bi bi-box-arrow-right me-2"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
+                </div>
+
+                <ul class="nav nav-pills flex-column mb-auto p-2 w-100">
+                    <li class="w-100"><a href="./" class="nav-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li class="w-100"><a href="./MyCourses/" class="nav-link"><i class="bi bi-journal-bookmark"></i> My Courses</a></li>
+                    <li class="w-100"><a href="./Categories/" class="nav-link"><i class="bi bi-grid"></i> Categories</a></li>
+                    <li class="w-100"><a href="./Schedule/" class="nav-link"><i class="bi bi-calendar-event"></i> Schedule</a></li>
+                    <li class="w-100"><a href="./Messages/" class="nav-link"><i class="bi bi-chat-dots"></i> Messages</a></li>
+                    <li class="w-100"><a href="./Profile/" class="nav-link"><i class="bi bi-person"></i> Profile</a></li>
+                    <li class="w-100"><a href="./Resources/" class="nav-link"><i class="bi bi-file-earmark-text"></i> Resources</a></li>
+                    <!-- <li class="w-100"><a href="./shop.php" class="nav-link"><i class="bi bi-shop"></i> Shop</a></li> -->
+                </ul>
+
+                <div class="p-3 border-top border-white border-opacity-10 mt-auto">
+                    <a href="../logout.php" class="nav-link text-danger justify-content-center m-0">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
                 </div>
             </div>
-        </div>
 
-        <div class="sidebar-overlay" id="sidebar-overlay"></div>
-
-        <div class="content">
-            <div class="container-fluid">
-                <!-- Header -->
-                <div class="row mb-4">
-                    <div class="col">
-                        <h2>Welcome back, <?php echo htmlspecialchars($_SESSION['first_name'] . " " . $_SESSION['last_name']); ?>! 👋</h2>
-                        <p class="text-muted">Here's what's happening with your learning journey.</p>
-                    </div>
-                </div>
-
-                <!-- Statistics Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-md-4">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Enrolled Courses</h5>
-                                <h2><?php echo $stats_result['enrolled_courses']; ?></h2>
-                                <p class="mb-0"><i class="bi bi-arrow-up"></i> New courses this month</p>
-                            </div>
+            <!-- Main Content Area -->
+            <div class="col main-content min-vh-100 d-flex flex-column" style="min-width: 0; overflow-x: hidden;">
+                
+                <!-- Top Header Bar -->
+                <div class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="btn btn-light d-md-none border" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+                            <i class="bi bi-list fs-5"></i>
+                        </button>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0">Welcome back, <?php echo htmlspecialchars($first_name . ' ' . $last_name); ?>! 👋</h4>
+                            <span class="text-muted small">Here is an overview of your active learning progress</span>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Assignments</h5>
-                                <h2><?php echo $stats_result['pending_assignments']; ?></h2>
-                                <p class="mb-0">Pending</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Certificates</h5>
-                                <h2><?php echo $stats_result['certificates']; ?></h2>
-                                <p class="mb-0">Earned</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Current Progress -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title mb-4">Continue Learning</h5>
-                                <div class="row g-4">
-                                    <?php while ($course = $ongoing_courses_result->fetch_assoc()): ?>
-                                        <div class="col-md-6">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <img src="../uploads/course_uploads/thumbnails/<?php echo htmlspecialchars($course['thumbnail']); ?>"
-                                                    class="rounded me-3" style="width: 80px; height: 80px; object-fit: cover;"
-                                                    alt="Course">
-                                                <div>
-                                                    <h6 class="mb-1"><?php echo htmlspecialchars($course['title']); ?></h6>
-                                                    <p class="text-muted mb-0">
-                                                        <?php echo $course['completed_videos']; ?>/<?php echo $course['total_videos']; ?> videos completed
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="progress mb-3">
-                                                <div class="progress-bar bg-success"
-                                                    style="width: <?php
-                                                                    $progress = $course['total_videos'] > 0 ?
-                                                                        ($course['completed_videos'] / $course['total_videos']) * 100 : 0;
-                                                                    echo number_format($progress, 0);
-                                                                    ?>%">
-                                                    <?php echo number_format($progress, 0); ?>%
-                                                </div>
-                                            </div>
-                                            <div class="mt-2">
-                                                <a href="./MyCourses/course_content.php?id=<?php echo $course['course_id']; ?>"
-                                                    class="btn btn-warning">Continue Learning</a>
-                                            </div>
-                                        </div>
-                                    <?php endwhile; ?>
+                    <!-- Right User Badge -->
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2 bg-light border px-3 py-1.5 rounded-pill">
+                            <?php if ($profile_image): ?>
+                                <img src="../uploads/profiles/<?php echo htmlspecialchars($profile_image); ?>" class="rounded-circle object-fit-cover" style="width: 32px; height: 32px;" alt="Profile" onerror="this.src='../images/default-course.png';">
+                            <?php else: ?>
+                                <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                                    <?php echo $initial; ?>
                                 </div>
-                            </div>
+                            <?php endif; ?>
+                            <span class="fw-semibold text-dark small"><?php echo htmlspecialchars($first_name); ?></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recommended Courses -->
-                <div class="row">
-                    <div class="col-12">
-                        <h5 class="mb-4">Recommended Courses</h5>
-                    </div>
-                    <?php while ($course = $recommended_courses_result->fetch_assoc()): ?>
-                        <div class="col-md-4 mb-4">
-                            <div class="card course-card">
-                                <img src="../uploads/course_uploads/thumbnails/<?php echo htmlspecialchars($course['thumbnail'] ?: './Courses/thumbnails'); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($course['title']); ?>">
-                                <div class="card-body">
-                                    <span class="badge bg-success mb-2"><?php echo htmlspecialchars($course['category'] ?: 'General'); ?></span>
-                                    <h5 class="card-title"><?php echo htmlspecialchars($course['title']); ?></h5>
-                                    <p class="card-text text-muted"><?php echo htmlspecialchars($course['description']); ?></p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span><i class="bi bi-clock"></i> Course Type: <?php echo htmlspecialchars($course['course_type'] ?: 'Undefined'); ?></span>
-                                        <a href="./MyCourses/course.php?id=<?php echo $course['course_id'] . "&" . rand(10000000, 99999999) . chr(rand(65, 90)); ?>" class="btn btn-primary">Enroll Now</a>
+                <div class="p-4 flex-grow-1">
+
+                    <!-- Metric Cards Row -->
+                    <div class="row g-4 mb-4">
+                        <!-- Enrolled Courses -->
+                        <div class="col-12 col-sm-6 col-xl-4">
+                            <div class="card stats-card p-4">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-semibold d-block mb-1">Enrolled Courses</span>
+                                        <h2 class="fw-bold text-dark mb-0"><?php echo intval($stats_result['enrolled_courses'] ?? 0); ?></h2>
+                                        <span class="text-success small fw-semibold"><i class="bi bi-arrow-up-right me-1"></i>Active Learning</span>
+                                    </div>
+                                    <div class="stats-icon-box bg-primary bg-opacity-10 text-primary border border-primary-subtle">
+                                        <i class="bi bi-journal-bookmark-fill"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <?php endwhile; ?>
+
+                        <!-- Pending Assignments -->
+                        <div class="col-12 col-sm-6 col-xl-4">
+                            <div class="card stats-card p-4">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-semibold d-block mb-1">Pending Tasks</span>
+                                        <h2 class="fw-bold text-dark mb-0"><?php echo intval($stats_result['pending_assignments'] ?? 0); ?></h2>
+                                        <span class="text-warning small fw-semibold"><i class="bi bi-clock-history me-1"></i>Assignments Pending</span>
+                                    </div>
+                                    <div class="stats-icon-box bg-warning bg-opacity-10 text-warning border border-warning-subtle">
+                                        <i class="bi bi-file-earmark-check-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Certificates Earned -->
+                        <div class="col-12 col-sm-6 col-xl-4">
+                            <div class="card stats-card p-4">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-semibold d-block mb-1">Certificates Earned</span>
+                                        <h2 class="fw-bold text-dark mb-0"><?php echo intval($stats_result['certificates'] ?? 0); ?></h2>
+                                        <span class="text-info small fw-semibold"><i class="bi bi-patch-check-fill me-1"></i>Verified Accomplishments</span>
+                                    </div>
+                                    <div class="stats-icon-box bg-info bg-opacity-10 text-info border border-info-subtle">
+                                        <i class="bi bi-award-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Continue Learning Section Card -->
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+                            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-play-circle-fill text-primary me-2"></i>Continue Learning</h6>
+                            <a href="./MyCourses/" class="text-primary small text-decoration-none fw-semibold">View All Courses <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                        <div class="card-body p-4">
+                            <?php if ($ongoing_courses_result && $ongoing_courses_result->num_rows > 0): ?>
+                                <div class="row g-4">
+                                    <?php while ($course = $ongoing_courses_result->fetch_assoc()): ?>
+                                        <?php 
+                                            $totalVids = intval($course['total_videos'] ?? 0);
+                                            $completedVids = intval($course['completed_videos'] ?? 0);
+                                            $progress = $totalVids > 0 ? round(($completedVids / $totalVids) * 100) : 0;
+                                        ?>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="p-3 border rounded-4 bg-light bg-opacity-50 d-flex flex-column flex-sm-row align-items-sm-center gap-3">
+                                                <img 
+                                                    src="../uploads/course_uploads/thumbnails/<?php echo htmlspecialchars($course['thumbnail']); ?>"
+                                                    class="rounded-3 object-fit-cover flex-shrink-0"
+                                                    style="width: 100px; height: 80px;"
+                                                    alt="<?php echo htmlspecialchars($course['title']); ?>"
+                                                    onerror="this.src='../images/default-course.png';"
+                                                >
+                                                <div class="flex-grow-1 min-w-0">
+                                                    <h6 class="fw-bold text-dark mb-1 text-truncate"><?php echo htmlspecialchars($course['title']); ?></h6>
+                                                    <span class="text-muted small d-block mb-2">
+                                                        <i class="bi bi-film me-1"></i><?php echo $completedVids; ?> of <?php echo $totalVids; ?> videos watched
+                                                    </span>
+                                                    
+                                                    <div class="progress rounded-pill mb-2" style="height: 8px;">
+                                                        <div class="progress-bar bg-success rounded-pill" style="width: <?php echo $progress; ?>%"></div>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <span class="fw-semibold text-success small"><?php echo $progress; ?>% Completed</span>
+                                                        <a href="./MyCourses/course_content.php?id=<?php echo $course['course_id']; ?>" class="btn btn-primary btn-sm rounded-pill px-3">
+                                                            <i class="bi bi-play-fill me-1"></i>Continue
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endwhile; ?>
+                                </div>
+                            <?php else: ?>
+                                <div class="text-center py-4 text-muted">
+                                    <i class="bi bi-journal-x fs-1 text-secondary opacity-50 d-block mb-2"></i>
+                                    You are not currently enrolled in any ongoing course.
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Recommended Courses Section -->
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold text-dark mb-0"><i class="bi bi-stars text-warning me-2"></i>Recommended For You</h5>
+                        <a href="./Categories/" class="text-primary small text-decoration-none fw-semibold">Browse Catalog <i class="bi bi-arrow-right"></i></a>
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                        <?php if ($recommended_courses_result && $recommended_courses_result->num_rows > 0): ?>
+                            <?php while ($course = $recommended_courses_result->fetch_assoc()): ?>
+                                <div class="col">
+                                    <div class="card course-card border-0 d-flex flex-column">
+                                        <img 
+                                            src="../uploads/course_uploads/thumbnails/<?php echo htmlspecialchars($course['thumbnail']); ?>" 
+                                            class="course-card-img" 
+                                            alt="<?php echo htmlspecialchars($course['title']); ?>"
+                                            onerror="this.src='../images/default-course.png';"
+                                        >
+                                        <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="badge bg-primary bg-opacity-10 text-primary border px-2.5 py-1 rounded-pill small">
+                                                    <?php echo htmlspecialchars($course['category'] ?: 'General'); ?>
+                                                </span>
+                                                <span class="badge bg-light text-secondary border px-2 py-1 small font-monospace">
+                                                    <?php echo htmlspecialchars($course['course_type'] ?: 'Online'); ?>
+                                                </span>
+                                            </div>
+
+                                            <h6 class="fw-bold text-dark mb-2"><?php echo htmlspecialchars($course['title']); ?></h6>
+                                            <p class="text-secondary small flex-grow-1 mb-3" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                                <?php echo htmlspecialchars($course['description']); ?>
+                                            </p>
+
+                                            <div class="pt-3 border-top d-flex align-items-center justify-content-between mt-auto">
+                                                <span class="text-muted small"><i class="bi bi-mortarboard me-1"></i>Verified Certificate</span>
+                                                <a href="./MyCourses/course.php?id=<?php echo $course['course_id']; ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold">
+                                                    Enroll Now
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <div class="col-12 text-center py-5 text-muted">
+                                <i class="bi bi-check2-all fs-1 text-success opacity-50 d-block mb-2"></i>
+                                You have enrolled in all available courses!
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
                 </div>
-                <div class="mb-4 d-md-none"></div>
             </div>
+
         </div>
-
-
     </div>
 
-
-
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-            const sidebarOverlay = document.getElementById('sidebar-overlay');
-
-            // Only add event listeners if elements exist
-            if (sidebarToggle && sidebar && sidebarOverlay) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('show');
-                    sidebarOverlay.classList.toggle('show');
-                    // Prevent content from shifting
-                    document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : 'auto';
-                });
-
-                sidebarOverlay.addEventListener('click', function() {
-                    sidebar.classList.remove('show');
-                    sidebarOverlay.classList.remove('show');
-                    // Reset body overflow
-                    document.body.style.overflow = 'auto';
-                });
-
-                // Close sidebar when a menu item is clicked
-                const menuItems = document.querySelectorAll('.sidebar-menu .nav-link');
-                menuItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        sidebar.classList.remove('show');
-                        sidebarOverlay.classList.remove('show');
-                        // Reset body overflow
-                        document.body.style.overflow = 'auto';
-                    });
-                });
-            }
-        });
-    </script>
 </body>
-
 </html>

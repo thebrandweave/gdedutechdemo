@@ -143,7 +143,7 @@ if ($role === 'admin') {
 
 echo json_encode([
     'status' => 'success',
-    'message' => 'Google Authentication successful!',
+    'message' => 'Google Login successful!',
     'redirect' => $redirectUrl
 ]);
 exit();

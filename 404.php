@@ -1,20 +1,25 @@
 <?php
-// Get the referring URL
-$referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+// Determine base URL path dynamically for absolute asset loading
+$scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+$basePath = ($scriptDir === '/' || $scriptDir === '\\') ? '' : $scriptDir;
+
+$videoPath = $basePath . '/Images/Others/404.mp4';
+$posterPath = $basePath . '/Images/Others/404.png';
+$logoPath = $basePath . '/Images/Logos/GD_Only_logo.png';
 
 // Determine if user is logged in and their role
 session_start();
-$redirect_url = 'index.php';
+$redirect_url = $basePath . '/index.php';
 if (isset($_SESSION['role'])) {
     switch(strtolower($_SESSION['role'])) {
         case 'admin':
-            $redirect_url = './adminPanel/';
+            $redirect_url = $basePath . '/adminPanel/';
             break;
         case 'staff':
-            $redirect_url = './staffPanel/';
+            $redirect_url = $basePath . '/staffPanel/';
             break;
         case 'student':
-            $redirect_url = './studentPanel/';
+            $redirect_url = $basePath . '/studentPanel/';
             break;
     }
 }
@@ -33,8 +38,8 @@ if (isset($_SESSION['role'])) {
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="./Images/Logos/GD_Only_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="<?php echo htmlspecialchars($logoPath); ?>">
 
     <style>
         * {
@@ -69,7 +74,7 @@ if (isset($_SESSION['role'])) {
 
         .video-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             margin: 0 auto 24px auto;
             border-radius: 20px;
             overflow: hidden;
@@ -145,8 +150,10 @@ if (isset($_SESSION['role'])) {
     <div class="error-card">
         <!-- 404 Video Container -->
         <div class="video-container">
-            <video class="video-404" autoplay loop muted playsinline poster="./Images/Others/404.png">
+            <video id="video404" class="video-404" autoplay loop muted playsinline poster="<?php echo htmlspecialchars($posterPath); ?>">
+                <source src="<?php echo htmlspecialchars($videoPath); ?>" type="video/mp4">
                 <source src="./Images/Others/404.mp4" type="video/mp4">
+                <source src="/Images/Others/404.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
@@ -167,6 +174,17 @@ if (isset($_SESSION['role'])) {
     </div>
 
     <script>
+        // Force Video Playback for Chrome/Edge Autoplay Policies
+        document.addEventListener("DOMContentLoaded", function () {
+            const video = document.getElementById("video404");
+            if (video) {
+                video.muted = true;
+                video.play().catch(function(error) {
+                    console.log("Autoplay exception handled:", error);
+                });
+            }
+        });
+
         // Array of funny messages
         const funnyMessages = [
             "Plot twist: The page is not lost, it's just playing hide and seek... and winning! 🙈",
