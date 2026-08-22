@@ -354,7 +354,7 @@ if (isset($_GET['student_id'])) {
                             </div>
                         </div>
 
-                        <form action="verify_certificate.php" method="GET" class="row g-3 align-items-center">
+                        <form action="verify_certificate.php#verification-results" method="GET" class="row g-3 align-items-center">
                             <div class="col-lg-8 col-md-7">
                                 <div class="input-group search-key-box">
                                     <span class="input-group-text"><i class="bi bi-person-fill text-primary fs-5"></i></span>
@@ -377,7 +377,7 @@ if (isset($_GET['student_id'])) {
     </div>
 
     <!-- Main Content Container for Results -->
-    <div class="container pb-5">
+    <div class="container pb-5" id="verification-results">
         <div class="row justify-content-center">
             <div class="col-lg-10">
 
@@ -434,7 +434,6 @@ if (isset($_GET['student_id'])) {
 
                                          <?php if (!empty($admission['certificate_file'])): ?>
                                              <div class="d-flex flex-column gap-2 mt-3">
-                                              
                                                  <a href="./uploads/certificates/<?php echo htmlspecialchars($admission['certificate_file']); ?>" download class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center justify-content-center gap-2">
                                                      <i class="bi bi-download"></i>
                                                      <span>Download Certificate</span>
@@ -549,6 +548,12 @@ if (isset($_GET['student_id'])) {
                                      </div>
 
                                  </div> <!-- /row -->
+
+                                 <!-- Contact Disclaimer -->
+                                 <div class="text-center text-muted small mt-4 pt-3 border-top">
+                                     <i class="bi bi-info-circle-fill me-1 text-primary"></i> If any mistakes, please contact GD EDU TECH
+                                 </div>
+
                              </div> <!-- /card-body -->
                          </div> <!-- /student-profile-card -->
 
@@ -557,8 +562,8 @@ if (isset($_GET['student_id'])) {
                              $certExt = strtolower(pathinfo($admission['certificate_file'], PATHINFO_EXTENSION));
                              $certPath = "./uploads/certificates/" . htmlspecialchars($admission['certificate_file']);
                          ?>
-                      
-                              
+                             
+                               
                              </div>
                          <?php endif; ?>
 
@@ -609,6 +614,17 @@ if (isset($_GET['student_id'])) {
                 }
             }
         }
+
+        <?php if ($admission || !empty($error_message)): ?>
+        document.addEventListener('DOMContentLoaded', function() {
+            var resultElem = document.getElementById('verification-results');
+            if (resultElem) {
+                setTimeout(function() {
+                    resultElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+        <?php endif; ?>
     </script>
 </body>
 
