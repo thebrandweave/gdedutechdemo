@@ -395,7 +395,7 @@ $conn->close();
             <div class="google-auth-wrapper text-center">
                 <!-- Hidden Google Identity Services Client Init -->
                 <div id="g_id_onload"
-                     data-client_id="267890495884-euub370ds33tgn98rponciu9n8e59snl.apps.googleusercontent.com"
+                     data-client_id="<?= defined('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' ?>"
                      data-context="signin"
                      data-ux_mode="popup"
                      data-callback="handleGoogleSignIn"

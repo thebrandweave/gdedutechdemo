@@ -530,7 +530,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- Google Sign-In Button -->
                     <div class="google-auth-wrapper text-center">
                         <div id="g_id_onload"
-                             data-client_id="267890495884-euub370ds33tgn98rponciu9n8e59snl.apps.googleusercontent.com.apps.googleusercontent.com"
+                             data-client_id="<?= defined('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' ?>"
                              data-context="signup"
                              data-ux_mode="popup"
                              data-callback="handleGoogleSignUp"

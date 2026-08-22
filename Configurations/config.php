@@ -13,3 +13,7 @@ if ($conn->connect_error) {
 }
 
 $adminMail = "gdedutech24@gmail.com";
+
+// Google OAuth Client ID Configuration
+// Replace with your Client ID from Google Cloud Console (https://console.cloud.google.com/apis/credentials)
+define('GOOGLE_CLIENT_ID', '267890495884-euub370ds33tgn98rponciu9n8e59snl.apps.googleusercontent.com');
