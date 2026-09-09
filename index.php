@@ -734,26 +734,26 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
                 <!-- Left Promo Content -->
                 <div class="hero-promo-content">
                     <div class="promo-badge">
-                        <i class="bi bi-fire text-warning me-1"></i> LIMITED TIME OFFER
+                        <i class="bi bi-mortarboard-fill text-warning me-1"></i> GD EDU TECH
                     </div>
                     
-                  <h1 class="hero-promo-title">
-    Get <span class="highlight-gold">₹8,000 Off</span> on <br>Selected Courses!
-</h1>
-                    
+                <h1 class="hero-promo-title">
+            Build Skills. <br/> <span class="highlight-gold">Shape Your Future.</span>
+        </h1>            
                     <p class="hero-promo-sub">
-                        Upgrade your skills with industry-focused programs and advance your career.
-                    </p>
+ Learn industry-relevant skills with practical training, expert guidance,
+            and career-focused programs designed to help you succeed.                    </p>
                     
-                    <div class="offer-date-info">
-                        <i class="bi bi-calendar-event me-2"></i> Offer Valid Till <strong>05th September, 2026</strong>
-                    </div>
+                      <div class="offer-date-info">
+            <i class="bi bi-stars me-2"></i>
+            Learn Today. <strong>Lead Tomorrow.</strong>
+        </div>
                     
-                    <div class="hero-promo-actions">
-                        <a href="courses.php" class="btn-explore-offer">
-                            Explore Offer <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
-                    </div>
+               <div class="hero-promo-actions">
+            <a href="courses.php" class="btn-explore-offer">
+                Explore Our Courses <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
                     
                     <!-- Carousel Pagination Dots
                     <div class="banner-pagination-dots">
@@ -766,7 +766,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
                 <!-- Center Person Image -->
                 <div class="hero-person-wrapper">
-                    <img src="./assets/images/hi3.png" alt="Student" class="hero-person-img">
+                    <img src="./assets/images/hi.png" alt="Student" class="hero-person-img">
                 </div>
 
                 <!-- Right Certified White Card -->
