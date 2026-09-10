@@ -551,14 +551,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
 
 <body>
 <!-- Fixed Google Write a Review Tab -->
-    <a
-        class="gd-google-review-tab"
-        href="https://www.google.com/search?q=GD+EDU+TECH+Mangalore+reviews"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Write a Google review for GD Edu Tech"
-        title="Write a review"
-    >
+  <a
+    class="gd-google-review-tab"
+    href="https://search.google.com/local/writereview?placeid=ChIJxxHvltdbozsR9dshtS279tk"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="View GD Edu Tech Google Reviews"
+>
      <span class="gd-google-review-tab-inner">
     <img
         class="google-g-logo"
@@ -1220,7 +1219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
     @media (max-width: 576px) {
         #gd-chatbot-root {
             right: 14px;
-            bottom: 14px;
+            bottom: 73px;
         }
 
         #gd-chatbot-panel {

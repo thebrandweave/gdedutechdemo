@@ -1016,7 +1016,7 @@ if ($result) {
     @media (max-width: 576px) {
         #gd-chatbot-root {
             right: 14px;
-            bottom: 14px;
+            bottom: 73px;
         }
 
         #gd-chatbot-panel {

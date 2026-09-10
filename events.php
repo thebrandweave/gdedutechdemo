@@ -981,7 +981,7 @@ if (isset($_GET['ajax_filter']) && $_GET['ajax_filter'] == '1') {
     @media (max-width: 576px) {
         #gd-chatbot-root {
             right: 14px;
-            bottom: 14px;
+            bottom: 73px;
         }
 
         #gd-chatbot-panel {

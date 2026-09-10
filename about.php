@@ -951,7 +951,7 @@ require_once './Configurations/config.php';
     @media (max-width: 576px) {
         #gd-chatbot-root {
             right: 6px;
-            bottom: 14px;
+            bottom: 73px;
         }
 
         #gd-chatbot-panel {
@@ -965,6 +965,8 @@ require_once './Configurations/config.php';
         }
 
         #gd-chatbot-toggle {
+                    right: -6px;
+        bottom: 57px;
             width: 80px;
             height: 84px;
             font-size: 23px;
