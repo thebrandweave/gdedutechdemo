@@ -469,5 +469,581 @@
             btn.disabled = true;
         });
     </script>
+     
+
+<!-- =========================================================
+     GD EDU TECH CHATBOT
+     Self-contained widget only. Existing page design untouched.
+     ========================================================= -->
+<style>
+    #gd-chatbot-root,
+    #gd-chatbot-root * {
+        box-sizing: border-box;
+    }
+
+    #gd-chatbot-root {
+        position: fixed;
+        right: 2px;
+        bottom: 145px;
+        z-index: 99999;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    #gd-chatbot-toggle {
+        width: 136px;
+        height: 58px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: #0079a8;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        cursor: pointer;
+        box-shadow: none;
+        transition: none;
+        position: relative;
+    }
+        10% {
+            transform: scale(1.18);
+            opacity: 0.22;
+        }
+        20% {
+            transform: scale(1.04);
+            opacity: 0.38;
+        }
+        30% {
+            transform: scale(1.25);
+            opacity: 0;
+        }
+        45%, 90% {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
+#gd-chatbot-toggle:focus-visible,
+    #gd-chatbot-close:focus-visible,
+    #gd-chatbot-send:focus-visible,
+    #gd-chatbot-input:focus-visible,
+    .gd-chatbot-quick-btn:focus-visible {
+        outline: 3px solid rgba(0, 121, 168, 0.28);
+        outline-offset: 2px;
+    }
+
+    #gd-chatbot-panel {
+        position: absolute;
+        right: 12px;
+        bottom: 42px;
+        width: 377px;
+        height: 500px;
+        max-height: calc(100vh - 120px);
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 18px;
+        box-shadow: 0 18px 55px rgba(0, 0, 0, 0.20);
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+    }
+
+    #gd-chatbot-panel.gd-chatbot-open {
+        display: flex;
+        animation: gdChatbotOpen 0.2s ease-out;
+    }
+
+    @keyframes gdChatbotOpen {
+        from { opacity: 0; transform: translateY(10px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .gd-chatbot-header {
+        background: #0079a8;
+        color: #fff;
+        padding: 14px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex: 0 0 auto;
+    }
+
+    .gd-chatbot-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .gd-chatbot-avatar {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .gd-chatbot-title {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .gd-chatbot-status {
+        display: block;
+        margin-top: 2px;
+        font-size: 11px;
+        opacity: 0.9;
+    }
+
+    #gd-chatbot-close {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+    }
+
+    #gd-chatbot-close:hover {
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    #gd-chatbot-messages {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 15px;
+        background: #f7f9fb;
+        scroll-behavior: smooth;
+    }
+
+    .gd-chatbot-row {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .gd-chatbot-row.gd-chatbot-user-row {
+        justify-content: flex-end;
+    }
+
+    .gd-chatbot-message {
+        max-width: 82%;
+        padding: 10px 12px;
+        border-radius: 14px;
+        font-size: 13px;
+        line-height: 1.55;
+        word-break: break-word;
+    }
+
+    .gd-chatbot-bot-message {
+        background: #fff;
+        color: #333;
+        border: 1px solid #e9edf1;
+        border-bottom-left-radius: 5px;
+    }
+
+    .gd-chatbot-user-message {
+        background: #0079a8;
+        color: #fff;
+        border-bottom-right-radius: 5px;
+    }
+
+    .gd-chatbot-message a {
+        color: #0079a8;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .gd-chatbot-quick-actions {
+        padding: 8px 12px 2px;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        background: #fff;
+        scrollbar-width: none;
+        flex: 0 0 auto;
+    }
+
+    .gd-chatbot-quick-actions::-webkit-scrollbar {
+        display: none;
+    }
+
+    .gd-chatbot-quick-btn {
+        flex: 0 0 auto;
+        border: 1px solid #d9e7ed;
+        background: #fff;
+        color: #0079a8;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .gd-chatbot-quick-btn:hover {
+        background: #eef8fb;
+    }
+
+    .gd-chatbot-input-wrap {
+        padding: 10px;
+        background: #fff;
+        border-top: 1px solid #edf0f2;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 0 0 auto;
+    }
+
+    #gd-chatbot-input {
+        flex: 1;
+        min-width: 0;
+        height: 42px;
+        border: 1px solid #dfe4e8;
+        border-radius: 999px;
+        padding: 0 14px;
+        font-family: inherit;
+        font-size: 13px;
+        color: #222;
+        background: #fff;
+        outline: none;
+    }
+
+    #gd-chatbot-input:focus {
+        border-color: #0079a8;
+    }
+
+    #gd-chatbot-send {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        border: 0;
+        border-radius: 50%;
+        background: #0079a8;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 17px;
+    }
+
+    #gd-chatbot-send:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .gd-chatbot-typing {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 46px;
+    }
+
+    .gd-chatbot-typing span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #9aa6ad;
+        animation: gdChatbotTyping 1s infinite ease-in-out;
+    }
+
+    .gd-chatbot-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .gd-chatbot-typing span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes gdChatbotTyping {
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.55; }
+        30% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    @media (max-width: 576px) {
+        #gd-chatbot-root {
+            right: 14px;
+            bottom: 14px;
+        }
+
+        #gd-chatbot-panel {
+            position: fixed;
+            right: 12px;
+            left: 12px;
+            bottom: 82px;
+            width: auto;
+            height: min(500px, calc(100vh - 110px));
+            max-height: calc(100vh - 110px);
+        }
+
+        #gd-chatbot-toggle {
+            width: 54px;
+            height: 54px;
+            font-size: 23px;
+        }
+    }
+
+   .gd-chatbot-icon {
+    width: 121px;
+    height: 598px;
+    object-fit: contain;
+    display: block;
+}
+</style>
+
+<div id="gd-chatbot-root">
+    <div id="gd-chatbot-panel" role="dialog" aria-label="GD Edu Tech chatbot" aria-hidden="true">
+        <div class="gd-chatbot-header">
+            <div class="gd-chatbot-header-left">
+                <div class="gd-chatbot-avatar" aria-hidden="true">
+                    <i class="bi bi-robot"></i>
+                </div>
+                <div>
+                    <p class="gd-chatbot-title">GD Edu Tech Assistant</p>
+                    <span class="gd-chatbot-status">Online • Ask about our courses</span>
+                </div>
+            </div>
+            <button id="gd-chatbot-close" type="button" aria-label="Close chatbot">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div id="gd-chatbot-messages" aria-live="polite"></div>
+
+        <div class="gd-chatbot-quick-actions" aria-label="Quick questions">
+            <button type="button" class="gd-chatbot-quick-btn" data-question="What courses do you offer?">Courses</button>
+            <button type="button" class="gd-chatbot-quick-btn" data-question="Tell me about offline courses">Offline Courses</button>
+            <button type="button" class="gd-chatbot-quick-btn" data-question="Do you provide placement assistance?">Placement</button>
+            <button type="button" class="gd-chatbot-quick-btn" data-question="How can I apply for a scholarship?">Scholarship</button>
+        </div>
+
+        <form id="gd-chatbot-form" class="gd-chatbot-input-wrap" autocomplete="off">
+            <input
+                id="gd-chatbot-input"
+                type="text"
+                placeholder="Type your message..."
+                aria-label="Chat message"
+                maxlength="300"
+            >
+            <button id="gd-chatbot-send" type="submit" aria-label="Send message">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </form>
+    </div>
+<button id="gd-chatbot-toggle" type="button" aria-label="Open chatbot" aria-expanded="false">
+    <img src="./assets/images/t5d42NEZJZ.gif" alt="Chatbot" class="gd-chatbot-icon">
+</button>
+</div>
+
+<script>
+(function () {
+    const root = document.getElementById('gd-chatbot-root');
+    if (!root) return;
+
+    const panel = document.getElementById('gd-chatbot-panel');
+    const toggle = document.getElementById('gd-chatbot-toggle');
+    const closeBtn = document.getElementById('gd-chatbot-close');
+    const form = document.getElementById('gd-chatbot-form');
+    const input = document.getElementById('gd-chatbot-input');
+    const messages = document.getElementById('gd-chatbot-messages');
+    const quickButtons = document.querySelectorAll('.gd-chatbot-quick-btn');
+
+    let greeted = false;
+    let busy = false;
+
+    function scrollToBottom() {
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function addMessage(text, sender, allowHtml = false) {
+        const row = document.createElement('div');
+        row.className = 'gd-chatbot-row' + (sender === 'user' ? ' gd-chatbot-user-row' : '');
+
+        const bubble = document.createElement('div');
+        bubble.className = 'gd-chatbot-message ' + (sender === 'user' ? 'gd-chatbot-user-message' : 'gd-chatbot-bot-message');
+
+        if (allowHtml) {
+            bubble.innerHTML = text;
+        } else {
+            bubble.textContent = text;
+        }
+
+        row.appendChild(bubble);
+        messages.appendChild(row);
+        scrollToBottom();
+        return row;
+    }
+
+    function showTyping() {
+        const row = document.createElement('div');
+        row.className = 'gd-chatbot-row';
+        row.id = 'gd-chatbot-typing-row';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'gd-chatbot-message gd-chatbot-bot-message gd-chatbot-typing';
+        bubble.innerHTML = '<span></span><span></span><span></span>';
+
+        row.appendChild(bubble);
+        messages.appendChild(row);
+        scrollToBottom();
+    }
+
+    function hideTyping() {
+        const typingRow = document.getElementById('gd-chatbot-typing-row');
+        if (typingRow) typingRow.remove();
+    }
+
+    function botReply(message) {
+        const q = message.toLowerCase().trim();
+
+        if (/\b(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(q)) {
+            return 'Hello! 👋 Welcome to GD Edu Tech. How can I help you today?';
+        }
+
+        if (q.includes('course') || q.includes('program')) {
+            if (q.includes('offline') || q.includes('classroom')) {
+                return 'Our classroom training includes Full Stack Development, Architectural Design, Interior Design, Digital Marketing, Graphic Design & Video Editing, and Photography & Camera Handling. <a href="courses.php">View courses</a>.';
+            }
+            return 'GD Edu Tech offers career-focused programs including Full Stack Development, Architectural Design, Interior Design, Digital Marketing, Graphic Design & Video Editing, and Photography. <a href="courses.php">Explore all courses</a>.';
+        }
+
+        if (q.includes('full stack') || q.includes('web development') || q.includes('developer')) {
+            return 'Yes, Full Stack Development is one of our featured classroom training programs. You can check the available course details on our <a href="courses.php">Courses page</a>.';
+        }
+
+        if (q.includes('interior')) {
+            return 'Yes, GD Edu Tech offers an Interior Design course with practical, career-focused training. <a href="courses.php">View course details</a>.';
+        }
+
+        if (q.includes('architecture') || q.includes('architectural')) {
+            return 'Yes, we offer an Architectural Design course. <a href="courses.php">View the course options</a> for more details.';
+        }
+
+        if (q.includes('digital marketing') || q.includes('marketing')) {
+            return 'Yes, Digital Marketing is available as one of our training programs. <a href="courses.php">See course details</a>.';
+        }
+
+        if (q.includes('graphic') || q.includes('video editing') || q.includes('photography')) {
+            return 'We offer Graphic Design & Video Editing and Photography & Camera Handling programs. <a href="courses.php">Explore the courses</a>.';
+        }
+
+        if (q.includes('scholarship')) {
+            return 'You can apply through our scholarship page. <a href="scholarship.php">Apply for Scholarship</a>.';
+        }
+
+        if (q.includes('placement') || q.includes('job') || q.includes('career')) {
+            return 'Yes. GD Edu Tech provides placement assistance and career guidance, including support such as resume building and interview preparation.';
+        }
+
+        if (q.includes('internship')) {
+            return 'Yes. GD Edu Tech provides internship programs designed to give students practical, real-world experience.';
+        }
+
+        if (q.includes('certificate') || q.includes('certification')) {
+            return 'Courses are designed to provide industry-recognized certification after completion. You can contact the team for certification details for a specific program.';
+        }
+
+        if (q.includes('online')) {
+            return 'GD Edu Tech supports flexible online learning with access to course materials. For current online course availability, please check the <a href="courses.php">Courses page</a>.';
+        }
+
+        if (q.includes('fee') || q.includes('price') || q.includes('cost') || q.includes('duration') || q.includes('timing')) {
+            return 'Fees, duration, and batch timings can vary by course. Please <a href="contact.php">contact GD Edu Tech</a> for the latest details.';
+        }
+
+        if (q.includes('contact') || q.includes('phone') || q.includes('address') || q.includes('location')) {
+            return 'You can reach the GD Edu Tech team through the <a href="contact.php">Contact page</a>.';
+        }
+
+        if (q.includes('enroll') || q.includes('join') || q.includes('admission') || q.includes('register')) {
+            return 'You can start by exploring the available programs on the <a href="courses.php">Courses page</a>, then use the enrollment/contact option for the course you want.';
+        }
+
+        if (q.includes('thank')) {
+            return 'You’re welcome! 😊 If you have another question about GD Edu Tech, just ask.';
+        }
+
+        return 'I can help with courses, scholarships, internships, certifications, placement assistance, fees, and enrollment. For anything else, please <a href="contact.php">contact our team</a>.';
+    }
+
+    function submitMessage(message) {
+        const cleanMessage = String(message || '').trim();
+        if (!cleanMessage || busy) return;
+
+        busy = true;
+        addMessage(cleanMessage, 'user');
+        input.value = '';
+        showTyping();
+
+        window.setTimeout(function () {
+            hideTyping();
+            addMessage(botReply(cleanMessage), 'bot', true);
+            busy = false;
+            input.focus();
+        }, 450);
+    }
+
+    function openChat() {
+        panel.classList.add('gd-chatbot-open');
+        panel.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.innerHTML = '<i class=""></i>';
+        toggle.setAttribute('aria-label', 'Close chatbot');
+
+        if (!greeted) {
+            greeted = true;
+            addMessage('Hi! 👋 I’m the GD Edu Tech Assistant. Ask me about courses, scholarships, internships, placement assistance, fees, or enrollment.', 'bot');
+        }
+
+        window.setTimeout(function () {
+            input.focus();
+            scrollToBottom();
+        }, 50);
+    }
+
+    function closeChat() {
+        panel.classList.remove('gd-chatbot-open');
+        panel.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.innerHTML = '<img src="./assets/images/t5d42NEZJZ.gif" alt="Chatbot" class="gd-chatbot-icon">';
+        toggle.setAttribute('aria-label', 'Open chatbot');
+    }
+
+    toggle.addEventListener('click', function () {
+        if (panel.classList.contains('gd-chatbot-open')) {
+            closeChat();
+        } else {
+            openChat();
+        }
+    });
+
+    closeBtn.addEventListener('click', closeChat);
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitMessage(input.value);
+    });
+
+    quickButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            submitMessage(button.getAttribute('data-question'));
+        });
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && panel.classList.contains('gd-chatbot-open')) {
+            closeChat();
+            toggle.focus();
+        }
+    });
+})();
+</script>
 </body>
 </html>
