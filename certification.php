@@ -612,7 +612,7 @@ require_once './Configurations/config.php';
 
     @media (max-width: 576px) {
         #gd-chatbot-root {
-            right: 14px;
+            right: 2px;
             bottom: 73px;
         }
 
@@ -627,7 +627,7 @@ require_once './Configurations/config.php';
         }
 
         #gd-chatbot-toggle {
-            width: 54px;
+            width: 94px;
             height: 54px;
             font-size: 23px;
         }
@@ -681,7 +681,7 @@ require_once './Configurations/config.php';
         </form>
     </div>
 <button id="gd-chatbot-toggle" type="button" aria-label="Open chatbot" aria-expanded="false">
-    <img src="./assets/images/t5d42NEZJZ.gif" alt="Chatbot" class="gd-chatbot-icon">
+    <img src="./assets/images/t5d42NEZJZ.svg" alt="Chatbot" class="gd-chatbot-icon">
 </button>
 </div>
 
@@ -855,7 +855,7 @@ require_once './Configurations/config.php';
         panel.classList.remove('gd-chatbot-open');
         panel.setAttribute('aria-hidden', 'true');
         toggle.setAttribute('aria-expanded', 'false');
-        toggle.innerHTML = '<img src="./assets/images/t5d42NEZJZ.gif" alt="Chatbot" class="gd-chatbot-icon">';
+        toggle.innerHTML = '<img src="./assets/images/t5d42NEZJZ.svg" alt="Chatbot" class="gd-chatbot-icon">';
         toggle.setAttribute('aria-label', 'Open chatbot');
     }
 

@@ -1218,7 +1218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
 
     @media (max-width: 576px) {
         #gd-chatbot-root {
-            right: 14px;
+            right: 2px;
             bottom: 73px;
         }
 
@@ -1233,7 +1233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         }
 
         #gd-chatbot-toggle {
-            width: 54px;
+            width: 94px;
             height: 54px;
             font-size: 23px;
         }
@@ -1287,7 +1287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         </form>
     </div>
 <button id="gd-chatbot-toggle" type="button" aria-label="Open chatbot" aria-expanded="false">
-    <img src="./assets/images/t5d42NEZJZ.gif" alt="Chatbot" class="gd-chatbot-icon">
+    <img src="./assets/images/t5d42NEZJZ.svg" alt="Chatbot" class="gd-chatbot-icon">
 </button>
 </div>
 
@@ -1461,7 +1461,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         panel.classList.remove('gd-chatbot-open');
         panel.setAttribute('aria-hidden', 'true');
         toggle.setAttribute('aria-expanded', 'false');
-        toggle.innerHTML = '<img src="./assets/images/t5d42NEZJZ.gif" alt="Chatbot" class="gd-chatbot-icon">';
+        toggle.innerHTML = '<img src="./assets/images/t5d42NEZJZ.svg" alt="Chatbot" class="gd-chatbot-icon">';
         toggle.setAttribute('aria-label', 'Open chatbot');
     }
 
