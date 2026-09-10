@@ -970,6 +970,8 @@ require_once './Configurations/config.php';
         }
     }
 
+    .gd-chatbot-icon {
+}
    .gd-chatbot-icon {
     width: 121px;
     height: 598px;
