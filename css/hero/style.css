@@ -197,11 +197,11 @@
 .hero-person-wrapper {
   position: absolute;
   bottom: 0;
-  top: 17%;
+  top: 8%;
   left: 50%;
   transform: translateX(-50%);
   height: 100%;
-  width: 476px;
+  width: 510px;
   display: flex;
   justify-content: center;
   align-items: flex-end;

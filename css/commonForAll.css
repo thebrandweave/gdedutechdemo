@@ -142,6 +142,7 @@ img, video, iframe, svg, canvas {
         max-height: 320px !important;
         width: auto !important;
         margin: 0 auto !important;
+    mix-blend-mode: subtract !important;
         display: block !important;
         animation: none !important;
     }
