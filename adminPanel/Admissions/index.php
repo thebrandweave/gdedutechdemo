@@ -707,13 +707,16 @@ try {
                             <div class="col-md-6">
                                 <label for="edit_course_applied" class="form-label font-weight-semibold">Course Applied <span class="text-danger">*</span></label>
                                 <select class="form-select" id="edit_course_applied" name="course_applied" required>
-                                    <option value="" disabled selected>Select course...</option>
+                                   <option value="" disabled selected>Select course...</option>
                                     <option value="Full Stack Development">Full Stack Development</option>
                                     <option value="Architectural Design">Architectural Design</option>
                                     <option value="Interior Design">Interior Design</option>
                                     <option value="Digital Marketing">Digital Marketing</option>
                                     <option value="Graphic Design & Video Editing">Graphic Design & Video Editing</option>
-                                    <option value="Photography & Camera Handling">Photography & Camera Handling</option>
+                                    <option value="Graphic Design">Graphic Design</option>
+                                    <option value="Visual Media Program">Visual Media Program</option>
+                                    <option value="Tally & GST">Tally & GST</option>
+                                    <option value="Advanced Excel">Advanced Excel</option>
                                     <?php 
                                     if ($courses_query && mysqli_num_rows($courses_query) > 0): 
                                         mysqli_data_seek($courses_query, 0);
