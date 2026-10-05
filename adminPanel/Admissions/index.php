@@ -643,9 +643,7 @@ if ($all_students_res) {
                     </div>
 
                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <button type="button" class="btn btn-outline-primary text-nowrap fw-semibold" data-bs-toggle="modal" data-bs-target="#addCourseModal" onclick="openAddCourseGeneric()">
-                            <i class="bi bi-journal-plus me-1.5"></i>Add Course to Existing Student
-                        </button>
+                       
                         <button type="button" class="btn btn-primary text-nowrap fw-semibold" data-bs-toggle="modal" data-bs-target="#addAdmissionModal">
                             <i class="bi bi-person-plus-fill me-1.5"></i>New Student Admission
                         </button>
@@ -843,13 +841,7 @@ if ($all_students_res) {
                                                             <i class="bi bi-eye-fill text-info fs-6"></i>
                                                         </a>
 
-                                                        <!-- Add Another Course Button -->
-                                                        <a href="javascript:void(0)" class="action-icon add-course-btn text-success"
-                                                           data-student-id="<?php echo htmlspecialchars($admission['student_id']); ?>"
-                                                           data-student-name="<?php echo htmlspecialchars($admission['student_name']); ?>"
-                                                           title="Add Another Course to this Student ID">
-                                                            <i class="bi bi-journal-plus text-success fs-6"></i>
-                                                        </a>
+                                                  
 
                                                         <!-- Edit Button -->
                                                         <a href="javascript:void(0)" class="action-icon edit-btn" 
