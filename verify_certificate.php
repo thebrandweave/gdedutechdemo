@@ -436,7 +436,7 @@ if (isset($_GET['student_id'])) {
     <!-- Main Content Container for Results -->
     <div class="container pb-5" id="verification-results">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-lg-12">
 
                 <!-- Error Section -->
                 <?php if (!empty($error_message)): ?>
@@ -663,16 +663,16 @@ if (isset($_GET['student_id'])) {
                                                  </div>
                                                  <div class="col-md-8 p-3 info-table-value">
                                                      <?php if (count($student_courses) > 1): ?>
-                                                         <div class="d-flex flex-column gap-2.5">
+                                                         <div class="d-flex flex-column ">
                                                              <?php foreach ($student_courses as $c): 
                                                                  $skills = array_filter(array_map('trim', explode(",", $c['key_skills'] ?? '')));
                                                              ?>
-                                                                 <div class="p-2.5 px-3 rounded-3 bg-light border border-1">
-                                                                     <div class="small fw-bold text-dark mb-2 d-flex align-items-center">
+                                                                 <div class="p-2.5 px-3 rounded-3 m-1 bg-light border border-1">
+                                                                     <div class="small fw-bold text-dark mb-2 d-flex align-items-center m-2">
                                                                          <i class="bi bi-mortarboard-fill text-primary me-2"></i>
                                                                          <span><?php echo htmlspecialchars($c['course_name']); ?>:</span>
                                                                      </div>
-                                                                     <div class="d-flex flex-wrap gap-2">
+                                                                     <div class="d-flex flex-wrap gap-2 m-3">
                                                                          <?php if (!empty($skills)): ?>
                                                                              <?php foreach ($skills as $skill): ?>
                                                                                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill fw-semibold">
@@ -687,7 +687,7 @@ if (isset($_GET['student_id'])) {
                                                              <?php endforeach; ?>
                                                          </div>
                                                      <?php else: ?>
-                                                         <div class="d-flex flex-wrap gap-2">
+                                                         <div class="d-flex flex-wrap gap-2 m-3">
                                                              <?php
                                                              $raw_skills = !empty($student_courses[0]['key_skills']) ? $student_courses[0]['key_skills'] : ($admission['key_skills'] ?? '');
                                                              $skills = array_filter(array_map('trim', explode(",", $raw_skills)));
@@ -718,45 +718,6 @@ if (isset($_GET['student_id'])) {
                              </div> <!-- /card-body -->
                          </div> <!-- /student-profile-card -->
 
-                         <!-- Issued Certificate Document Preview Cards -->
-                         <?php if (!empty($student_certificates)): ?>
-                             <?php foreach ($student_certificates as $scert): 
-                                 $certFile = $scert['file'];
-                                 $certExt = strtolower(pathinfo($certFile, PATHINFO_EXTENSION));
-                                 $certPath = "./uploads/certificates/" . htmlspecialchars($certFile);
-                             ?>
-                                 <div class="card border-0 shadow-sm rounded-4 mt-4 overflow-hidden">
-                                     <div class="card-header bg-white py-3 px-4 d-flex flex-wrap justify-content-between align-items-center gap-2 border-bottom">
-                                         <div class="d-flex align-items-center gap-2">
-                                             <i class="bi bi-award-fill text-warning fs-5"></i>
-                                             <h6 class="mb-0 fw-bold text-dark">
-                                                 Certificate Document &ndash; <?php echo htmlspecialchars($scert['course_name']); ?>
-                                             </h6>
-                                         </div>
-                                         <div class="d-flex gap-2">
-                                             <a href="<?php echo $certPath; ?>" download class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                 <i class="bi bi-download me-1"></i> Download
-                                             </a>
-                                             <a href="<?php echo $certPath; ?>" target="_blank" class="btn btn-sm btn-primary rounded-pill px-3">
-                                                 <i class="bi bi-eye me-1"></i> View Full
-                                             </a>
-                                         </div>
-                                     </div>
-                                     <div class="card-body p-3 text-center bg-light">
-                                         <?php if (in_array($certExt, ['jpg', 'jpeg', 'png', 'webp'])): ?>
-                                             <img src="<?php echo $certPath; ?>" alt="Certificate - <?php echo htmlspecialchars($scert['course_name']); ?>" class="img-fluid rounded-3 shadow-sm" style="max-height: 600px;">
-                                         <?php elseif ($certExt === 'pdf'): ?>
-                                             <iframe src="<?php echo $certPath; ?>#toolbar=0" style="width: 100%; height: 550px; border: none; border-radius: 8px;"></iframe>
-                                         <?php else: ?>
-                                             <div class="py-4">
-                                                 <i class="bi bi-file-earmark-check fs-1 text-primary mb-2"></i>
-                                                 <p class="mb-0 fw-semibold text-muted">Certificate available for download</p>
-                                             </div>
-                                         <?php endif; ?>
-                                     </div>
-                                 </div>
-                             <?php endforeach; ?>
-                         <?php endif; ?>
 
                      </div>
                 <?php endif; ?>
