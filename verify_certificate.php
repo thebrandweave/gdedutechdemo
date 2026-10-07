@@ -4,6 +4,9 @@ require_once './Configurations/config.php';
 
 $student_id = "";
 $admission = null;
+$student_courses = [];
+$has_different_training_periods = false;
+$student_certificates = [];
 $error_message = "";
 
 if (isset($_GET['student_id'])) {
@@ -13,6 +16,60 @@ if (isset($_GET['student_id'])) {
         $result = mysqli_query($conn, $query);
         if ($result && mysqli_num_rows($result) > 0) {
             $admission = mysqli_fetch_assoc($result);
+
+            // Fetch all assigned courses for this student
+            $courses_query = "SELECT * FROM student_admission_courses WHERE student_id = '$student_id' ORDER BY id ASC";
+            $courses_result = mysqli_query($conn, $courses_query);
+            if ($courses_result && mysqli_num_rows($courses_result) > 0) {
+                while ($c_row = mysqli_fetch_assoc($courses_result)) {
+                    $student_courses[] = $c_row;
+                }
+            }
+
+            // Fallback for students with records only in student_admissions
+            if (empty($student_courses)) {
+                $student_courses[] = [
+                    'id' => 0,
+                    'course_name' => $admission['course_applied'] ?? '',
+                    'start_date' => $admission['start_date'] ?? null,
+                    'end_date' => $admission['end_date'] ?? null,
+                    'internship' => $admission['internship'] ?? '',
+                    'key_skills' => $admission['key_skills'] ?? '',
+                    'certificate_file' => $admission['certificate_file'] ?? ''
+                ];
+            }
+
+            // Check if training periods differ across enrolled courses
+            if (count($student_courses) > 1) {
+                $first_period = null;
+                foreach ($student_courses as $sc) {
+                    $s = !empty($sc['start_date']) ? date('Y-m-d', strtotime($sc['start_date'])) : '';
+                    $e = !empty($sc['end_date']) ? date('Y-m-d', strtotime($sc['end_date'])) : '';
+                    $period_key = $s . '|' . $e;
+                    if ($first_period === null) {
+                        $first_period = $period_key;
+                    } elseif ($first_period !== $period_key) {
+                        $has_different_training_periods = true;
+                        break;
+                    }
+                }
+            }
+
+            // Collect available certificate files
+            foreach ($student_courses as $sc) {
+                if (!empty($sc['certificate_file'])) {
+                    $student_certificates[] = [
+                        'course_name' => $sc['course_name'],
+                        'file' => $sc['certificate_file']
+                    ];
+                }
+            }
+            if (empty($student_certificates) && !empty($admission['certificate_file'])) {
+                $student_certificates[] = [
+                    'course_name' => $admission['course_applied'],
+                    'file' => $admission['certificate_file']
+                ];
+            }
         } else {
             $error_message = "No record found for Student ID: " . htmlspecialchars($student_id) . ". Please make sure the ID is correct (e.g., GDEDU1001).";
         }
@@ -432,12 +489,21 @@ if (isset($_GET['student_id'])) {
                                              </span>
                                          </div>
 
-                                         <?php if (!empty($admission['certificate_file'])): ?>
+                                         <?php if (!empty($student_certificates)): ?>
                                              <div class="d-flex flex-column gap-2 mt-3">
-                                                 <a href="./uploads/certificates/<?php echo htmlspecialchars($admission['certificate_file']); ?>" download class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center justify-content-center gap-2">
-                                                     <i class="bi bi-download"></i>
-                                                     <span>Download Certificate</span>
-                                                 </a>
+                                                 <?php if (count($student_certificates) === 1): ?>
+                                                     <a href="./uploads/certificates/<?php echo htmlspecialchars($student_certificates[0]['file']); ?>" download class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center justify-content-center gap-2">
+                                                         <i class="bi bi-download"></i>
+                                                         <span>Download Certificate</span>
+                                                     </a>
+                                                 <?php else: ?>
+                                                     <?php foreach ($student_certificates as $scert): ?>
+                                                         <a href="./uploads/certificates/<?php echo htmlspecialchars($scert['file']); ?>" download class="btn btn-outline-success rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center justify-content-center gap-2 text-truncate" title="Download Certificate - <?php echo htmlspecialchars($scert['course_name']); ?>">
+                                                             <i class="bi bi-download flex-shrink-0"></i>
+                                                             <span class="text-truncate">Download <?php echo htmlspecialchars($scert['course_name']); ?> Cert</span>
+                                                         </a>
+                                                     <?php endforeach; ?>
+                                                 <?php endif; ?>
                                              </div>
                                          <?php else: ?>
                                              <button onclick="window.print();" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center justify-content-center gap-2 shadow-sm mt-3">
@@ -469,7 +535,17 @@ if (isset($_GET['student_id'])) {
                                                      <span>Course Enrolled</span>
                                                  </div>
                                                  <div class="col-md-8 p-3 info-table-value text-primary fw-bold">
-                                                     <?php echo htmlspecialchars($admission['course_applied']); ?>
+                                                     <?php if (count($student_courses) > 1): ?>
+                                                         <div class="d-flex flex-wrap gap-2">
+                                                             <?php foreach ($student_courses as $c): ?>
+                                                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-semibold">
+                                                                     <i class="bi bi-mortarboard-fill me-1"></i><?php echo htmlspecialchars($c['course_name']); ?>
+                                                                 </span>
+                                                             <?php endforeach; ?>
+                                                         </div>
+                                                     <?php else: ?>
+                                                         <span><?php echo htmlspecialchars($admission['course_applied']); ?></span>
+                                                     <?php endif; ?>
                                                  </div>
                                              </div>
 
@@ -496,51 +572,136 @@ if (isset($_GET['student_id'])) {
                                              </div>
 
                                              <div class="row g-0 info-table-row">
-                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-<?php echo ($has_different_training_periods ? 'start pt-3' : 'center'); ?>">
                                                      <i class="bi bi-calendar3 text-primary me-2 fs-5"></i>
                                                      <span>Training Duration</span>
                                                  </div>
                                                  <div class="col-md-8 p-3 info-table-value">
-                                                     <?php echo date('d M Y', strtotime($admission['start_date'])); ?>
-                                                     <strong class="mx-2 text-muted">to</strong>
-                                                     <?php echo date('d M Y', strtotime($admission['end_date'])); ?>
+                                                     <?php if ($has_different_training_periods): ?>
+                                                         <div class="d-flex flex-column gap-2">
+                                                             <?php foreach ($student_courses as $c): ?>
+                                                                 <div class="p-2 px-3 rounded-3 bg-light border border-1 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-1">
+                                                                     <span class="fw-bold text-dark d-flex align-items-center">
+                                                                         <i class="bi bi-calendar-event text-primary me-2"></i><?php echo htmlspecialchars($c['course_name']); ?>:
+                                                                     </span>
+                                                                     <span class="text-secondary fw-semibold">
+                                                                         <?php if (!empty($c['start_date']) && !empty($c['end_date'])): ?>
+                                                                             <?php echo date('d M Y', strtotime($c['start_date'])); ?>
+                                                                             <strong class="mx-1 text-muted">to</strong>
+                                                                             <?php echo date('d M Y', strtotime($c['end_date'])); ?>
+                                                                         <?php else: ?>
+                                                                             <span class="text-muted fst-italic">Dates not specified</span>
+                                                                         <?php endif; ?>
+                                                                     </span>
+                                                                 </div>
+                                                             <?php endforeach; ?>
+                                                         </div>
+                                                     <?php else: ?>
+                                                         <?php 
+                                                         $single_s = !empty($student_courses[0]['start_date']) ? $student_courses[0]['start_date'] : $admission['start_date'];
+                                                         $single_e = !empty($student_courses[0]['end_date']) ? $student_courses[0]['end_date'] : $admission['end_date'];
+                                                         if (!empty($single_s) && !empty($single_e)):
+                                                         ?>
+                                                             <?php echo date('d M Y', strtotime($single_s)); ?>
+                                                             <strong class="mx-2 text-muted">to</strong>
+                                                             <?php echo date('d M Y', strtotime($single_e)); ?>
+                                                         <?php else: ?>
+                                                             <span class="text-muted fst-italic">Dates not specified</span>
+                                                         <?php endif; ?>
+                                                     <?php endif; ?>
                                                  </div>
                                              </div>
 
-                                             <?php if (!empty(trim($admission['internship']))): ?>
+                                             <?php 
+                                             $has_internship = false;
+                                             foreach ($student_courses as $c) {
+                                                 if (!empty(trim($c['internship'] ?? ''))) {
+                                                     $has_internship = true;
+                                                     break;
+                                                 }
+                                             }
+                                             if (!$has_internship && !empty(trim($admission['internship'] ?? ''))) {
+                                                 $has_internship = true;
+                                             }
+                                             ?>
+                                             <?php if ($has_internship): ?>
                                              <div class="row g-0 info-table-row">
-                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-<?php echo (count($student_courses) > 1 ? 'start pt-3' : 'center'); ?>">
                                                      <i class="bi bi-briefcase-fill text-primary me-2 fs-5"></i>
                                                      <span>Internship</span>
                                                  </div>
                                                  <div class="col-md-8 p-3 info-table-value">
-                                                     <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">
-                                                         <i class="bi bi-check-circle-fill me-1"></i>
-                                                         <?php echo htmlspecialchars($admission['internship']); ?>
-                                                     </span>
+                                                     <?php if (count($student_courses) > 1): ?>
+                                                         <div class="d-flex flex-column gap-2">
+                                                             <?php foreach ($student_courses as $c): ?>
+                                                                 <?php if (!empty(trim($c['internship'] ?? ''))): ?>
+                                                                     <div class="p-2 px-3 rounded-3 bg-light border border-1 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-1">
+                                                                         <span class="fw-bold text-dark d-flex align-items-center">
+                                                                             <i class="bi bi-award text-success me-2"></i><?php echo htmlspecialchars($c['course_name']); ?>:
+                                                                         </span>
+                                                                         <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">
+                                                                             <i class="bi bi-check-circle-fill me-1"></i><?php echo htmlspecialchars($c['internship']); ?>
+                                                                         </span>
+                                                                     </div>
+                                                                 <?php endif; ?>
+                                                             <?php endforeach; ?>
+                                                         </div>
+                                                     <?php else: ?>
+                                                         <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">
+                                                             <i class="bi bi-check-circle-fill me-1"></i>
+                                                             <?php echo htmlspecialchars(!empty($student_courses[0]['internship']) ? $student_courses[0]['internship'] : $admission['internship']); ?>
+                                                         </span>
+                                                     <?php endif; ?>
                                                  </div>
                                              </div>
                                              <?php endif; ?>
 
                                              <div class="row g-0 info-table-row">
-                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-center">
+                                                 <div class="col-md-4 p-3 info-table-label d-flex align-items-<?php echo (count($student_courses) > 1 ? 'start pt-3' : 'center'); ?>">
                                                      <i class="bi bi-tags-fill text-primary me-2 fs-5"></i>
                                                      <span>Key Skills</span>
                                                  </div>
                                                  <div class="col-md-8 p-3 info-table-value">
-                                                     <div class="d-flex flex-wrap gap-2">
-                                                         <?php
-                                                         $skills = explode(",", $admission['key_skills']);
-                                                         foreach ($skills as $skill) {
-                                                             $skill = trim($skill);
-                                                             if (!empty($skill)) {
-                                                                 echo '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill">'
-                                                                     . htmlspecialchars($skill) .
-                                                                     '</span>';
-                                                             }
-                                                         }
-                                                         ?>
-                                                     </div>
+                                                     <?php if (count($student_courses) > 1): ?>
+                                                         <div class="d-flex flex-column gap-2.5">
+                                                             <?php foreach ($student_courses as $c): 
+                                                                 $skills = array_filter(array_map('trim', explode(",", $c['key_skills'] ?? '')));
+                                                             ?>
+                                                                 <div class="p-2.5 px-3 rounded-3 bg-light border border-1">
+                                                                     <div class="small fw-bold text-dark mb-2 d-flex align-items-center">
+                                                                         <i class="bi bi-mortarboard-fill text-primary me-2"></i>
+                                                                         <span><?php echo htmlspecialchars($c['course_name']); ?>:</span>
+                                                                     </div>
+                                                                     <div class="d-flex flex-wrap gap-2">
+                                                                         <?php if (!empty($skills)): ?>
+                                                                             <?php foreach ($skills as $skill): ?>
+                                                                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill fw-semibold">
+                                                                                     <?php echo htmlspecialchars($skill); ?>
+                                                                                 </span>
+                                                                             <?php endforeach; ?>
+                                                                         <?php else: ?>
+                                                                             <span class="text-muted small fst-italic">No specific skills listed</span>
+                                                                         <?php endif; ?>
+                                                                     </div>
+                                                                 </div>
+                                                             <?php endforeach; ?>
+                                                         </div>
+                                                     <?php else: ?>
+                                                         <div class="d-flex flex-wrap gap-2">
+                                                             <?php
+                                                             $raw_skills = !empty($student_courses[0]['key_skills']) ? $student_courses[0]['key_skills'] : ($admission['key_skills'] ?? '');
+                                                             $skills = array_filter(array_map('trim', explode(",", $raw_skills)));
+                                                             if (!empty($skills)):
+                                                                 foreach ($skills as $skill): ?>
+                                                                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill fw-semibold">
+                                                                         <?php echo htmlspecialchars($skill); ?>
+                                                                     </span>
+                                                                 <?php endforeach;
+                                                             else: ?>
+                                                                 <span class="text-muted small fst-italic">No specific skills listed</span>
+                                                             <?php endif; ?>
+                                                         </div>
+                                                     <?php endif; ?>
                                                  </div>
                                              </div>
 
@@ -557,14 +718,44 @@ if (isset($_GET['student_id'])) {
                              </div> <!-- /card-body -->
                          </div> <!-- /student-profile-card -->
 
-                         <!-- Issued Certificate Document Preview Card -->
-                         <?php if (!empty($admission['certificate_file'])): 
-                             $certExt = strtolower(pathinfo($admission['certificate_file'], PATHINFO_EXTENSION));
-                             $certPath = "./uploads/certificates/" . htmlspecialchars($admission['certificate_file']);
-                         ?>
-                            
-                            
-                             </div>
+                         <!-- Issued Certificate Document Preview Cards -->
+                         <?php if (!empty($student_certificates)): ?>
+                             <?php foreach ($student_certificates as $scert): 
+                                 $certFile = $scert['file'];
+                                 $certExt = strtolower(pathinfo($certFile, PATHINFO_EXTENSION));
+                                 $certPath = "./uploads/certificates/" . htmlspecialchars($certFile);
+                             ?>
+                                 <div class="card border-0 shadow-sm rounded-4 mt-4 overflow-hidden">
+                                     <div class="card-header bg-white py-3 px-4 d-flex flex-wrap justify-content-between align-items-center gap-2 border-bottom">
+                                         <div class="d-flex align-items-center gap-2">
+                                             <i class="bi bi-award-fill text-warning fs-5"></i>
+                                             <h6 class="mb-0 fw-bold text-dark">
+                                                 Certificate Document &ndash; <?php echo htmlspecialchars($scert['course_name']); ?>
+                                             </h6>
+                                         </div>
+                                         <div class="d-flex gap-2">
+                                             <a href="<?php echo $certPath; ?>" download class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                 <i class="bi bi-download me-1"></i> Download
+                                             </a>
+                                             <a href="<?php echo $certPath; ?>" target="_blank" class="btn btn-sm btn-primary rounded-pill px-3">
+                                                 <i class="bi bi-eye me-1"></i> View Full
+                                             </a>
+                                         </div>
+                                     </div>
+                                     <div class="card-body p-3 text-center bg-light">
+                                         <?php if (in_array($certExt, ['jpg', 'jpeg', 'png', 'webp'])): ?>
+                                             <img src="<?php echo $certPath; ?>" alt="Certificate - <?php echo htmlspecialchars($scert['course_name']); ?>" class="img-fluid rounded-3 shadow-sm" style="max-height: 600px;">
+                                         <?php elseif ($certExt === 'pdf'): ?>
+                                             <iframe src="<?php echo $certPath; ?>#toolbar=0" style="width: 100%; height: 550px; border: none; border-radius: 8px;"></iframe>
+                                         <?php else: ?>
+                                             <div class="py-4">
+                                                 <i class="bi bi-file-earmark-check fs-1 text-primary mb-2"></i>
+                                                 <p class="mb-0 fw-semibold text-muted">Certificate available for download</p>
+                                             </div>
+                                         <?php endif; ?>
+                                     </div>
+                                 </div>
+                             <?php endforeach; ?>
                          <?php endif; ?>
 
                      </div>

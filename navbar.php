@@ -215,7 +215,7 @@
             <li class="nav-item dropdown">
 
     <a
-        class="nav-link-a  <?php echo (basename($_SERVER['PHP_SELF']) == 'about.php' || basename($_SERVER['PHP_SELF']) == 'our-story.php' || basename($_SERVER['PHP_SELF']) == 'certification.php') ? 'active' : ''; ?>"
+        class="nav-link-a  <?php echo (basename($_SERVER['PHP_SELF']) == 'about.php' || basename($_SERVER['PHP_SELF']) == 'our-story.php' || basename($_SERVER['PHP_SELF']) == 'certification.php' || basename($_SERVER['PHP_SELF']) == 'our-graduates.php') ? 'active' : ''; ?>"
         href="#"
         id="aboutDropdown"
         role="button"
@@ -238,6 +238,12 @@
         <li>
             <a class="dropdown-item" href="certification.php">
                 Certification
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="our-graduates.php">
+                Our Graduates
             </a>
         </li>
 
