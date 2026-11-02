@@ -376,6 +376,12 @@ function getCourseIcon($courseName) {
             .project-details-body { padding: 25px 20px; }
             .student-header-banner { padding: 25px 20px; }
         }
+
+        .container-grad{
+                max-width: 1850px;
+    margin: 0 auto;
+    padding: 0 20px;
+        }
     </style>
 </head>
 
@@ -383,38 +389,85 @@ function getCourseIcon($courseName) {
     <!-- Navbar -->
     <?php include 'navbar.php'; ?>
 
-    <!-- Header Section -->
-    <section class="graduates-hero-section text-center">
-        <div class="container position-relative z-2">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb justify-content-center px-3 py-1.5 rounded-pill mb-3 d-inline-flex bg-white bg-opacity-10">
-                    <li class="breadcrumb-item"><a href="index.php" class="text-white text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
-                    <li class="breadcrumb-item"><a href="about.php" class="text-white text-decoration-none">About</a></li>
-                    <li class="breadcrumb-item active text-white" aria-current="page">Our Graduates</li>
-                </ol>
-            </nav>
-            <h1 class="display-4 fw-bold mb-3" data-aos="fade-up">
-                Our Graduates &amp; <span style="color: #38bdf8;">Project Showcase</span>
-            </h1>
-            <p class="lead mx-auto mb-0" style="max-width: 720px; color: #e2e8f0;" data-aos="fade-up" data-aos-delay="100">
-                Explore hands-on capstone projects, industry-standard CAD blueprints, software applications, and design portfolios crafted by GD Edu Tech graduates.
-            </p>
+      <!-- Redesigned Executive Page Header -->
+    <section class="about-page-header position-relative overflow-hidden w-100 my-0">
+        <!-- Ambient Decorative Glows & Pattern -->
+        <div class="about-header-glow-1"></div>
+        <div class="about-header-glow-2"></div>
+        <div class="about-header-pattern"></div>
+
+        <div class="container position-relative z-2 py-4">
+            <div class="row align-items-center g-5">
+                <!-- Left Column: Title & Info -->
+                <div class="col-lg-7 text-start" data-aos="fade-right">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb about-breadcrumb px-3 py-1.5 rounded-pill mb-3 d-inline-flex">
+                            <li class="breadcrumb-item"><a href="index.php" class="text-black text-decoration-none"><i class="bi bi-house-door-fill me-1"></i> Home</a></li>
+                            <li class="breadcrumb-item active text-black" aria-current="page">Our Graduates</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-4 fw-bold text-black mb-3">
+                        Our<span class="cta-gold-text"> Graduates</span>
+                    </h1>
+
+                    <p class="lead text-black-50 mb-4" style="max-width: 600px;">
+                        Shaping confident, skilled graduates ready to build successful careers and make an impact.
+                    </p>
+
+                   <div class="d-flex flex-wrap gap-3 align-items-center pt-2">
+    <div class="about-header-badge">
+        <i class="bi bi-mortarboard-fill text-warning"></i>
+        <span style="color: #000;">100+ Graduates</span>
+    </div>
+
+    <div class="about-header-badge">
+        <i class="bi bi-briefcase-fill text-info"></i>
+        <span style="color: #000;">50+ Placed Graduates</span>
+    </div>
+
+    <div class="about-header-badge">
+        <i class="bi bi-patch-check-fill text-success"></i>
+        <span style="color: #000;">98% Career Success</span>
+    </div>
+</div>
+                </div>
+
+                <!-- Right Column: Floating Vision Glass Card -->
+                <div class="col-lg-5 text-center text-lg-end" data-aos="fade-left" data-aos-delay="200">
+                    <div class="about-header-card text-start">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle  bg-opacity-20 p-3 text-warning">
+                                <i class="bi bi-mortarboard-fill fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-black fw-bold mb-0">Our Core Mission</h6>
+                                <span class="text-black-50 small">Transforming Futures Worldwide</span>
+                            </div>
+                        </div>
+                        <p class="text-black-50 small mb-0" style="line-height: 1.6;">
+                            Bridge the gap between academic theory and practical industry demand through accessible, high-impact education.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header-shape position-absolute bottom-0 start-0 w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none" style="height: 40px; display: block; width: 100%;">
+                <path fill="#ffffff" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,58.7C672,43,768,21,864,21.3C960,21,1056,43,1152,53.3C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
         </div>
     </section>
 
     <!-- Main Content Section: Left Sidebar Courses + Right Section Student Showcase -->
-    <div class="container py-5">
+    <div class="container-grad py-5">
         <div class="row g-4">
-
+<!-- 
             <!-- LEFT SECTION: All Courses List -->
             <div class="col-lg-4 col-xl-3">
                 <div class="course-nav-card" data-aos="fade-right">
-                    <div class="course-nav-header d-flex align-items-center justify-content-between">
-                        <div>
-                            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-grid-fill text-primary me-2"></i>All Courses</h5>
-                            <small class="text-muted"><?php echo count($courses_data); ?> Technical Domains</small>
-                        </div>
-                    </div>
+                  
 
                     <div class="course-nav-list" role="tablist">
                         <?php 
@@ -465,28 +518,9 @@ function getCourseIcon($courseName) {
                              role="tabpanel"
                              aria-labelledby="tab-btn-<?php echo $slug; ?>">
 
-                            <!-- Top Bar for Current Course -->
-                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 bg-white rounded-4 border shadow-sm">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="course-icon-box" style="width: 44px; height: 44px; font-size: 1.3rem;">
-                                        <i class="bi <?php echo getCourseIcon($course_name); ?>"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="fw-bold mb-0 text-dark"><?php echo htmlspecialchars($course_name); ?></h4>
-                                        <small class="text-muted">Graduates &amp; Final Project Showcase</small>
-                                    </div>
-                                </div>
+                           
 
-                                <div class="d-flex align-items-center gap-2">
-                                    <?php if ($is_multiple): ?>
-                                        <span class="auto-slide-indicator">
-                                            <span class="spin-dot"></span> Auto-slide Active (<?php echo $student_count; ?> Students)
-                                        </span>
-                                    <?php else: ?>
-                                        <span class="student-counter-badge">1 Certified Graduate</span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
+                          
 
                             <!-- Showcase Area: Auto-slide Carousel if Multiple Students, Single Card otherwise -->
                             <?php if ($is_multiple): ?>
@@ -539,17 +573,11 @@ function getCourseIcon($courseName) {
                                                                 </div>
 
                                                                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-3 small text-white-50">
-                                                                    <?php if (!empty($st['student_id'])): ?>
-                                                                        <span><i class="bi bi-person-badge me-1 text-info"></i> ID: <strong class="text-white"><?php echo htmlspecialchars($st['student_id']); ?></strong></span>
-                                                                    <?php endif; ?>
+                                                               
                                                                     <?php if (!empty($st['completion_date'])): ?>
                                                                         <span><i class="bi bi-calendar-check me-1 text-info"></i> Completed: <strong class="text-white"><?php echo htmlspecialchars($st['completion_date']); ?></strong></span>
                                                                     <?php endif; ?>
-                                                                    <?php if (!empty($st['student_id'])): ?>
-                                                                        <a href="verify_certificate.php?student_id=<?php echo urlencode($st['student_id']); ?>#verification-results" class="btn btn-sm btn-outline-info rounded-pill px-3 py-1 text-white">
-                                                                            <i class="bi bi-patch-check-fill me-1"></i> Verify Record
-                                                                        </a>
-                                                                    <?php endif; ?>
+                                                             
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -586,22 +614,6 @@ function getCourseIcon($courseName) {
                                                             </div>
                                                         <?php endif; ?>
 
-                                                        <!-- Key Deliverables / Features -->
-                                                        <?php if (!empty($key_feats)): ?>
-                                                            <div class="mb-4">
-                                                                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-stars text-warning me-2"></i>Key Project Highlights:</h6>
-                                                                <div class="row g-2">
-                                                                    <?php foreach ($key_feats as $feat): ?>
-                                                                        <div class="col-md-6">
-                                                                            <div class="feature-item">
-                                                                                <i class="bi bi-check-circle-fill feature-icon"></i>
-                                                                                <span><?php echo htmlspecialchars($feat); ?></span>
-                                                                            </div>
-                                                                        </div>
-                                                                    <?php endforeach; ?>
-                                                                </div>
-                                                            </div>
-                                                        <?php endif; ?>
 
                                                         <!-- Project Images Gallery -->
                                                         <?php if (!empty($project_imgs)): ?>

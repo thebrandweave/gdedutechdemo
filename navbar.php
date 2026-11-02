@@ -241,11 +241,11 @@
             </a>
         </li>
 
-        <li>
+        <!-- <li>
             <a class="dropdown-item" href="our-graduates.php">
                 Our Graduates
             </a>
-        </li>
+        </li> -->
 
     </ul>
 

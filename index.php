@@ -730,28 +730,28 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
             </button> -->
 
             <!-- Banner Grid Layout -->
-            <div class="hero-banner-grid">
-                <!-- Left Promo Content -->
-                <div class="hero-promo-content">
-                    <div class="promo-badge">
-                        <i class="bi bi-mortarboard-fill text-warning me-1"></i> GD EDU TECH
-                    </div>
-                    
-                <h1 class="hero-promo-title">
-            Flat ₹9,000 Off <br/> <span class="highlight-gold">This Dasara</span>
-        </h1>            
-                    <p class="hero-promo-sub">
- Learn industry-relevant skills with practical training, expert guidance,
-            and career-focused programs designed to help you succeed.                    </p>
-                    
-                      <div class="offer-date-info">
-            <i class="bi bi-calendar3 me-2"></i>
-            Offer valid till : <strong>24th October 2026</strong>
+           <div class="hero-banner-grid">
+    <!-- Left Promo Content -->
+    <div class="hero-promo-content">
+        <div class="promo-badge">
+            <i class="bi bi-mortarboard-fill text-warning me-1"></i>
+            GD EDU TECH
         </div>
-                    
-               <div class="hero-promo-actions">
+
+        <h1 class="hero-promo-title">
+            Learn Skills That <br/>
+            <span class="highlight-gold">Build Your Future</span>
+        </h1>
+
+        <p class="hero-promo-sub">
+            Learn industry-relevant skills with practical training, expert guidance,
+            and career-focused programs designed to help you succeed.
+        </p>
+
+        <div class="hero-promo-actions">
             <a href="courses.php" class="btn-explore-offer">
-                Explore Our Courses <i class="bi bi-arrow-right ms-2"></i>
+                Explore Our Courses
+                <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
                     
@@ -766,7 +766,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
                 <!-- Center Person Image -->
                 <div class="hero-person-wrapper">
-                    <img src="./assets/images/dasara1.png" alt="Student" class="hero-person-img">
+                    <img src="./assets/images/hi.png" alt="Student" class="hero-person-img">
                 </div>
 
                 <!-- Right Certified White Card -->
