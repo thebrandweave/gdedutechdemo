@@ -764,7 +764,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
                 <!-- Center Person Image -->
                 <div class="hero-person-wrapper">
-                    <img src="./assets/images/diw1.png" alt="Student" class="hero-person-img">
+                    <img src="./assets/images/diw2.png" alt="Student" class="hero-person-img">
                 </div>
 
                 <!-- Right Certified White Card -->
