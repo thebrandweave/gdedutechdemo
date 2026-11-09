@@ -737,16 +737,14 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
             <i class="bi bi-mortarboard-fill text-warning me-1"></i>
             GD EDU TECH
         </div>
+<h1 class="hero-promo-title">
+    Flat <span class="highlight-gold">₹6,000 OFF</span>
+</h1>
 
-        <h1 class="hero-promo-title">
-            Learn Skills That <br/>
-            <span class="highlight-gold">Build Your Future</span>
-        </h1>
-
-        <p class="hero-promo-sub">
-            Learn industry-relevant skills with practical training, expert guidance,
-            and career-focused programs designed to help you succeed.
-        </p>
+<p class="hero-promo-sub">
+    Limited-time offer! Enroll now and enjoy a flat ₹6,000 discount.
+    Offer valid till 11th November only.
+</p>
 
         <div class="hero-promo-actions">
             <a href="courses.php" class="btn-explore-offer">
@@ -766,7 +764,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
 
                 <!-- Center Person Image -->
                 <div class="hero-person-wrapper">
-                    <img src="./assets/images/hi.png" alt="Student" class="hero-person-img">
+                    <img src="./assets/images/diw1.png" alt="Student" class="hero-person-img">
                 </div>
 
                 <!-- Right Certified White Card -->
