@@ -154,10 +154,7 @@ img, video, iframe, svg, canvas {
         justify-content: center !important;
     }
 
-    /* Footer Mobile Centering */
-    footer, .footer {
-        /* text-align: start; */
-    }
+ 
 
     footer .social-links, .footer-social {
         justify-content: center;

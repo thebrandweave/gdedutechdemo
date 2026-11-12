@@ -882,10 +882,6 @@ video.hero-person-img,
     gap: 15px;
   }
 
-  .stat-card-white,
-  .stat-card-noborder {
-    /* padding: 16px 14px; */
-  }
 
   .btn-action-primary,
   .btn-action-secondary {
