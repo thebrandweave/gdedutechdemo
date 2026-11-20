@@ -1292,7 +1292,7 @@ $categories = $conn->query($categories_query)->fetch_all(MYSQLI_ASSOC);
           <!-- Thumbnail Column -->
           <div class="col-12 col-md-5">
             <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="min-height: 220px; background-color: #f8fafc;">
-              <img id="courseImage" src="" class="w-100 h-100 object-fit-cover rounded-4" style="max-height: 240px;" alt="Course Thumbnail" onerror="this.src='./Images/Logos/GD_Only_logo.png';">
+              <img id="courseImage" src="./Images/Logos/GD_Only_logo.png" class="w-100 h-100 object-fit-cover rounded-4" style="max-height: 240px;" alt="Course Thumbnail" onerror="this.onerror=null; this.src='./Images/Logos/GD_Only_logo.png';">
             </div>
           </div>
 
