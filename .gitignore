@@ -5,6 +5,10 @@ build/
 
 # Videos & uploads
 uploads/course_uploads/course_videos/
+uploads/certificates/
+uploads/resumes/
+uploads/profiles/
+studentPanel/Profile/student_profile/
 *.mp4
 *.MOV
 *.mov
